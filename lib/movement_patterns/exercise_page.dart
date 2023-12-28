@@ -27,6 +27,32 @@ class _State extends DisplayListFragmentState<Exercise> {
   
   @override
   Widget buildExtraContent() {
-    return Container();
+    return Positioned(
+      bottom: 10,
+      left: 10,
+      child: FloatingActionButton(
+        backgroundColor: Colors.red,
+        child: const Icon(
+          Icons.add,
+          color: Colors.white
+        ),
+        onPressed: (){}
+      )
+    );
+  }
+  
+  @override
+  String getTitle() {
+    return "Exercises";
+  }
+  
+  @override
+  void onLongPress(Exercise data) {
+    print("Hello");
+  }
+  
+  @override
+  void updateDisplayedFields(String searchText) {
+    // TODO: implement updateDisplayedFields
   }
 }

@@ -7,16 +7,20 @@ import 'package:fitness_app/movement_patterns/movement_pattern.dart';
 import 'package:flutter/material.dart';
 
 class MainScaffold extends StatelessWidget {
+  final String title;
   final Widget content;
-  const MainScaffold({super.key, required this.content});
+  const MainScaffold({super.key, required this.content, required this.title});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Overload Training",
-          style: TextStyle(
-          color: Colors.white
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontFamily: 'Roboto',
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            
           )
         ),
         centerTitle: true,
@@ -111,7 +115,7 @@ class MainScaffold extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const MovementPatternPage(
-          dataList: MovementPattern.values, colors: [Colors.black,Colors.black]
+          dataList: MovementPattern.values, colors: [Colors.black,Colors.black87]
         )
       )
     );

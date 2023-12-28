@@ -78,5 +78,8 @@ class MovementPatternMuscleFactory {
         return [];
     }
   }
+  static String movementPatternToString(MovementPattern movementPattern) {
+    return movementPattern.toString().split(".")[1];
+  }
 }
 

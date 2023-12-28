@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness_app/movement_patterns/movement_pattern.dart';
 import 'package:fitness_app/movement_patterns/muscles.dart';
 
@@ -60,4 +61,6 @@ class PreSetExercises {
       Exercise("Leg Raises", movementPattern: MovementPattern.Core),
     ];
   }
+
+  
 }
