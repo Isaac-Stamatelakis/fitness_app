@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fitness_app/movement_patterns/movement_pattern.dart';
-import 'package:fitness_app/movement_patterns/muscles.dart';
+import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
+import 'package:fitness_app/exercise_core/muscles.dart';
+import 'package:fitness_app/misc/database.dart';
 
+/// Represents an exercise. Has name and movement pattern that the exercise belongs to
 class Exercise {
   Exercise(this.exerciseName, {required this.movementPattern});
   final MovementPattern movementPattern;
@@ -11,11 +13,63 @@ class Exercise {
   }
 }
 
-class ExerciseVariation extends Exercise{
-  ExerciseVariation(super.exerciseName, this.variationName, {required super.movementPattern});
-  final String variationName;
+
+class ExerciseFactory {
+  static Exercise fromDocument(DocumentSnapshot snapshot) {
+    var data = snapshot.data() as Map<String, dynamic>;
+    MovementPattern exercisePattern = MovementPattern.Undefined;
+    for (MovementPattern movementPattern in MovementPattern.values) {
+      if (data['movementPattern'] == MovementPatternMuscleFactory.movementPatternToString(movementPattern)) {
+        exercisePattern = movementPattern;
+      }
+    }
+    return Exercise(data['name'], movementPattern: exercisePattern);
+  }
 }
 
+
+
+
+/// Retrieves exercises from preset collection which are preincluded and immutable by user
+class PresetExerciseRetriever {
+  Future<List<Exercise>> retrieve() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("PresetExercises").get();
+    List<Exercise> exercises = [];
+    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+      exercises.add(ExerciseFactory.fromDocument(documentSnapshot));
+    }
+    return exercises;
+  }
+}
+
+/// Retrives exercises from users exercise collection
+class CustomExerciseRetriever {
+  final String ownerID;
+  CustomExerciseRetriever({required this.ownerID});
+  Future<List<Exercise>> retrieve() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("CustomExercises").where('owner_id', isEqualTo: ownerID).get();
+    List<Exercise> exercises = [];
+    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+      exercises.add(ExerciseFactory.fromDocument(documentSnapshot));
+    }
+    return exercises;
+  }
+}
+
+/// Retrives combination of user custom exercises and presets
+class EntireExerciseRetriever {
+  final String ownerID;
+  EntireExerciseRetriever({required this.ownerID});
+  Future<List<Exercise>> retrieve() async {
+    List<Exercise> exercises = [];
+    exercises.addAll(await CustomExerciseRetriever(ownerID: ownerID).retrieve());
+    exercises.addAll(await PresetExerciseRetriever().retrieve());
+    return exercises;
+  }
+}
+
+
+/// Deprecated, now on database, still here cause this took too much time to make
 class PreSetExercises {
   static List<Exercise> getPresets() {
     return [

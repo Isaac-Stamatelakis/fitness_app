@@ -1,9 +1,11 @@
-import 'package:fitness_app/movement_patterns/display_list_fragment.dart';
-import 'package:fitness_app/movement_patterns/movement_pattern.dart';
+import 'package:fitness_app/exercise_core/display_list_fragment.dart';
+import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 class MovementPageLoader extends StatelessWidget {
+  const MovementPageLoader({super.key});
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

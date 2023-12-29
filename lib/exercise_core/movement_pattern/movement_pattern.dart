@@ -1,5 +1,5 @@
 // ignore_for_file: constant_identifier_names
-import 'package:fitness_app/movement_patterns/muscles.dart';
+import 'package:fitness_app/exercise_core/muscles.dart';
 
 enum MovementPattern {
   Squat,
@@ -25,6 +25,7 @@ enum MovementPattern {
   Core,
   ChestFly,
   UpperChestFly,
+  Undefined
 }
 
 class MovementPatternMuscleFactory {

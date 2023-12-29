@@ -2,14 +2,14 @@ import 'package:fitness_app/main_scaffold.dart';
 import 'package:flutter/material.dart';
 
 abstract class DisplayListFragment<T> extends StatefulWidget {
-  final List<T> dataList;
+  final List<T>? dataList;
   final List<Color> colors;
   const DisplayListFragment({super.key, required this.dataList, required this.colors});
 
 }
 
 abstract class DisplayListFragmentState<T> extends State<DisplayListFragment> {
-  late List displayedDataList = widget.dataList;
+  late List? displayedDataList = widget.dataList;
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
@@ -41,9 +41,9 @@ abstract class DisplayListFragmentState<T> extends State<DisplayListFragment> {
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width/2,
                     child: ListView.builder(
-                      itemCount: widget.dataList.length,
+                      itemCount: widget.dataList?.length,
                       itemBuilder: (context, index) {
-                        return _buildTile(context,displayedDataList[index],onPress);
+                        return _buildTile(context,displayedDataList?[index],onPress);
                       },
                     ),
                   ) 

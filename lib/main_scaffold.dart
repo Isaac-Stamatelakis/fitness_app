@@ -1,9 +1,9 @@
 import 'dart:math';
 
-import 'package:fitness_app/movement_patterns/exercise.dart';
-import 'package:fitness_app/movement_patterns/exercise_page.dart';
-import 'package:fitness_app/movement_patterns/movement_page.dart';
-import 'package:fitness_app/movement_patterns/movement_pattern.dart';
+import 'package:fitness_app/exercise_core/exercise/exercise.dart';
+import 'package:fitness_app/exercise_core/exercise/exercise_page.dart';
+import 'package:fitness_app/exercise_core/movement_pattern/movement_page.dart';
+import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
 import 'package:flutter/material.dart';
 
 class MainScaffold extends StatelessWidget {
@@ -125,8 +125,8 @@ class MainScaffold extends StatelessWidget {
     Scaffold.of(context).closeDrawer();
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ExercisePage(
-          dataList: PreSetExercises.getPresets(), colors: const [Colors.black,Colors.black]
+      MaterialPageRoute(builder: (context) => const ExercisePageLoader(
+          colors: [Colors.black,Colors.black]
         )
       )
     );

@@ -1,14 +1,9 @@
-import 'dart:js_interop';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fitness_app/firebase_options.dart';
 import 'package:fitness_app/homepage.dart';
 import 'package:fitness_app/main_scaffold.dart';
-import 'package:fitness_app/movement_patterns/exercise.dart';
-import 'package:fitness_app/movement_patterns/movement_page.dart';
-import 'package:fitness_app/movement_patterns/movement_pattern.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
