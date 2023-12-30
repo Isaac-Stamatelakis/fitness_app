@@ -6,6 +6,7 @@ import 'package:fitness_app/exercise_core/exercise/exercise_db.dart';
 import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
 import 'package:fitness_app/misc/database.dart';
 import 'package:fitness_app/training_split/set.dart';
+import 'package:flutter/material.dart';
 
 class TrainingSplit {
   final String? name;
@@ -75,6 +76,24 @@ class TrainingSessionFactory {
     }
     return exerciseBlocks;
   } 
+
+  static Widget? toText(ISession? session) {
+    TextStyle textStyle = const TextStyle(
+      color: Colors.white
+    );
+    if (session is TrainingSession) {
+      return Text(
+        session.name,
+        style: textStyle,
+      );
+    } else if (session is RestSession) {
+      return Text(
+        "Rest",
+        style: textStyle,
+      );
+    }
+    return null;
+  }
 
 
 }

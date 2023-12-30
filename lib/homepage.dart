@@ -1,11 +1,12 @@
 import 'package:fitness_app/misc/global_widgets.dart';
 import 'package:fitness_app/misc/page_loader.dart';
+import 'package:fitness_app/training_split/preset/dialog_new_split.dart';
 import 'package:fitness_app/user/user.dart';
 import 'package:flutter/material.dart';
 
-class HomePageLoader extends PageLoader {
+class HomePageLoader extends SizedWidgetLoader {
   final String userID;
-  const HomePageLoader({required this.userID, super.key});
+  const HomePageLoader({required this.userID, super.key, required super.size});
 
   @override
   Widget generateContent(AsyncSnapshot snapshot) {
@@ -16,13 +17,6 @@ class HomePageLoader extends PageLoader {
   Future getFuture() {
     return UserRetriever(userID: userID).fromDatabase();
   }
-
-  @override
-  String getTitle() {
-    return "Overload Training";
-  }
-
-  
 }
 
 
@@ -95,7 +89,7 @@ class _State extends State<HomePage> {
       if (widget.user.currentSessionID == "") {
 
       } else {
-        
+
       }
     }
     
@@ -103,6 +97,13 @@ class _State extends State<HomePage> {
 
   void _toTrainingSplit() {
     if (widget.user.trainingSplitID == "") {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return NewTrainingSplitDialog(user: widget.user);
+        }
+      );
+    } else {
 
     }
   }

@@ -1,18 +1,19 @@
 // ignore_for_file: constant_identifier_names
-
 import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
+import 'package:fitness_app/misc/display_list.dart';
 import 'package:fitness_app/training_split/set.dart';
 import 'package:fitness_app/training_split/training_split.dart';
+import 'package:flutter/material.dart';
 
 enum TrainingSplitPreset {
- PushPullLeg,
- BroSplit,
- UpperLower,
- Custom 
+  Custom,
+  PushPullLeg,
+  BroSplit,
+  UpperLower,
 }
 
 class TrainingSplitPresetFactory {
-  String presetToString(TrainingSplitPreset preset) {
+  static String presetToString(TrainingSplitPreset? preset) {
     switch (preset) {
       case TrainingSplitPreset.PushPullLeg:
         return "Push/Pull/Legs";
@@ -25,7 +26,7 @@ class TrainingSplitPresetFactory {
     }
   }
 
-  TrainingSplit? buildSplit(TrainingSplitPreset preset) {
+  static TrainingSplit? buildSplit(TrainingSplitPreset? preset) {
     switch (preset) {
       case TrainingSplitPreset.PushPullLeg:
         return TrainingSplit(
@@ -167,7 +168,7 @@ class TrainingSplitPresetFactory {
             ),
             TrainingSession(
               dbID: null, 
-              name: "Leg", 
+              name: "Legs", 
               exercises: [
                 ExerciseBlock(
                   movementPattern: MovementPattern.Squat, 
@@ -372,7 +373,7 @@ class TrainingSplitPresetFactory {
             ),
             TrainingSession(
               dbID: null, 
-              name: "Leg", 
+              name: "Legs", 
               exercises: [
                 ExerciseBlock(
                   movementPattern: MovementPattern.Squat, 
@@ -574,7 +575,7 @@ class TrainingSplitPresetFactory {
             ),
             TrainingSession(
               dbID: null, 
-              name: "Leg", 
+              name: "Legs", 
               exercises: [
                 ExerciseBlock(
                   movementPattern: MovementPattern.Squat, 
@@ -918,9 +919,9 @@ class TrainingSplitPresetFactory {
           trainingSessions: [
 
           ],
-          
         );
+      case null:
+        return null;
     }
-
   }
 }
