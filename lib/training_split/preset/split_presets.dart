@@ -36,7 +36,7 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Push", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
@@ -97,7 +97,7 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Pull", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
                   movementPattern: MovementPattern.VerticalPull, 
                   exercise: null, 
@@ -169,7 +169,7 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Legs", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
                   movementPattern: MovementPattern.Squat, 
                   exercise: null, 
@@ -241,7 +241,7 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Push", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
@@ -302,7 +302,7 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Pull", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
                   movementPattern: MovementPattern.VerticalPull, 
                   exercise: null, 
@@ -374,7 +374,7 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Legs", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
                   movementPattern: MovementPattern.Squat, 
                   exercise: null, 
@@ -454,7 +454,7 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Chest", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
@@ -515,7 +515,7 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Back", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
                   movementPattern: MovementPattern.VerticalPull, 
                   exercise: null, 
@@ -576,7 +576,7 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Legs", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
                   movementPattern: MovementPattern.Squat, 
                   exercise: null, 
@@ -648,7 +648,7 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Shoulders", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
@@ -709,7 +709,7 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Arms", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
@@ -779,7 +779,7 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Upper1", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
@@ -840,7 +840,7 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Lower1", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
                   movementPattern: MovementPattern.Squat, 
                   exercise: null, 

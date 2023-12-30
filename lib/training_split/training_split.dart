@@ -5,6 +5,7 @@ import 'package:fitness_app/exercise_core/exercise/exercise.dart';
 import 'package:fitness_app/exercise_core/exercise/exercise_db.dart';
 import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
 import 'package:fitness_app/misc/database.dart';
+import 'package:fitness_app/training_split/page/page_training_split.dart';
 import 'package:fitness_app/training_split/set.dart';
 import 'package:flutter/material.dart';
 
@@ -22,15 +23,19 @@ class ISession {
 class TrainingSession extends ISession {
   final String? dbID;
   final String name;
-  final List<ExerciseBlock> exercises;
-  TrainingSession({required this.dbID, required this.name, required this.exercises});
+  final List<ExerciseBlock> exerciseBlocks;
+  TrainingSession({required this.dbID, required this.name, required this.exerciseBlocks});
 }
 
 class RestSession extends ISession{
 
 }
+
+class IBlock {
+
+}
 /// Represents a collection of subsequent sets
-class ExerciseBlock {
+class ExerciseBlock extends IBlock {
   final MovementPattern? movementPattern;
   final Exercise? exercise;
   final List<ISet?> sets;
@@ -59,7 +64,7 @@ class TrainingSessionFactory {
   static Future<TrainingSession> fromDocument(DocumentSnapshot snapshot) async {
     var data = snapshot.data() as Map<String, dynamic>;
     return TrainingSession(
-      dbID: snapshot.id, name: data['name'], exercises: await decode<SetCollection>(data['exercise_blocks'])
+      dbID: snapshot.id, name: data['name'], exerciseBlocks: await decode<SetCollection>(data['exercise_blocks'])
     );
   }
 
@@ -93,6 +98,15 @@ class TrainingSessionFactory {
       );
     }
     return null;
+  }
+
+  static Widget generateBlockList(ISession? session) {
+    if (session is TrainingSession) {
+      return TrainingBlockList(blocks: session.exerciseBlocks);
+    } else if (session is RestSession) {
+      return Container();
+    }
+    return Container();
   }
 
 

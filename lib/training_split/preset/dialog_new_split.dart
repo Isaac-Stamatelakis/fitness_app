@@ -81,7 +81,6 @@ class _TrainingPresetListState extends AbstractListState<TrainingSplitPreset> {
   @override
   void onPress(TrainingSplitPreset? preset) {
     Navigator.pop(context);
-    print(preset.toString());
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => TrainingSplitPage(
