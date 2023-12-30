@@ -1,18 +1,7 @@
-import 'package:fitness_app/exercise_core/display_list_fragment.dart';
+import 'package:fitness_app/misc/display_list_fragment.dart';
+import 'package:fitness_app/exercise_core/movement_pattern/move_dialog.dart';
 import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
-class MovementPageLoader extends StatelessWidget {
-  const MovementPageLoader({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
-
-}
 
 class MovementPatternPage extends DisplayListFragment<MovementPattern> {
   const MovementPatternPage({super.key, required super.dataList, required super.colors});
@@ -34,12 +23,18 @@ class _State extends DisplayListFragmentState<MovementPattern> {
   }
 
   @override
-  void onPress(data) {
-    // TODO: implement onPress
+  void onPress(MovementPattern movementPattern) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MovementDialog(movementPattern: movementPattern);
+      }
+    );
   }
   
   @override
   Widget buildExtraContent() {
+    // No extra content
     return Container();
   }
   
@@ -55,6 +50,6 @@ class _State extends DisplayListFragmentState<MovementPattern> {
   
   @override
   void updateDisplayedFields(String searchText) {
-    // TODO: implement updateDisplayedFields
+    // Do nothing
   }
 }

@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:logger/logger.dart';
 
-abstract class DatabaseHelper {
-  Future<dynamic> fromDatabase() async {
+abstract class DatabaseHelper<T> {
+  Future<T?> fromDatabase() async {
     try {
       DocumentSnapshot documentSnapshot = await getDatabaseReference().get();
       if (documentSnapshot.exists && documentSnapshot.data() != null) {
@@ -16,29 +16,30 @@ abstract class DatabaseHelper {
       return null;
     }
   }
-  dynamic fromDocument(DocumentSnapshot snapshot);
+  T? fromDocument(DocumentSnapshot snapshot);
 
   dynamic getDatabaseReference();
 }
 
 
-abstract class DatabaseRetriever extends DatabaseHelper {
-  final String id;
-  DatabaseRetriever(this.id);
-  
-}
-
-abstract class MultiDatabaseRetriever {
-  final List<String>? _ids;
-  MultiDatabaseRetriever(this._ids);
-  Future<List<dynamic>> fromDatabase() async {
-    List<dynamic> retrieved = [];
-    for (String id in _ids!) {
-      retrieved.add(await getRetriever(id).fromDatabase());
+abstract class MultiDatabaseRetriever<T> {
+  Future<List<T>> retrieve() async {
+    try {
+      QuerySnapshot querySnapshot = await getQuerySnapshot();
+    
+      List<T> items = [];
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        items.add(fromDocument(documentSnapshot));
+      }
+      return items;
+    } catch (e) {
+      Logger().e('Error retrieving from database: $e');
+      return [];
     }
-    return retrieved;
   }
-  DatabaseRetriever getRetriever(String id);
+  T fromDocument(DocumentSnapshot snapshot);
+
+  Future<QuerySnapshot> getQuerySnapshot();
 }
 
 abstract class DatabaseQuery {

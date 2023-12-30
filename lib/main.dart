@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Fitness App',
       theme: ThemeData(
         primaryColor: Colors.black,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
             )
           )
       ),
-      home: const MainScaffold(title: "Overload Training", content: HomePage(userID: "C86Yk50EFU6Gj1U69rEj"))
+      home: const MainScaffold(title: "Overload Training", content: HomePageLoader(userID: "C86Yk50EFU6Gj1U69rEj"))
     );
   }
 }

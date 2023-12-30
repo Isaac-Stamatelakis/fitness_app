@@ -1,8 +1,34 @@
+import 'package:fitness_app/misc/global_widgets.dart';
+import 'package:fitness_app/misc/page_loader.dart';
+import 'package:fitness_app/user/user.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
+class HomePageLoader extends PageLoader {
   final String userID;
-  const HomePage({super.key, required this.userID});
+  const HomePageLoader({required this.userID, super.key});
+
+  @override
+  Widget generateContent(AsyncSnapshot snapshot) {
+    return HomePage(user: snapshot.data);
+  }
+
+  @override
+  Future getFuture() {
+    return UserRetriever(userID: userID).fromDatabase();
+  }
+
+  @override
+  String getTitle() {
+    return "Overload Training";
+  }
+
+  
+}
+
+
+class HomePage extends StatefulWidget {
+  final User user;
+  const HomePage({super.key, required this.user});
   @override
   State<StatefulWidget> createState() => _State();
 }
@@ -19,12 +45,22 @@ class _State extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,      
         children: [
-          _SquareGradientButton(_toSession, text: "Start Session", colors: [Colors.red,Colors.red.shade200], size: const Size(300,100)),
+          _SquareGradientButton(
+            _toSession, 
+            text: widget.user.currentSessionID == "" ? "Start Session" : "Continue Session", 
+            colors: [Colors.red,Colors.red.shade200], 
+            size: const Size(300,100)
+          ),
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-               _SquareGradientButton(_toTrainingSplit, text: "Edit Training Split", colors: [Colors.blue,Colors.blue.shade200], size: const Size(200,100)),
+               _SquareGradientButton(
+                _toTrainingSplit, 
+                text: widget.user.trainingSplitID == "" ? "Create Training Split" : "Edit Training Split", 
+                colors: [Colors.blue,Colors.blue.shade200], 
+                size: const Size(200,100)
+              ),
                const SizedBox(width: 20),
                _SquareGradientButton(_toProgress, text: "View Progress", colors: [Colors.blue,Colors.blue.shade200], size: const Size(200,100))
             ],
@@ -43,11 +79,32 @@ class _State extends State<HomePage> {
 
 
   void _toSession() {
+    if (widget.user.trainingSplitID == "") {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SingleButtonDialog(
+            displayText: "Must Have a Training Split to Start a Session", 
+            buttonText: "Continue", 
+            buttonColors: [Colors.red,Colors.red.shade300], 
+            dialogColors: const [Colors.black,Colors.black87]
+          );
+        }
+      );
+    } else {
+      if (widget.user.currentSessionID == "") {
 
+      } else {
+        
+      }
+    }
+    
   }
 
   void _toTrainingSplit() {
+    if (widget.user.trainingSplitID == "") {
 
+    }
   }
 
   void _toProgress() {

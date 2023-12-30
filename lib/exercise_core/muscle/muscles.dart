@@ -23,3 +23,12 @@ enum Muscle {
   Glutes,
   Calves,
 }
+
+class MuscleHelper {
+  static String muscleToString(Muscle? muscle) {
+    switch (muscle) {
+      default:
+        return muscle.toString().split(".")[1];
+    }
+  }
+}

@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
-import 'package:fitness_app/exercise_core/muscles.dart';
+
+import 'package:fitness_app/exercise_core/muscle/muscles.dart';
 
 enum MovementPattern {
   Squat,
@@ -25,11 +26,12 @@ enum MovementPattern {
   Core,
   ChestFly,
   UpperChestFly,
-  Undefined
+  Pullover,
+  WristFlexion
 }
 
 class MovementPatternMuscleFactory {
-  static List<Muscle> getMusclesWorked(MovementPattern movementPattern) {
+  static List<Muscle> getMusclesWorked(MovementPattern? movementPattern) {
     switch (movementPattern) {
       case MovementPattern.Squat:
         return [Muscle.Quadriceps,Muscle.Glutes,Muscle.Adductors];
@@ -79,7 +81,7 @@ class MovementPatternMuscleFactory {
         return [];
     }
   }
-  static String movementPatternToString(MovementPattern movementPattern) {
+  static String movementPatternToString(MovementPattern? movementPattern) {
     return movementPattern.toString().split(".")[1];
   }
 }

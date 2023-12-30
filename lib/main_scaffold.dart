@@ -1,9 +1,10 @@
 import 'dart:math';
 
-import 'package:fitness_app/exercise_core/exercise/exercise.dart';
 import 'package:fitness_app/exercise_core/exercise/exercise_page.dart';
-import 'package:fitness_app/exercise_core/movement_pattern/movement_page.dart';
+import 'package:fitness_app/exercise_core/movement_pattern/move_page.dart';
 import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
+import 'package:fitness_app/misc/global_widgets.dart';
+import 'package:fitness_app/misc/page_loader.dart';
 import 'package:flutter/material.dart';
 
 class MainScaffold extends StatelessWidget {
@@ -86,21 +87,17 @@ class MainScaffold extends StatelessWidget {
           ),
           child:  Column(
             children: [
-              _SquareGradientButton(
-                _navigateMovementPatterns, 
+              SquareGradientButton(
+                height: 50,
+                onPress: _navigateMovementPatterns, 
                 text: "Movement Patterns", 
                 colors: const [Colors.black,Colors.white]
               ),
               const SizedBox(height: 20),
-              _SquareGradientButton(
-                _navigateExercises, 
+              SquareGradientButton(
+                height: 50,
+                onPress: _navigateExercises, 
                 text: "Exercises", 
-                colors: const [Colors.black,Colors.white]
-              ),
-              const SizedBox(height: 20),
-              _SquareGradientButton(
-                _navigateExerciseVariations, 
-                text: "Exercise Variations", 
                 colors: const [Colors.black,Colors.white]
               ),
             ],
@@ -125,55 +122,11 @@ class MainScaffold extends StatelessWidget {
     Scaffold.of(context).closeDrawer();
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const ExercisePageLoader(
-          colors: [Colors.black,Colors.black]
-        )
-      )
-    );
-  }
-
-  void _navigateExerciseVariations(BuildContext context) {
-    Scaffold.of(context).closeDrawer();
-  }
-}
-
-class _SquareGradientButton extends StatelessWidget {
-  final Function(BuildContext) onPress;
-  final String text;
-  final List<Color> colors;
-
-  const _SquareGradientButton(this.onPress,{required this.text, required this.colors});
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {onPress(context);},
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-        padding: const EdgeInsets.all(0.0),
-      ),
-      child: Ink(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-            colors: colors,
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: Container(
-          height: 50,
-          alignment: Alignment.center,
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white
-            ),
-          ),
-        ),
-      ),
+      MaterialPageRoute(builder: (context) => const ExercisePageLoader())
     );
   }
 }
+
 
 class _LightPatch extends StatelessWidget {
   final Size size;

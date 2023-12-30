@@ -64,7 +64,6 @@ abstract class DisplayListFragmentState<T> extends State<DisplayListFragment> {
   String getTitle();
   
   Widget? _buildTile(BuildContext context, dynamic data, Function(T) onPress) {
-    
     return Column(
       children: [
         const SizedBox(height: 20),
@@ -79,7 +78,6 @@ abstract class DisplayListFragmentState<T> extends State<DisplayListFragment> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
             padding: const EdgeInsets.all(0.0),
           ),
-          
           child: Ink(
             decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -89,7 +87,7 @@ abstract class DisplayListFragmentState<T> extends State<DisplayListFragment> {
               ),
             ),
             child: Container(
-              height: 100,
+              height: 75,
               alignment: Alignment.center,
               child: buildText(data),
             ),
