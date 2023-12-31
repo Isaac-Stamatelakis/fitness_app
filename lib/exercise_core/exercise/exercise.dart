@@ -8,7 +8,7 @@ class Exercise {
   final MovementPattern? movementPattern;
   final String exerciseName;
   List<Muscle> getMusclesWorked() {
-    return MovementPatternMuscleFactory.getMusclesWorked(movementPattern);
+    return MovementPatternFactory.getMusclesWorked(movementPattern);
   }
   final String dbID;
 }
@@ -19,7 +19,7 @@ class ExerciseFactory {
     var data = snapshot.data() as Map<String, dynamic>;
     MovementPattern? exercisePattern;
     for (MovementPattern movementPattern in MovementPattern.values) {
-      if (data['movementPattern'] == MovementPatternMuscleFactory.movementPatternToString(movementPattern)) {
+      if (data['movementPattern'] == MovementPatternFactory.movementPatternToString(movementPattern)) {
         exercisePattern = movementPattern;
       }
     }

@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 
+abstract class IButtonListState<T> {
+  Widget? getContainerWidget(T? data);
+
+  void onPress(T? data);
+
+  void onLongPress(T? data);
+}
+
 abstract class AbstractList<T> extends StatefulWidget {
   final List<T>? dataList;
   final List<Color> colors;
   const AbstractList({super.key, required this.dataList, required this.colors});
 }
 
-abstract class AbstractListState<T> extends State<AbstractList<T>> {
+abstract class AbstractListState<T> extends State<AbstractList<T>> implements IButtonListState<T>{
   @override
   Widget build(BuildContext context) {
     return Flexible(
@@ -55,10 +63,4 @@ abstract class AbstractListState<T> extends State<AbstractList<T>> {
       ],
     );
   }
-
-  Widget? getContainerWidget(T? data);
-
-  void onPress(T? data);
-
-  void onLongPress(T? data);
 }

@@ -58,7 +58,7 @@ class _State extends State<ExerciseDialog> {
                 SquareGradientButton(
                   height: 100,
                   onPress: _showMovementDialog, 
-                  text: MovementPatternMuscleFactory.movementPatternToString(widget.exercise.movementPattern), 
+                  text: MovementPatternFactory.movementPatternToString(widget.exercise.movementPattern), 
                   colors: [Colors.blue,Colors.blue.shade300]
                 ),
                 const SizedBox(

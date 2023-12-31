@@ -443,7 +443,7 @@ class TrainingSplitPresetFactory {
                 ),
               ]
             ),
-            RestSession()
+            TrainingSession(dbID: null, name: "Rest", exerciseBlocks: [])
           ],
         );
       case TrainingSplitPreset.BroSplit:
@@ -767,8 +767,8 @@ class TrainingSplitPresetFactory {
                 ),
               ],
             ),
-            RestSession(),
-            RestSession()
+            TrainingSession(dbID: null, name: "Rest", exerciseBlocks: []),
+            TrainingSession(dbID: null, name: "Rest", exerciseBlocks: [])
           ],
         );
       case TrainingSplitPreset.UpperLower:
@@ -909,7 +909,7 @@ class TrainingSplitPresetFactory {
                 ),
               ],
             ),
-            RestSession()
+            TrainingSession(dbID: null, name: "Rest", exerciseBlocks: [])
           ],
         );
       case TrainingSplitPreset.Custom:

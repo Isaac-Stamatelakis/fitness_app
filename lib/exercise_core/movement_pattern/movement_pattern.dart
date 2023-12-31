@@ -27,10 +27,11 @@ enum MovementPattern {
   ChestFly,
   UpperChestFly,
   Pullover,
-  WristFlexion
+  WristFlexion,
+  UndefinedMovement,
 }
 
-class MovementPatternMuscleFactory {
+class MovementPatternFactory {
   static List<Muscle> getMusclesWorked(MovementPattern? movementPattern) {
     switch (movementPattern) {
       case MovementPattern.Squat:
@@ -83,6 +84,12 @@ class MovementPatternMuscleFactory {
   }
   static String movementPatternToString(MovementPattern? movementPattern) {
     return movementPattern.toString().split(".")[1];
+  }
+
+  static List<MovementPattern> getNoneNullPatterns() {
+    List<MovementPattern> patterns = MovementPattern.values;
+    patterns.remove(MovementPattern.UndefinedMovement);
+    return patterns;
   }
 }
 

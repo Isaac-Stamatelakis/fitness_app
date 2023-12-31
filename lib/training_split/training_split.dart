@@ -5,6 +5,7 @@ import 'package:fitness_app/exercise_core/exercise/exercise.dart';
 import 'package:fitness_app/exercise_core/exercise/exercise_db.dart';
 import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
 import 'package:fitness_app/misc/database.dart';
+import 'package:fitness_app/training_split/page/list_training.dart';
 import 'package:fitness_app/training_split/page/page_training_split.dart';
 import 'package:fitness_app/training_split/set.dart';
 import 'package:flutter/material.dart';
@@ -17,19 +18,17 @@ class TrainingSplit {
   TrainingSplit({required this.name, required this.trainingSessions, required this.dbID});
 }
 
-class ISession {
-
+abstract class ISession {
+  final String? dbID;
+  late String name;
+  ISession({required this.dbID, required this.name});
 }
 class TrainingSession extends ISession {
-  final String? dbID;
-  final String name;
   final List<ExerciseBlock> exerciseBlocks;
-  TrainingSession({required this.dbID, required this.name, required this.exerciseBlocks});
+  TrainingSession({required super.dbID, required super.name, required this.exerciseBlocks});
 }
 
-class RestSession extends ISession{
 
-}
 
 class IBlock {
 
@@ -91,20 +90,13 @@ class TrainingSessionFactory {
         session.name,
         style: textStyle,
       );
-    } else if (session is RestSession) {
-      return Text(
-        "Rest",
-        style: textStyle,
-      );
-    }
+    } 
     return null;
   }
 
   static Widget generateBlockList(ISession? session) {
     if (session is TrainingSession) {
       return TrainingBlockList(blocks: session.exerciseBlocks);
-    } else if (session is RestSession) {
-      return Container();
     }
     return Container();
   }

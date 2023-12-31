@@ -15,7 +15,7 @@ class _State extends DisplayListFragmentState<MovementPattern> {
   @override
   Widget? buildText(data) {
     return Text(
-      MovementPatternMuscleFactory.movementPatternToString(data),
+      MovementPatternFactory.movementPatternToString(data),
       style: const TextStyle(
         color: Colors.white
       ),

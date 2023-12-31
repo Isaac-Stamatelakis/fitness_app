@@ -111,8 +111,8 @@ class MainScaffold extends StatelessWidget {
     Scaffold.of(context).closeDrawer();
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const MovementPatternPage(
-          dataList: MovementPattern.values, colors: [Colors.black,Colors.black87]
+      MaterialPageRoute(builder: (context) => MovementPatternPage(
+          dataList: MovementPatternFactory.getNoneNullPatterns(), colors: const [Colors.black,Colors.black87]
         )
       )
     );
@@ -125,7 +125,10 @@ class MainScaffold extends StatelessWidget {
       MaterialPageRoute(builder: (context) => const ExercisePageLoader())
     );
   }
+
+  
 }
+
 
 
 class _LightPatch extends StatelessWidget {
