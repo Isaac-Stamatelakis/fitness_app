@@ -1,9 +1,9 @@
 import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
 import 'package:fitness_app/misc/display_list.dart';
+import 'package:fitness_app/training_split/page/edit_block_dialog.dart';
 import 'package:fitness_app/training_split/page/edit_session_dialog.dart';
 import 'package:fitness_app/training_split/training_split.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 abstract class ASessionList extends StatefulWidget {
   final List<ISession>? sessions;
@@ -222,7 +222,34 @@ class TrainingBlockListState extends ATrainingBlockListState {
 
   @override
   void onPress(IBlock? block) {
-    // TODO: implement onPress
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return EditBlockDialog(block: block, moveUp: _moveUp, moveDown: _moveDown);
+      }
+    );
+  }
+  
+  void _moveUp(IBlock? block) {
+    setState(() {
+      int index = widget.blocks!.indexOf(block!);
+      int newIndex;
+      index > 0 ? newIndex = index-1 : newIndex=widget.blocks!.length-1;
+      dynamic temp = widget.blocks![index];
+      widget.blocks![index] = widget.blocks![newIndex];
+      widget.blocks![newIndex] = temp; 
+    });
+  }
+
+  void _moveDown(IBlock? block) {
+    setState(() {
+      int index = widget.blocks!.indexOf(block!);
+      int newIndex;
+      index < widget.blocks!.length-1 ? newIndex = index+1 : newIndex=0;
+      dynamic temp = widget.blocks![index];
+      widget.blocks![index] = widget.blocks![newIndex];
+      widget.blocks![newIndex] = temp; 
+    });
   }
 
 }

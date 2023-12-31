@@ -87,8 +87,9 @@ class MovementPatternFactory {
   }
 
   static List<MovementPattern> getNoneNullPatterns() {
-    List<MovementPattern> patterns = MovementPattern.values;
-    patterns.remove(MovementPattern.UndefinedMovement);
+    List<MovementPattern> patterns = MovementPattern.values
+      .where((pattern) => pattern != MovementPattern.UndefinedMovement)
+      .toList();
     return patterns;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
 import 'package:flutter/material.dart';
 
 class SquareGradientButton extends StatelessWidget {
@@ -175,5 +176,100 @@ class ConfirmationDialog extends StatelessWidget {
   }
   void _popBack(BuildContext context) {
     Navigator.pop(context);
+  }
+}
+
+
+abstract class ASearchDropDownButton<T> extends StatefulWidget {
+  final double width;
+  final List<T>? list;
+  const ASearchDropDownButton({super.key, required this.list, required this.width});
+}
+
+abstract class ASearchDropDownButtonState<T> extends State<ASearchDropDownButton<T>> {
+  late int selectedIndex = 0;
+  late String searchValue = "";
+  late List<String> stringList = [];
+  late List<T> valueList = [];
+  @override
+  void initState() {
+    super.initState();
+    buildLists("");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        TextField(
+          decoration: const InputDecoration(
+            labelText: 'Search Movements',
+          ),
+          onChanged: (String search) {
+            setState(() {
+              selectedIndex = 0;
+              buildLists(search.toLowerCase());
+            });
+            
+          },
+        ),
+        const SizedBox(height: 20),
+        Theme(
+          data: ThemeData(
+            canvasColor: Colors.black
+          ), 
+          child: SizedBox(
+            width: widget.width,
+            height: 50,
+            child: DropdownButton<String>(
+              isExpanded: true,
+              value: getValueAtIndex(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedIndex = stringList.indexOf(newValue!);
+                });
+              },
+              items: stringList
+                  .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: const TextStyle(
+                        color: Colors.white70
+                      ),
+                    ),
+                  );
+              }).toList(),
+            ),
+          )
+          
+        )
+      ],
+    );
+  }
+
+  String elementToString(T element);
+
+  void buildLists(String search) {
+    List<String> newStringList = [];
+    List<T> newValueList = [];
+    for (T value in widget.list!) {
+      String stringValue = elementToString(value);
+      if (stringValue.toLowerCase().contains(search)) {
+          newStringList.add(elementToString(value));
+          newValueList.add(value);
+      }
+    }
+    stringList = newStringList;
+    valueList = newValueList;
+  }
+
+  String? getValueAtIndex() {
+    if (stringList.isEmpty) {
+      return null;
+    }
+    return stringList[selectedIndex];
   }
 }
