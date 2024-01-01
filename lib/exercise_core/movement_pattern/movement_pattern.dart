@@ -82,10 +82,52 @@ class MovementPatternFactory {
         return [];
     }
   }
-  static String movementPatternToString(MovementPattern? movementPattern) {
-    return movementPattern.toString().split(".")[1];
+  static String patternToFormattedString(MovementPattern? movementPattern) {
+    switch (movementPattern) {
+      case MovementPattern.HorizontalPress:
+        return "Horizontal Press";
+      case MovementPattern.InclinePress:
+        return "Incline Press";
+      case MovementPattern.VerticlePress:
+        return "Vertical Press";
+      case MovementPattern.VerticalPull:
+        return "Vertical Pull";
+      case MovementPattern.HorizontalPull:
+        return "Horizontal Pull";
+      case MovementPattern.ShoulderAbduction:
+        return "Shoulder Abduction";
+      case MovementPattern.ShoulderFlexion:
+        return "Shoulder Flexion";
+      case MovementPattern.ShoulderRotation:
+        return "Shoulder Rotation";
+      case MovementPattern.LegFlexion:
+        return "Leg Flexion";
+      case MovementPattern.LegExtension:
+        return "Leg Extension";
+      case MovementPattern.AnkleExtension:
+        return "Ankle Extension";
+      case MovementPattern.ElbowFlexion:
+        return "Elbow Flexion";
+      case MovementPattern.ElbowExtension:
+        return "Elbow Extension";
+      case MovementPattern.HipAdduction:
+        return "Hip Adduction";
+      case MovementPattern.HipAdbuction:
+        return "Hip Adbuction";
+      case MovementPattern.SpinalExtension:
+        return "Spinal Extension";
+      case MovementPattern.ChestFly:
+        return "Chest Fly";
+      case MovementPattern.UpperChestFly:
+        return "Upper Chest Fly";
+      default:
+        return patternToString(movementPattern);
+    }
   }
 
+  static String patternToString(MovementPattern? movementPattern) {
+    return movementPattern.toString().split(".")[1];
+  }
   static List<MovementPattern> getNoneNullPatterns() {
     List<MovementPattern> patterns = MovementPattern.values
       .where((pattern) => pattern != MovementPattern.UndefinedMovement)

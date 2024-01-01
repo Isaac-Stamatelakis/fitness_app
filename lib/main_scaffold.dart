@@ -91,14 +91,14 @@ class MainScaffold extends StatelessWidget {
                 height: 50,
                 onPress: _navigateMovementPatterns, 
                 text: "Movement Patterns", 
-                colors: const [Colors.black,Colors.white]
+                colors: [Colors.white70,Colors.indigo.shade400]
               ),
               const SizedBox(height: 20),
               SquareGradientButton(
                 height: 50,
                 onPress: _navigateExercises, 
                 text: "Exercises", 
-                colors: const [Colors.black,Colors.white]
+                colors: [Colors.white70,Colors.indigo.shade400]
               ),
             ],
           )

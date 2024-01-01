@@ -31,15 +31,15 @@ class TrainingSession extends ISession {
 
 
 class IBlock {
+  final MovementPattern? movementPattern;
+  final IExercise? exercise;
 
+  IBlock({required this.movementPattern, required this.exercise});
 }
 /// Represents a collection of subsequent sets
 class ExerciseBlock extends IBlock {
-  final MovementPattern? movementPattern;
-  final Exercise? exercise;
   final List<ISet?> sets;
-
-  ExerciseBlock({required this.movementPattern, required this.exercise, required this.sets});
+  ExerciseBlock({required this.sets, required super.movementPattern, required super.exercise});
   void add(ISet set) {
     sets.add(set);
   }
@@ -75,7 +75,7 @@ class TrainingSessionFactory {
         sets.add(SetFactory.fromJson<T>(setJson));
       }
       String exerciseID = json['exercise_id'];
-      Exercise? exercise = await SingleExerciseRetriever(dbID: exerciseID).retrieve();
+      IExercise? exercise = await SingleExerciseRetriever(dbID: exerciseID).retrieve();
       exerciseBlocks.add(ExerciseBlock(sets: sets, exercise: exercise, movementPattern: exercise?.movementPattern));
     }
     return exerciseBlocks;

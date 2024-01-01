@@ -1,13 +1,28 @@
+import 'dart:math';
+
+import 'package:fitness_app/exercise_core/exercise/exercise.dart';
+import 'package:fitness_app/exercise_core/exercise/exercise_db.dart';
+import 'package:fitness_app/exercise_core/exercise/variation/exercise_variation.dart';
 import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
 import 'package:fitness_app/misc/global_widgets.dart';
+import 'package:fitness_app/misc/page_loader.dart';
 import 'package:fitness_app/training_split/training_split.dart';
 import 'package:flutter/material.dart';
 
-class EditBlockDialog extends StatelessWidget {
+class EditBlockDialog extends StatefulWidget {
   final IBlock? block;
   final Function(IBlock?) moveUp;
   final Function(IBlock?) moveDown;
   const EditBlockDialog({super.key, required this.block, required this.moveUp, required this.moveDown});
+
+  @override
+  State<EditBlockDialog> createState() => _EditBlockDialogState();
+}
+
+class _EditBlockDialogState extends State<EditBlockDialog> {
+  late MovementPattern? selectedPattern;
+  late IExercise? selectedExercise;
+  late ExerciseVariation? selectedVariation;
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +58,6 @@ class EditBlockDialog extends StatelessWidget {
               ),
               centerTitle: true,
             ),
-            const SizedBox(height: 20),
-            MovementPatternDropButton(list: MovementPatternFactory.getNoneNullPatterns(), width: double.infinity),
-            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -62,7 +74,7 @@ class EditBlockDialog extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: (){moveUp(block);}, 
+                      onPressed: (){widget.moveUp(widget.block);}, 
                       icon: const Icon(
                         Icons.arrow_circle_up,
                         color: Colors.white,
@@ -71,7 +83,7 @@ class EditBlockDialog extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     IconButton(
-                      onPressed: (){moveDown(block);}, 
+                      onPressed: (){widget.moveDown(widget.block);}, 
                       icon: const Icon(
                         Icons.arrow_circle_down,
                         color: Colors.white,
@@ -81,21 +93,50 @@ class EditBlockDialog extends StatelessWidget {
                   ],
                 ),
               ],
-            )
+            ),
+            const SizedBox(height: 20),
+            _MovementPatternDropButton(
+              list: MovementPatternFactory.getNoneNullPatterns(), 
+              width: double.infinity, 
+              label: 'Search Movements', 
+              onSelect: _onMovementSelected
+            ),
+            const SizedBox(height: 20),
+            _ExerciseDropDownLoader(
+              pattern: widget.block!.movementPattern, 
+              onSelect: _onExerciseSelected,
+            ),
+            const SizedBox(height: 20),
+            _ExerciseVariationDropButtonLoader(
+              onSelect: _onVariationSelected, 
+              exercise: selectedExercise
+            ),
           ],
         )
       )
     );
-    
+  
   }
+
+  void _onMovementSelected(MovementPattern pattern) {
+
+  }
+
+  void _onExerciseSelected(IExercise exercise) {
+
+  }
+
+  void _onVariationSelected(ExerciseVariation variation) {
+
+  }
+
   void _onSavePress(BuildContext context) {
 
   }
 }
 
-class MovementPatternDropButton extends ASearchDropDownButton<MovementPattern> {
-  const MovementPatternDropButton({super.key, required super.list, required super.width});
-
+class _MovementPatternDropButton extends ASearchDropDownButton<MovementPattern> {
+  const _MovementPatternDropButton({required super.list, required super.width, required super.label, required super.onSelect});
   @override
   State<StatefulWidget> createState() => _DropButtonState();
 
@@ -104,9 +145,64 @@ class MovementPatternDropButton extends ASearchDropDownButton<MovementPattern> {
 class _DropButtonState extends ASearchDropDownButtonState<MovementPattern> {
   @override
   String elementToString(MovementPattern movementPattern) {
-    return MovementPatternFactory.movementPatternToString(movementPattern);
+    return MovementPatternFactory.patternToString(movementPattern);
   }
-  
- 
+}
 
+class _ExerciseDropDownLoader extends WidgetLoader {
+  final MovementPattern? pattern;
+  final Function(IExercise) onSelect;
+  const _ExerciseDropDownLoader({required this.onSelect, required this.pattern});
+  @override
+  Widget generateContent(AsyncSnapshot snapshot) {
+    return _ExerciseDropButton(list: snapshot.data, width: double.infinity, label: "Search Exercises", onSelect: onSelect,);
+  }
+
+  @override
+  Future getFuture() {
+    return EntirePatternExerciseQuery(pattern: pattern).retrieve();
+  }
+
+}
+
+class _ExerciseDropButton extends ASearchDropDownButton<IExercise> {
+  const _ExerciseDropButton({required super.list, required super.width, required super.label, required super.onSelect});
+  @override
+  State<StatefulWidget> createState() => _ExerciseDropButtonState();
+}
+
+class _ExerciseDropButtonState extends ASearchDropDownButtonState<IExercise> {
+  @override
+  String elementToString(IExercise element) {
+    return element.exerciseName;
+  }
+}
+
+class _ExerciseVariationDropButtonLoader extends WidgetLoader {
+  final IExercise? exercise;
+  final Function(ExerciseVariation) onSelect;
+  const _ExerciseVariationDropButtonLoader({required this.onSelect, required this.exercise});
+  @override
+  Widget generateContent(AsyncSnapshot snapshot) {
+    return _ExerciseVariationDropButton(list: snapshot.data, width: double.infinity, label: "Search Variations", onSelect: onSelect,);
+  }
+
+  @override
+  Future getFuture() {
+    return ExerciseVariationRetriever(exerciseID: exercise!.dbID).retrieve();
+  }
+
+}
+
+class _ExerciseVariationDropButton extends ASearchDropDownButton<ExerciseVariation> {
+  const _ExerciseVariationDropButton({required super.list, required super.width, required super.label, required super.onSelect});
+  @override
+  State<StatefulWidget> createState() => _ExerciseVariationDropButtonState();
+}
+
+class _ExerciseVariationDropButtonState extends ASearchDropDownButtonState<ExerciseVariation> {
+  @override
+  String elementToString(ExerciseVariation? element) {
+    return element!.variationName;
+  }
 }

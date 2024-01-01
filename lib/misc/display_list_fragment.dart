@@ -10,6 +10,14 @@ abstract class DisplayListFragment<T> extends StatefulWidget {
 
 abstract class DisplayListFragmentState<T> extends State<DisplayListFragment> {
   late List? displayedDataList = widget.dataList;
+  late String searchValue = "";
+  late List<T> valueList = [];
+  @override
+  void initState() {
+    super.initState();
+    buildLists("");
+  }
+
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
@@ -23,8 +31,10 @@ abstract class DisplayListFragmentState<T> extends State<DisplayListFragment> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width/2,
                   child: TextField(
-                    onChanged: (value) {
-                      updateDisplayedFields(value);
+                    onChanged: (search) {
+                      setState(() {
+                        buildLists(search);
+                      });
                     },
                     style: const TextStyle(
                       color: Colors.white
@@ -41,9 +51,9 @@ abstract class DisplayListFragmentState<T> extends State<DisplayListFragment> {
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width/2,
                     child: ListView.builder(
-                      itemCount: widget.dataList?.length,
+                      itemCount: valueList.length,
                       itemBuilder: (context, index) {
-                        return _buildTile(context,displayedDataList?[index],onPress);
+                        return _buildTile(context,valueList[index],onPress);
                       },
                     ),
                   ) 
@@ -56,10 +66,19 @@ abstract class DisplayListFragmentState<T> extends State<DisplayListFragment> {
     );
   }
 
+  void buildLists(String search) {
+    List<T> newValueList = [];
+    for (T value in widget.dataList!) {
+      String stringValue = getString(value);
+      if (stringValue.toLowerCase().contains(search)) {
+          newValueList.add(value);
+      }
+    }
+    valueList = newValueList;
+  }
   void onPress(T data);
   void onLongPress(T data);
-  void updateDisplayedFields(String searchText);
-  Widget? buildText(T data);
+  String getString(T data);
   Widget buildExtraContent();
   String getTitle();
   
@@ -89,7 +108,12 @@ abstract class DisplayListFragmentState<T> extends State<DisplayListFragment> {
             child: Container(
               height: 75,
               alignment: Alignment.center,
-              child: buildText(data),
+              child: Text(
+                getString(data),
+                style: const TextStyle(
+                  color: Colors.white
+                ),
+              )
             ),
           ),
         ),

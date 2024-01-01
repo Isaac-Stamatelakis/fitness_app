@@ -24,7 +24,7 @@ class MovementDialog extends StatelessWidget {
             AppBar(
               backgroundColor: Colors.black,
               title: Text(
-                MovementPatternFactory.movementPatternToString(movementPattern),
+                MovementPatternFactory.patternToString(movementPattern),
                 style: const TextStyle(
                   color: Colors.white
                 ),

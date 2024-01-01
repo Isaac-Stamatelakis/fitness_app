@@ -7,7 +7,7 @@ import 'package:logger/logger.dart';
 
 // ignore: must_be_immutable
 class AddExerciseVariationDialog extends StatelessWidget {
-  final Exercise exercise;
+  final IExercise exercise;
   final Function(ExerciseVariation) callback;
   AddExerciseVariationDialog({super.key, required this.exercise, required this.callback});
 

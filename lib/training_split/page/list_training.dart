@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
 import 'package:fitness_app/misc/display_list.dart';
 import 'package:fitness_app/training_split/page/edit_block_dialog.dart';
@@ -89,13 +91,14 @@ class _TrainingSessionListState extends ASessionListState {
   }
 
   @override
-  void onPress(ISession? session) {
-    showDialog(
+  void onPress(ISession? session) async {
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
         return EditSessionDialog(addBlock: _addBlock, session: session, moveLeft: _moveLeft, moveRight: _moveRight);
       }
     );
+    setState((){});
   }
   void _moveLeft(ISession? session) {
     setState(() {
@@ -203,7 +206,7 @@ class TrainingBlockListState extends ATrainingBlockListState {
   Widget? getContainerWidget(IBlock? block) {
     if (block is ExerciseBlock) {
       return Text(
-        "${MovementPatternFactory.movementPatternToString(block.movementPattern)}\n${block.exercise.toString()}",
+        "${MovementPatternFactory.patternToString(block.movementPattern)}\n${block.exercise.toString()}",
         style: const TextStyle(
           color: Colors.white70
         ),

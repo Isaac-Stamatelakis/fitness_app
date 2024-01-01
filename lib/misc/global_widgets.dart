@@ -181,9 +181,11 @@ class ConfirmationDialog extends StatelessWidget {
 
 
 abstract class ASearchDropDownButton<T> extends StatefulWidget {
+  final Function(T) onSelect;
   final double width;
   final List<T>? list;
-  const ASearchDropDownButton({super.key, required this.list, required this.width});
+  final String? label;
+  const ASearchDropDownButton({super.key, required this.list, required this.width,required this.label, required this.onSelect});
 }
 
 abstract class ASearchDropDownButtonState<T> extends State<ASearchDropDownButton<T>> {
@@ -203,13 +205,14 @@ abstract class ASearchDropDownButtonState<T> extends State<ASearchDropDownButton
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         TextField(
-          decoration: const InputDecoration(
-            labelText: 'Search Movements',
+          decoration: InputDecoration(
+            labelText: widget.label,
           ),
           onChanged: (String search) {
             setState(() {
               selectedIndex = 0;
               buildLists(search.toLowerCase());
+              widget.onSelect(valueList[selectedIndex]);
             });
             
           },
@@ -228,6 +231,7 @@ abstract class ASearchDropDownButtonState<T> extends State<ASearchDropDownButton
               onChanged: (String? newValue) {
                 setState(() {
                   selectedIndex = stringList.indexOf(newValue!);
+                  widget.onSelect(valueList[selectedIndex]);
                 });
               },
               items: stringList
@@ -265,7 +269,6 @@ abstract class ASearchDropDownButtonState<T> extends State<ASearchDropDownButton
     stringList = newStringList;
     valueList = newValueList;
   }
-
   String? getValueAtIndex() {
     if (stringList.isEmpty) {
       return null;
