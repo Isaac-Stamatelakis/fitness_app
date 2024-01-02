@@ -2,7 +2,7 @@ import 'dart:isolate';
 
 import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
 import 'package:fitness_app/misc/display_list.dart';
-import 'package:fitness_app/training_split/page/edit_block_dialog.dart';
+import 'package:fitness_app/training_split/page/edit_block/edit_block_dialog.dart';
 import 'package:fitness_app/training_split/page/edit_session_dialog.dart';
 import 'package:fitness_app/training_split/training_split.dart';
 import 'package:flutter/material.dart';
@@ -124,7 +124,7 @@ class _TrainingSessionListState extends ASessionListState {
   void _addBlock(ISession? session) {
     setState(() {
       if (session is TrainingSession) {
-        session.exerciseBlocks.add(ExerciseBlock(movementPattern: MovementPattern.UndefinedMovement, exercise: null, sets: []));
+        session.exerciseBlocks.add(ExerciseBlock(null, movementPattern: MovementPattern.UndefinedMovement, exercise: null, sets: []));
       }
     });
   }
@@ -205,13 +205,7 @@ class TrainingBlockListState extends ATrainingBlockListState {
   @override
   Widget? getContainerWidget(IBlock? block) {
     if (block is ExerciseBlock) {
-      return Text(
-        "${MovementPatternFactory.patternToString(block.movementPattern)}\n${block.exercise.toString()}",
-        style: const TextStyle(
-          color: Colors.white70
-        ),
-        textAlign: TextAlign.center,
-      );
+      return generateText(block);
     }
     return null;
   }
@@ -224,15 +218,35 @@ class TrainingBlockListState extends ATrainingBlockListState {
   }
 
   @override
-  void onPress(IBlock? block) {
-    showDialog(
+  void onPress(IBlock? block) async {
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
         return EditBlockDialog(block: block, moveUp: _moveUp, moveDown: _moveDown);
       }
     );
+    setState(() {
+      
+    });
   }
   
+  Widget generateText(IBlock? block) {
+    String returnString = "${MovementPatternFactory.patternToString(block!.movementPattern)}\n"; 
+    String exerciseName;
+    if (block.variation != null) {
+      exerciseName = block.variation!.variationName;
+    } else {
+      block.exercise == null ? exerciseName = "None" : exerciseName = block.exercise!.exerciseName;
+    }
+    returnString += exerciseName;
+    return Text(
+        returnString,
+        style: const TextStyle(
+          color: Colors.white70
+        ),
+        textAlign: TextAlign.center,
+      );
+  }
   void _moveUp(IBlock? block) {
     setState(() {
       int index = widget.blocks!.indexOf(block!);

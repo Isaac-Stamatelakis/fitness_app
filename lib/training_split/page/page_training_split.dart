@@ -38,7 +38,7 @@ class _State extends State<_TrainingPageContent> {
       children: [
         Row(
           children: [
-            SizedBox(width: 50),
+            const SizedBox(width: 50),
             Flexible(
               child: TrainingSessionList(
                 sessions: widget.trainingSplit?.trainingSessions

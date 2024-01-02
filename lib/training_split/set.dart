@@ -51,7 +51,11 @@ class Set extends ISet {
   Set({required this.data,required this.type});
 }
 
+class CardioSet extends ISet {
+  final int duration;
 
+  CardioSet({required this.duration});
+}
 /// Represents how subsequent sets are stored for a training plan
 /// ie sets 3 of bicep curls, data={'rep_range':'8-12'}
 class SetCollection extends ISet {

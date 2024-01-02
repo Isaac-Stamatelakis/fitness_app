@@ -181,22 +181,29 @@ class ConfirmationDialog extends StatelessWidget {
 
 
 abstract class ASearchDropDownButton<T> extends StatefulWidget {
-  final Function(T) onSelect;
+  final Function(T?) onSelect;
   final double width;
-  final List<T>? list;
+  final List<T?>? list;
   final String? label;
-  const ASearchDropDownButton({super.key, required this.list, required this.width,required this.label, required this.onSelect});
+  final T? initialValue;
+  const ASearchDropDownButton({super.key, required this.list, required this.width,required this.label, required this.onSelect, required this.initialValue});
 }
 
 abstract class ASearchDropDownButtonState<T> extends State<ASearchDropDownButton<T>> {
-  late int selectedIndex = 0;
+  late int selectedIndex;
   late String searchValue = "";
   late List<String> stringList = [];
-  late List<T> valueList = [];
+  late List<T?> valueList = [];
   @override
   void initState() {
     super.initState();
+    selectedIndex = getInitalIndex();
     buildLists("");
+    Future.delayed(Duration.zero, () {
+      if (widget.initialValue == null && selectedIndex >= 0) {
+        widget.onSelect(valueList[selectedIndex]);
+      }
+    });
   }
 
   @override
@@ -212,7 +219,9 @@ abstract class ASearchDropDownButtonState<T> extends State<ASearchDropDownButton
             setState(() {
               selectedIndex = 0;
               buildLists(search.toLowerCase());
-              widget.onSelect(valueList[selectedIndex]);
+              if (valueList.isNotEmpty) {
+                widget.onSelect(valueList[selectedIndex]);
+              } 
             });
             
           },
@@ -228,6 +237,7 @@ abstract class ASearchDropDownButtonState<T> extends State<ASearchDropDownButton
             child: DropdownButton<String>(
               isExpanded: true,
               value: getValueAtIndex(),
+              
               onChanged: (String? newValue) {
                 setState(() {
                   selectedIndex = stringList.indexOf(newValue!);
@@ -248,18 +258,17 @@ abstract class ASearchDropDownButtonState<T> extends State<ASearchDropDownButton
               }).toList(),
             ),
           )
-          
         )
       ],
     );
   }
 
-  String elementToString(T element);
+  String elementToString(T? element);
 
   void buildLists(String search) {
     List<String> newStringList = [];
-    List<T> newValueList = [];
-    for (T value in widget.list!) {
+    List<T?> newValueList = [];
+    for (T? value in widget.list!) {
       String stringValue = elementToString(value);
       if (stringValue.toLowerCase().contains(search)) {
           newStringList.add(elementToString(value));
@@ -274,5 +283,16 @@ abstract class ASearchDropDownButtonState<T> extends State<ASearchDropDownButton
       return null;
     }
     return stringList[selectedIndex];
+  }
+
+  int getInitalIndex() {
+    if (widget.list!.contains(widget.initialValue)) {
+      return widget.list!.indexOf(widget.initialValue);
+    }
+    if (widget.list!.isNotEmpty) {
+      return 0;
+    }
+    return -1;
+    
   }
 }

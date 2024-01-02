@@ -29,6 +29,7 @@ enum MovementPattern {
   Pullover,
   WristFlexion,
   UndefinedMovement,
+  Cardio
 }
 
 class MovementPatternFactory {

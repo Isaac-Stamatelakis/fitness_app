@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness_app/exercise_core/exercise/exercise.dart';
 import 'package:fitness_app/exercise_core/exercise/exercise_db.dart';
+import 'package:fitness_app/exercise_core/exercise/variation/exercise_variation.dart';
 import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
 import 'package:fitness_app/misc/database.dart';
 import 'package:fitness_app/training_split/page/list_training.dart';
@@ -31,15 +32,16 @@ class TrainingSession extends ISession {
 
 
 class IBlock {
-  final MovementPattern? movementPattern;
-  final IExercise? exercise;
+  late MovementPattern? movementPattern;
+  late IExercise? exercise;
+  late ExerciseVariation? variation;
 
-  IBlock({required this.movementPattern, required this.exercise});
+  IBlock(this.variation, {required this.movementPattern, required this.exercise});
 }
-/// Represents a collection of subsequent sets
+/// Represents a collection weight lighting subsequent sets of the same exercise
 class ExerciseBlock extends IBlock {
   final List<ISet?> sets;
-  ExerciseBlock({required this.sets, required super.movementPattern, required super.exercise});
+  ExerciseBlock(super.variation, {required this.sets, required super.movementPattern, required super.exercise});
   void add(ISet set) {
     sets.add(set);
   }
@@ -75,8 +77,14 @@ class TrainingSessionFactory {
         sets.add(SetFactory.fromJson<T>(setJson));
       }
       String exerciseID = json['exercise_id'];
+      String? variationID = json['variation_id'];
       IExercise? exercise = await SingleExerciseRetriever(dbID: exerciseID).retrieve();
-      exerciseBlocks.add(ExerciseBlock(sets: sets, exercise: exercise, movementPattern: exercise?.movementPattern));
+      ExerciseVariation? variation;
+      if (variationID != null && variationID.isNotEmpty) {
+        variation = await ExerciseVariationRetriever(dbID: variationID).fromDatabase();
+      }
+      
+      exerciseBlocks.add(ExerciseBlock(variation, sets: sets, exercise: exercise, movementPattern: exercise?.movementPattern));
     }
     return exerciseBlocks;
   } 

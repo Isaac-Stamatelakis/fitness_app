@@ -38,6 +38,7 @@ class TrainingSplitPresetFactory {
               name: "Push", 
               exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
                   sets: [
@@ -49,6 +50,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.VerticlePress, 
                   exercise: null, 
                   sets: [
@@ -60,6 +62,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
                   sets: [
@@ -71,6 +74,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ShoulderAbduction, 
                   exercise: null, 
                   sets: [
@@ -82,6 +86,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowExtension, 
                   exercise: null, 
                   sets: [
@@ -99,6 +104,7 @@ class TrainingSplitPresetFactory {
               name: "Pull", 
               exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.VerticalPull, 
                   exercise: null, 
                   sets: [
@@ -110,6 +116,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
@@ -121,6 +128,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HorizontalPull, 
                   exercise: null, 
                   sets: [
@@ -132,6 +140,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
@@ -143,6 +152,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.Pullover, 
                   exercise: null, 
                   sets: [
@@ -154,6 +164,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.WristFlexion, 
                   exercise: null, 
                   sets: [
@@ -171,6 +182,7 @@ class TrainingSplitPresetFactory {
               name: "Legs", 
               exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.Squat, 
                   exercise: null, 
                   sets: [
@@ -182,6 +194,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.LegFlexion, 
                   exercise: null, 
                   sets: [
@@ -193,6 +206,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.AnkleExtension, 
                   exercise: null, 
                   sets: [
@@ -204,6 +218,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.LegExtension, 
                   exercise: null, 
                   sets: [
@@ -215,6 +230,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HipAdbuction, 
                   exercise: null, 
                   sets: [
@@ -226,6 +242,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.SpinalExtension, 
                   exercise: null, 
                   sets: [
@@ -243,6 +260,7 @@ class TrainingSplitPresetFactory {
               name: "Push", 
               exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
                   sets: [
@@ -254,6 +272,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.VerticlePress, 
                   exercise: null, 
                   sets: [
@@ -265,6 +284,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
                   sets: [
@@ -276,6 +296,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ShoulderAbduction, 
                   exercise: null, 
                   sets: [
@@ -287,6 +308,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowExtension, 
                   exercise: null, 
                   sets: [
@@ -304,6 +326,7 @@ class TrainingSplitPresetFactory {
               name: "Pull", 
               exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.VerticalPull, 
                   exercise: null, 
                   sets: [
@@ -315,6 +338,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
@@ -326,6 +350,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HorizontalPull, 
                   exercise: null, 
                   sets: [
@@ -337,6 +362,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
@@ -348,6 +374,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.Pullover, 
                   exercise: null, 
                   sets: [
@@ -359,6 +386,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.WristFlexion, 
                   exercise: null, 
                   sets: [
@@ -376,6 +404,7 @@ class TrainingSplitPresetFactory {
               name: "Legs", 
               exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.Squat, 
                   exercise: null, 
                   sets: [
@@ -387,6 +416,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.LegFlexion, 
                   exercise: null, 
                   sets: [
@@ -398,6 +428,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.AnkleExtension, 
                   exercise: null, 
                   sets: [
@@ -409,6 +440,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.LegExtension, 
                   exercise: null, 
                   sets: [
@@ -420,6 +452,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HipAdbuction, 
                   exercise: null, 
                   sets: [
@@ -431,6 +464,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.SpinalExtension, 
                   exercise: null, 
                   sets: [
@@ -456,6 +490,7 @@ class TrainingSplitPresetFactory {
               name: "Chest", 
               exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
                   sets: [
@@ -467,6 +502,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
                   sets: [
@@ -478,6 +514,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ChestFly, 
                   exercise: null, 
                   sets: [
@@ -489,6 +526,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
                   sets: [
@@ -500,6 +538,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.UpperChestFly, 
                   exercise: null, 
                   sets: [
@@ -517,6 +556,7 @@ class TrainingSplitPresetFactory {
               name: "Back", 
               exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.VerticalPull, 
                   exercise: null, 
                   sets: [
@@ -528,6 +568,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HorizontalPull, 
                   exercise: null, 
                   sets: [
@@ -539,6 +580,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.Pullover, 
                   exercise: null, 
                   sets: [
@@ -550,6 +592,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.VerticalPull, 
                   exercise: null, 
                   sets: [
@@ -561,6 +604,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HorizontalPull, 
                   exercise: null, 
                   sets: [
@@ -578,6 +622,7 @@ class TrainingSplitPresetFactory {
               name: "Legs", 
               exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.Squat, 
                   exercise: null, 
                   sets: [
@@ -589,6 +634,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.LegFlexion, 
                   exercise: null, 
                   sets: [
@@ -600,6 +646,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.AnkleExtension, 
                   exercise: null, 
                   sets: [
@@ -611,6 +658,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.LegExtension, 
                   exercise: null, 
                   sets: [
@@ -622,6 +670,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HipAdbuction, 
                   exercise: null, 
                   sets: [
@@ -633,6 +682,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.SpinalExtension, 
                   exercise: null, 
                   sets: [
@@ -650,6 +700,7 @@ class TrainingSplitPresetFactory {
               name: "Shoulders", 
               exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
                   sets: [
@@ -661,6 +712,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ShoulderAbduction, 
                   exercise: null, 
                   sets: [
@@ -672,6 +724,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ShoulderFlexion, 
                   exercise: null, 
                   sets: [
@@ -683,6 +736,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
                   sets: [
@@ -694,6 +748,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ShoulderHorizontalAbduction, 
                   exercise: null, 
                   sets: [
@@ -711,6 +766,7 @@ class TrainingSplitPresetFactory {
               name: "Arms", 
               exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
@@ -722,6 +778,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowExtension, 
                   exercise: null, 
                   sets: [
@@ -733,6 +790,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowExtension, 
                   exercise: null, 
                   sets: [
@@ -744,6 +802,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
@@ -755,6 +814,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.WristFlexion, 
                   exercise: null, 
                   sets: [
@@ -781,6 +841,7 @@ class TrainingSplitPresetFactory {
               name: "Upper1", 
               exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
                   sets: [
@@ -792,6 +853,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
@@ -803,6 +865,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowExtension, 
                   exercise: null, 
                   sets: [
@@ -814,6 +877,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
                   sets: [
@@ -825,6 +889,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ShoulderAbduction, 
                   exercise: null, 
                   sets: [
@@ -842,6 +907,7 @@ class TrainingSplitPresetFactory {
               name: "Lower1", 
               exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.Squat, 
                   exercise: null, 
                   sets: [
@@ -853,6 +919,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.LegFlexion, 
                   exercise: null, 
                   sets: [
@@ -864,6 +931,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.LegExtension, 
                   exercise: null, 
                   sets: [
@@ -875,6 +943,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.AnkleExtension, 
                   exercise: null, 
                   sets: [
@@ -886,6 +955,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HipAdbuction, 
                   exercise: null, 
                   sets: [
@@ -897,6 +967,7 @@ class TrainingSplitPresetFactory {
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.SpinalExtension, 
                   exercise: null, 
                   sets: [
