@@ -7,24 +7,39 @@ import 'package:fitness_app/misc/page_loader.dart';
 import 'package:fitness_app/training_split/training_split.dart';
 import 'package:flutter/material.dart';
 
-/// Loads all drop down menus for exercise selection
-class EditBlockExercise extends StatelessWidget {
+/// As movement pattern is fixed, only exercise selection is required
+class CardioEditBlockExercise extends StatelessWidget {
   final IBlock? block;
   final Function(MovementPattern?) onMovementSelected;
-  const EditBlockExercise({super.key, required this.block, required this.onMovementSelected});
+  const CardioEditBlockExercise({super.key, this.block, required this.onMovementSelected});
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-         MovementPatternDropButton(
-              list: MovementPatternFactory.getNoneNullPatterns(), 
-              width: double.infinity, 
-              label: 'Search Movements', 
-              onSelect: onMovementSelected, 
-              initialValue: block!.movementPattern
-            ),
-            const SizedBox(height: 20),
-            _ExerciseAndVariationContainerLoader(block: block,)
+        _ExerciseAndVariationContainerLoader(block: block)
+      ],
+    );
+  }
+}
+
+/// Loads all drop down menus for lifting exercise selection
+class LiftingEditBlockExercise extends StatelessWidget {
+  final IBlock? block;
+  final Function(MovementPattern?) onMovementSelected;
+  const LiftingEditBlockExercise({super.key, required this.block, required this.onMovementSelected});
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        MovementPatternDropButton(
+            list: MovementPatternFactory.getNoneNullPatterns(), 
+            width: double.infinity, 
+            label: 'Search Movements', 
+            onSelect: onMovementSelected, 
+            initialValue: block!.movementPattern
+          ),
+        const SizedBox(height: 20),
+        _ExerciseAndVariationContainerLoader(block: block,)
       ],
     );
   }
@@ -38,7 +53,7 @@ class _ExerciseAndVariationContainerLoader extends WidgetLoader {
   Widget generateContent(AsyncSnapshot snapshot) {
     return _ExerciseAndVariationContainer(block: block, exercises: snapshot.data);
   }
-  
+
   @override
   Future getFuture() {
     return EntirePatternExerciseQuery(pattern: block!.movementPattern).retrieve();
@@ -55,7 +70,6 @@ class _ExerciseAndVariationContainer extends StatefulWidget {
   State<StatefulWidget> createState() => _ExerciseAndVariationContainerState();
 
 }
-
 
 class _ExerciseAndVariationContainerState extends State<_ExerciseAndVariationContainer> {
   @override

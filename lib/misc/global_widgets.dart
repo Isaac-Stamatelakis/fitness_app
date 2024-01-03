@@ -296,3 +296,54 @@ abstract class ASearchDropDownButtonState<T> extends State<ASearchDropDownButton
     
   }
 }
+
+abstract class AbstractDropDownSelector<T> extends StatefulWidget {
+  final Function(T?) onSelect;
+  final List<T> options;
+  final T? initalSelect;
+  const AbstractDropDownSelector({super.key, required this.onSelect, required this.options, required this.initalSelect});
+}
+  
+abstract class AbstractDropDownSelectorState<T> extends State<AbstractDropDownSelector<T>> {
+  late T? selected = widget.initalSelect;
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
+      data: ThemeData(
+        canvasColor: Colors.black
+      ), 
+      child: SizedBox(
+        width: 300,
+        height: 50, 
+        child :DropdownButton<T>(
+          value: selected,
+          onChanged: (T? newValue) {
+            setState(() {
+              selected = newValue;
+              widget.onSelect(newValue);
+            });
+            
+          },
+          items: widget.options.map((T option) {
+            return DropdownMenuItem<T>(
+              value: option,
+              child: Row(
+                children: [
+                  Text(
+                    optionToString(option),
+                    style: const TextStyle(
+                      color: Colors.white70
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        )
+      )
+    );
+  }
+
+  String optionToString(T option);
+
+}

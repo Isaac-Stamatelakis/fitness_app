@@ -26,7 +26,6 @@ abstract class MultiDatabaseRetriever<T> {
   Future<List<T>> retrieve() async {
     try {
       QuerySnapshot querySnapshot = await getQuerySnapshot();
-    
       List<T> items = [];
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
         items.add(fromDocument(documentSnapshot));

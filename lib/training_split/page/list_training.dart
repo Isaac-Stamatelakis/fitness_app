@@ -219,15 +219,7 @@ class TrainingBlockListState extends ATrainingBlockListState {
 
   @override
   void onPress(IBlock? block) async {
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return EditBlockDialog(block: block, moveUp: _moveUp, moveDown: _moveDown);
-      }
-    );
-    setState(() {
-      
-    });
+    _startEditDialog(block);
   }
   
   Widget generateText(IBlock? block) {
@@ -266,6 +258,25 @@ class TrainingBlockListState extends ATrainingBlockListState {
       dynamic temp = widget.blocks![index];
       widget.blocks![index] = widget.blocks![newIndex];
       widget.blocks![newIndex] = temp; 
+    });
+  }
+
+  void _onBlockTypeChanged(IBlock? oldBlock, IBlock? newBlock) {
+    int oldIndex = widget.blocks!.indexOf(oldBlock!);
+    widget.blocks?[oldIndex] = newBlock!;
+    Navigator.pop(context);
+    _startEditDialog(newBlock);
+  }
+
+  void _startEditDialog(IBlock? block) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return EditBlockDialogFactory(block: block, moveUp: _moveUp, moveDown: _moveDown, onBlockTypeChanged: _onBlockTypeChanged);
+      }
+    );
+    setState(() {
+      
     });
   }
 

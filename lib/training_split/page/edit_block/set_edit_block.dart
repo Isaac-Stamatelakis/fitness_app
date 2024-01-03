@@ -1,57 +1,55 @@
 
 import 'package:fitness_app/misc/display_list.dart';
-import 'package:fitness_app/training_split/set.dart';
+import 'package:fitness_app/training_split/set/set.dart';
 import 'package:fitness_app/training_split/training_split.dart';
 import 'package:flutter/material.dart';
 
-class EditBlockSet extends StatefulWidget {
+class LiftingEditBlockSet extends StatefulWidget {
   final IBlock? block;
-  const EditBlockSet({super.key, required this.block});
+  const LiftingEditBlockSet({super.key, required this.block});
 
   @override
   State<StatefulWidget> createState() => _EditSetWidgetState();
 }
 
-class _EditSetWidgetState extends State<EditBlockSet> {
+class _EditSetWidgetState extends State<LiftingEditBlockSet> {
   @override
   Widget build(BuildContext context) {
-
-    if (widget.block is ExerciseBlock?) {
-      ExerciseBlock? eBlock = widget.block as ExerciseBlock?;
-      print(eBlock!.sets.length);
-    }
-    return const Column(
+    return Column(
       children: [
-        //_SetList(dataList: widget.,)
+        IconButton(onPressed: _addSet, icon: const Icon(Icons.add)),
+        SetFactory.buildSetSelector(widget.block)
       ],
     );
   }
+
+  void _addSet() {
+    IBlock? block = widget.block; 
+    setState(() {
+      if (block is ExerciseBlock) {
+        block.sets!.add(
+          SetCollection(data: {}, type: SetType.Standard, amount: 1)
+        );
+      }
+    });
+  }
 }
 
-class _SetList extends AbstractList<ISet> {
-  final List<ISet> sets;
+class CardioEditBlockSet extends StatefulWidget {
+  final IBlock? block;
+  const CardioEditBlockSet({super.key, required this.block});
 
-  _SetList({required super.dataList, required super.colors, required this.sets});
   @override
-  State<StatefulWidget> createState() => _SetListState();
-
+  State<StatefulWidget> createState() => _CardioEditBlockSetState();
 }
 
-class _SetListState extends AbstractListState<ISet> {
+class _CardioEditBlockSetState extends State<CardioEditBlockSet> {
   @override
-  Widget? getContainerWidget(ISet? set) {
-    // TODO: implement getContainerWidget
-    throw UnimplementedError();
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SetFactory.buildSetSelector(widget.block)
+      ],
+    );
   }
-
-  @override
-  void onLongPress(ISet? set) {
-    // TODO: implement onLongPress
-  }
-
-  @override
-  void onPress(ISet? set) {
-    // TODO: implement onPress
-  }
-
 }

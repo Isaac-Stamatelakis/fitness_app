@@ -1,4 +1,4 @@
-// ignore_for_file: unused_element, constant_identifier_names
+// ignore_for_file: unused_element, constant_identifier_names, unused_field
 
 import 'dart:math';
 
@@ -9,22 +9,38 @@ import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart
 import 'package:fitness_app/misc/global_widgets.dart';
 import 'package:fitness_app/training_split/page/edit_block/exercise_edit_block.dart';
 import 'package:fitness_app/training_split/page/edit_block/set_edit_block.dart';
+import 'package:fitness_app/training_split/set/set.dart';
 import 'package:fitness_app/training_split/training_split.dart';
 import 'package:flutter/material.dart';
 
-
-
-class EditBlockDialog extends StatefulWidget {
+class EditBlockDialogFactory extends StatelessWidget {
   final IBlock? block;
   final Function(IBlock?) moveUp;
   final Function(IBlock?) moveDown;
-  const EditBlockDialog({super.key, required this.block, required this.moveUp, required this.moveDown});
+  final Function(IBlock?, IBlock?) onBlockTypeChanged;
 
+  const EditBlockDialogFactory({super.key, this.block, required this.moveUp, required this.moveDown, required this.onBlockTypeChanged});
   @override
-  State<EditBlockDialog> createState() => _EditBlockDialogState();
+  Widget build(BuildContext context) {
+    if (block is ExerciseBlock) {
+      return _LiftingEditDialog(block: block, moveUp: moveUp, moveDown: moveDown, onBlockTypeChanged: onBlockTypeChanged);
+    } else if (block is CardioBlock) {
+      return _CardioEditDialog(block: block, moveUp: moveUp, moveDown: moveDown, onBlockTypeChanged: onBlockTypeChanged);
+    }
+    return Container();
+  }
+
 }
 
-class _EditBlockDialogState extends State<EditBlockDialog> {
+abstract class _EditBlockDialog extends StatefulWidget {
+  final IBlock? block;
+  final Function(IBlock?) moveUp;
+  final Function(IBlock?) moveDown;
+  final Function(IBlock?, IBlock?) onBlockTypeChanged;
+  const _EditBlockDialog({super.key, required this.block, required this.moveUp, required this.moveDown, required this.onBlockTypeChanged});
+}
+
+abstract class _EditBlockDialogState extends State<_EditBlockDialog> {
   late _EditBlockMenuOption selectedOption = _EditBlockMenuOption.Exercises;
   @override
   Widget build(BuildContext context) {
@@ -61,6 +77,11 @@ class _EditBlockDialogState extends State<EditBlockDialog> {
                 ),
                 centerTitle: true,
               ),
+              const SizedBox(height: 20),
+              _BlockTypeSelector(onSelect: _onBlockTypeChanged, initalSelect: _getOption()),
+              const SizedBox(height: 20),
+              _EditSelector(onSelect: _onOptionChanged, initalSelect: _EditBlockMenuOption.Exercises),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -98,28 +119,16 @@ class _EditBlockDialogState extends State<EditBlockDialog> {
                 ],
               ),
               const SizedBox(height: 20),
-              _EditSelector(onSelect: _onOptionChanged),
-              const SizedBox(height: 20),
-              SizedBox(
-                  width: 300,
-                  child: _getOptionContent(),
-              )
+              _getOptionContent(),
+              
             ],
           )
         ),
       )
     );
-  
   }
+  Widget _getOptionContent();
 
-  Widget _getOptionContent() {
-    switch (selectedOption) {
-      case _EditBlockMenuOption.Exercises:
-        return EditBlockExercise(block: widget.block, onMovementSelected: _onMovementSelected);
-      case _EditBlockMenuOption.Sets:
-        return EditBlockSet(block: widget.block);
-    }
-  }
   void _onMovementSelected(MovementPattern? pattern) {
     setState(() {
       widget.block!.movementPattern = pattern;
@@ -141,54 +150,83 @@ class _EditBlockDialogState extends State<EditBlockDialog> {
       selectedOption = option;
     });
   }
+
+  void _onBlockTypeChanged(_BlockTypeOption? option) {
+    if (option == null) {
+      return;
+    }
+    IBlock? newBlock;
+    switch (option) {
+      case _BlockTypeOption.Lifting:
+        newBlock = ExerciseBlock(null, sets: [], movementPattern: null, exercise: null);
+      case _BlockTypeOption.Cardio:
+        newBlock = CardioBlock(null, movementPattern: MovementPattern.Cardio, exercise: null, set: CardioSet(duration: 0));
+    }
+    widget.onBlockTypeChanged(widget.block, newBlock);
+  }
+
+  _BlockTypeOption _getOption() {
+    if (widget.block is ExerciseBlock) {
+      return _BlockTypeOption.Lifting;
+    } else {
+      return _BlockTypeOption.Cardio;
+    }
+  }
 }
 
-class _EditSelector extends StatefulWidget {
-  final Function(_EditBlockMenuOption?) onSelect;
+class _LiftingEditDialog extends _EditBlockDialog {
+  const _LiftingEditDialog({required super.block, required super.moveUp, required super.moveDown, required super.onBlockTypeChanged});
+  @override
+  State<StatefulWidget> createState() => _LiftingEditDialogState();
 
-  const _EditSelector({super.key, required this.onSelect});
+}
+
+class _LiftingEditDialogState extends _EditBlockDialogState {
+  @override
+  Widget _getOptionContent() {
+    switch (selectedOption) {
+      case _EditBlockMenuOption.Exercises:
+        return LiftingEditBlockExercise(block: widget.block, onMovementSelected: _onMovementSelected);
+      case _EditBlockMenuOption.Sets:
+        return LiftingEditBlockSet(block: widget.block);
+    }
+  }
+}
+
+class _CardioEditDialog extends _EditBlockDialog {
+  const _CardioEditDialog({required super.block, required super.moveUp, required super.moveDown, required super.onBlockTypeChanged});
+  @override
+  State<StatefulWidget> createState() => _CardioEditDialogState();
+
+}
+
+class _CardioEditDialogState extends _EditBlockDialogState {
+  @override
+  Widget _getOptionContent() {
+    switch (selectedOption) {
+      case _EditBlockMenuOption.Exercises:
+        return CardioEditBlockExercise(block: widget.block, onMovementSelected: _onMovementSelected);
+      case _EditBlockMenuOption.Sets:
+        return CardioEditBlockSet(block: widget.block);
+    }
+  }
+
+}
+
+enum _EditBlockMenuOption {
+  Exercises,
+  Sets
+}
+
+
+class _EditSelector extends AbstractDropDownSelector<_EditBlockMenuOption> {
+  const _EditSelector({required super.onSelect, required super.initalSelect}) : super(options: _EditBlockMenuOption.values);
   @override
   _EditSelectorState createState() => _EditSelectorState();
 }
 
-class _EditSelectorState extends State<_EditSelector> {
-  final List<_EditBlockMenuOption> options = _EditBlockMenuOption.values;
-  late _EditBlockMenuOption selected = options[0];
-
+class _EditSelectorState extends AbstractDropDownSelectorState<_EditBlockMenuOption> {
   @override
-  Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData(
-        canvasColor: Colors.black
-      ), 
-      child: SizedBox(
-        width: 300,
-        height: 50, 
-        child :DropdownButton<_EditBlockMenuOption>(
-          value: selected,
-          onChanged: (_EditBlockMenuOption? newValue) {
-            widget.onSelect(newValue);
-          },
-          items: options.map((_EditBlockMenuOption option) {
-            return DropdownMenuItem<_EditBlockMenuOption>(
-              value: option,
-              child: Row(
-                children: [
-                  Text(
-                    optionToString(option),
-                    style: const TextStyle(
-                      color: Colors.white70
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
-        )
-      )
-    );
-  }
-
   String optionToString(_EditBlockMenuOption option) {
     switch (option) {
       case _EditBlockMenuOption.Exercises:
@@ -199,8 +237,27 @@ class _EditSelectorState extends State<_EditSelector> {
   }
 }
 
-enum _EditBlockMenuOption {
-  Exercises,
-  Sets
+enum _BlockTypeOption {
+  Lifting,
+  Cardio
+}
+
+class _BlockTypeSelector extends AbstractDropDownSelector<_BlockTypeOption> {
+  const _BlockTypeSelector({required super.onSelect, required super.initalSelect}) : super(options: _BlockTypeOption.values);
+
+  @override
+  State<StatefulWidget> createState() => _BlockTypeSelectorState();
+
+}
+
+class _BlockTypeSelectorState extends AbstractDropDownSelectorState<_BlockTypeOption> {
+  @override
+  String optionToString(_BlockTypeOption option) {
+    switch (option) {
+      default:
+        return option.toString().split(".")[1];
+    }
+  }
+
 }
 
