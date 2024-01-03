@@ -48,19 +48,6 @@ class CardioBlock extends IBlock {
   CardioBlock(super.variation, {required super.movementPattern, required super.exercise, required this.set});
 }
 
-class TrainingSessionRetriever extends MultiDatabaseRetriever<TrainingSession> {
-  final String trainingSplitID;
-  TrainingSessionRetriever({required this.trainingSplitID});
-  @override
-  fromDocument(DocumentSnapshot<Object?> snapshot) {
-    // TODO: implement fromDocument
-    throw UnimplementedError();
-  }  
-  @override
-  Future<QuerySnapshot<Object?>> getQuerySnapshot() {
-    return FirebaseFirestore.instance.collection("StaticSessions").where('training_split_id', isEqualTo: trainingSplitID).get();
-  }
-}
 
 class TrainingSessionFactory {
   static Future<TrainingSession> fromDocument(DocumentSnapshot snapshot) async {
@@ -70,25 +57,53 @@ class TrainingSessionFactory {
     );
   }
 
-  static Future<List<ExerciseBlock>> decode<T extends ISet>(List<Map<String,dynamic>> blockMap) async {
-    List<ExerciseBlock> exerciseBlocks = [];
-    for (Map<String,dynamic> json in blockMap) {
-      List<ISet?> sets = [];
-      for (Map<String, dynamic> setJson in json['sets']) {
-        sets.add(SetFactory.fromJson<T>(setJson));
-      }
+  static Future<List<IBlock>> decode<T extends ISet>(List<dynamic> listMap) async {
+    List<IBlock> blocks = [];
+    if (listMap.isEmpty) {
+      return [];
+    }
+    for (dynamic val in listMap) {
+      Map<String,dynamic> json = val as Map<String,dynamic>;
       String exerciseID = json['exercise_id'];
       String? variationID = json['variation_id'];
-      IExercise? exercise = await SingleExerciseRetriever(dbID: exerciseID).retrieve();
+      IExercise? exercise;
       ExerciseVariation? variation;
-      if (variationID != null && variationID.isNotEmpty) {
-        variation = await ExerciseVariationRetriever(dbID: variationID).fromDatabase();
+      MovementPattern? movementPattern = MovementPatternFactory.stringToPattern(json['movement_pattern']);
+      if (exerciseID.isNotEmpty) {
+        exercise = await SingleExerciseRetriever(dbID: exerciseID).retrieve();
+        if (variationID != null && variationID.isNotEmpty) {
+          variation = await ExerciseVariationRetriever(dbID: variationID).fromDatabase();
+        }
       }
-      
-      exerciseBlocks.add(ExerciseBlock(variation, sets: sets, exercise: exercise, movementPattern: exercise?.movementPattern));
+      List<ISet?> sets = [];
+      _BlockTypeOption? blockTypeOption;
+      for (dynamic setVal in json['sets']) {
+        Map<String,dynamic> setJson = setVal as Map<String,dynamic>;
+        if (setJson['type'] == "Cardio") {
+          sets.add(CardioSet(duration: setJson['duration']));
+          blockTypeOption = _BlockTypeOption.Cardio;
+          continue;
+        }
+        for (LiftingSetType type in LiftingSetType.values) {
+          if (setVal['type'] == SetFactory.liftingSetTypeToString(type)) {
+            sets.add(LiftingSet(type: type, data: setJson));
+            blockTypeOption = _BlockTypeOption.Lifting;
+          }
+        }
+      }
+
+      switch (blockTypeOption) {
+        case null:
+          // Do nothing
+        case _BlockTypeOption.Cardio:
+          blocks.add(CardioBlock(variation, movementPattern: MovementPattern.Cardio, exercise: exercise, set: sets[0] as CardioSet));
+        case _BlockTypeOption.Lifting:
+          blocks.add(ExerciseBlock(variation, sets: sets, movementPattern: movementPattern, exercise: exercise));
+      }
     }
-    return exerciseBlocks;
+    return blocks;
   } 
+
 
   static Widget? toText(ISession? session) {
     TextStyle textStyle = const TextStyle(
@@ -111,4 +126,9 @@ class TrainingSessionFactory {
   }
 
 
+}
+
+enum _BlockTypeOption {
+  Cardio,
+  Lifting,
 }

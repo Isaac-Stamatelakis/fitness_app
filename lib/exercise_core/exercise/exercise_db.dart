@@ -45,10 +45,9 @@ class EntireExerciseRetriever {
 
 class SingleExerciseRetriever {
   final String dbID;
-
   SingleExerciseRetriever({required this.dbID});
   Future<IExercise?> retrieve() async { 
-    IExercise? exercise = await SingleCustomExerciseRetriever(dbID: dbID).fromDatabase();
+    IExercise? exercise = await SinglePresetExerciseRetriever(dbID: dbID).fromDatabase();
     if (exercise != null) {
       return exercise;
     }
@@ -67,7 +66,7 @@ class SinglePresetExerciseRetriever extends DatabaseHelper{
 
   @override
   getDatabaseReference() {
-    return FirebaseFirestore.instance.collection("PresetExercises").doc(dbID).get();
+    return FirebaseFirestore.instance.collection("PresetExercises").doc(dbID);
   }
 } 
 
@@ -80,7 +79,7 @@ class SingleCustomExerciseRetriever extends DatabaseHelper{
   }
   @override
   getDatabaseReference() {
-    return FirebaseFirestore.instance.collection("CustomExercises").doc(dbID).get();
+    return FirebaseFirestore.instance.collection("CustomExercises").doc(dbID);
   }
 } 
 

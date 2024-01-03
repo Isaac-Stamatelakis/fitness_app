@@ -1,5 +1,6 @@
 import 'package:fitness_app/misc/global_widgets.dart';
 import 'package:fitness_app/misc/page_loader.dart';
+import 'package:fitness_app/training_split/page/page_training_split.dart';
 import 'package:fitness_app/training_split/preset/dialog_new_split.dart';
 import 'package:fitness_app/user/user.dart';
 import 'package:flutter/material.dart';
@@ -104,16 +105,26 @@ class _State extends State<HomePage> {
         }
       );
     } else {
-
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ModifyTrainingSplitPageLoader(
+            user: widget.user
+          )
+        )
+      );
     }
   }
 
+  void _reload() {
+    setState(() {
+      
+    });
+  }
   void _toProgress() {
     
   }
 
 }
-
 
 
 class _SessionList extends StatelessWidget {

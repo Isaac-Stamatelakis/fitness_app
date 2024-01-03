@@ -1,12 +1,15 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:ui_web';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
-import 'package:fitness_app/exercise_core/muscle/muscle_list.dart';
 import 'package:fitness_app/exercise_core/muscle/muscles.dart';
 import 'package:fitness_app/main_scaffold.dart';
 import 'package:fitness_app/misc/display_list.dart';
 import 'package:fitness_app/misc/global_widgets.dart';
+import 'package:fitness_app/misc/page_loader.dart';
+import 'package:fitness_app/training_split/db_training_split.dart';
 import 'package:fitness_app/training_split/page/edit_block/exercise_edit_block.dart';
 import 'package:fitness_app/training_split/page/list_training.dart';
 import 'package:fitness_app/training_split/preset/dialog_new_split.dart';
@@ -135,7 +138,6 @@ abstract class _AbstractTrainingPageState extends State<_AbstractTrainingPageCon
   }
 }
 
-
 class _NewTrainingPageContent extends _AbstractTrainingPageContent {
   _NewTrainingPageContent({required super.trainingSplit, required super.user});
 
@@ -148,63 +150,49 @@ class _NewTrainingPageContentState extends _AbstractTrainingPageState {
   void _onCompletePress() async {
     Map<String, dynamic> splitUpload = {
       'name': widget.trainingSplit!.name,
-      'owner_id' : widget.user.dbID
+      'owner_id' : widget.user.dbID,
+      'date_created' : DateTime.now()
     };
     DocumentReference splitRef = await FirebaseFirestore.instance.collection("TrainingSplits").add(splitUpload);
     Logger().i("Split Uploaded: ${splitRef.id}");
-    String splitID = "DELETE_ME";
+    
+    String splitID = splitRef.id;
+    widget.user.trainingSplitID = splitID;
+    await FirebaseFirestore.instance.collection('Users').doc(widget.user.dbID).update({
+      'training_split_id' : splitID
+    });
+    Logger().i("User Current Split Set: ${splitRef.id}");
     int index = 0;
     for (ISession session in widget.trainingSplit!.trainingSessions) {
-      if (session is TrainingSession) {
-        List<Map<String,dynamic>> exercise_blocks = [];
-        for (IBlock block in session.exerciseBlocks) {
-          String exercise_id = "";
-          String variation_id = "";
-          if (block.exercise != null) {
-            exercise_id = block.exercise!.dbID;
-            if (block.variation != null) {
-              variation_id = block.variation!.dbID;
-            }
-          }
-          Map<String,dynamic> blockJson = {
-            'exercise_id' : exercise_id,
-            'variation_id' : variation_id,
-          };
-
-          if (block is CardioBlock) {
-            blockJson['sets'] = [
-              {
-                'type':'Cardio',
-                'duration': block.set!.duration
-              }
-            ];
-            exercise_blocks.add(blockJson);
-          } else if (block is ExerciseBlock) {
-            List<Map<String, dynamic>> sets = [];
-            for (ISet? set in block.sets!) {
-              if (set is LiftingSet) {
-                LiftingSetFactory.cleanUpStaticSetData(set);
-                set.data['type'] = SetFactory.liftingSetTypeToString(set.type);
-                sets.add(set.data);
-              }
-            }
-            blockJson['sets'] = sets;
-            exercise_blocks.add(blockJson);
-          }
-        }
-        print(exercise_blocks.length);
-        Map<String,dynamic> sessionUpload = {
-          'exercise_blocks': exercise_blocks,
-          'name' : session.name,
-          'order' : index,
-          'training_split_id' : splitID
-        };
-        index += 1;
-        DocumentReference sessionRef = await FirebaseFirestore.instance.collection("StaticSessions").add(sessionUpload);
-        Logger().i("Session Uploaded: ${sessionRef.id}");
-      }
+      SessionUploader.uploadSession(session, splitID, index);
+      index += 1;
     }
   }
+}
+
+class ModifyTrainingSplitPageLoader extends PageLoader {
+  final User user;
+  const ModifyTrainingSplitPageLoader({super.key, required this.user});
+  @override
+  Widget generateContent(AsyncSnapshot snapshot) {
+    return MainScaffold(
+      title: "Training Split", 
+      content:_ModifyTrainingPageContent(
+        trainingSplit: snapshot.data, 
+        user: user), 
+      );
+  }
+
+  @override
+  Future getFuture() {
+    return TrainingSplitRetriever(dbID: user.trainingSplitID!).fromDatabase();
+  }
+
+  @override
+  String getTitle() {
+    return "Training Split";
+  }
+
 }
 
 class _ModifyTrainingPageContent extends _AbstractTrainingPageContent {
@@ -220,3 +208,4 @@ class _ModifyTrainingPageContentState extends _AbstractTrainingPageState {
     // TODO: implement _onCompletePress
   }
 }
+

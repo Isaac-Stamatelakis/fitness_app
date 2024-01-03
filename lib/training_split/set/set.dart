@@ -93,7 +93,7 @@ class LiftingSetFactory {
     ) {
       
       for (String key in keys) {
-        if (key != 'amount' || key != 'rep_range') {
+        if (key != 'amount' && key != 'rep_range') {
           set.data.remove(key);
         }
       }
@@ -101,7 +101,7 @@ class LiftingSetFactory {
       set.type == LiftingSetType.DropSet 
     ) {
       for (String key in keys) {
-        if (key != 'weight_drop' || key != 'rep_range') {
+        if (key != 'weight_drop' && key != 'rep_range') {
           set.data.remove(key);
         }
       }
@@ -109,19 +109,40 @@ class LiftingSetFactory {
     return {};
   }
   static String formatString(LiftingSet set) {
-    if (set.data.isEmpty) {
-      return "";
-    }
     switch (set.type) {
       case null:
-        return "";
+        return "3 Sets of 8-12 Reps";
       case LiftingSetType.Standard:
+        if (set.data['amount'] == null) {
+          set.data['amount'] = '3';
+        }
+        if (set.data['rep_range'] == null) {
+          set.data['rep_range'] = '8-12';
+        }
         return "${set.data['amount']} Sets of ${set.data['rep_range']} Reps";
       case LiftingSetType.DropSet:
-        return "Drop Set ${set.data['reps']} weight drop ${set.data['weight_drop']}";
+        if (set.data['rep_range'] == null) {
+          set.data['rep_range'] = '5-6';
+        }
+        if (set.data['weight_drop'] == null) {
+          set.data['weight_drop'] = '15';
+        }
+        return "Drop Set ${set.data['rep_range']} weight drop ${set.data['weight_drop']}";
       case LiftingSetType.LengthenedPartialSet:
+        if (set.data['amount'] == null) {
+          set.data['amount'] = '3';
+        }
+        if (set.data['rep_range'] == null) {
+          set.data['rep_range'] = '8-12';
+        }
         return "${set.data['amount']} Lengthened Partial Sets of ${set.data['rep_range']} Reps";
       case LiftingSetType.IntegratedLengthenedPartialSet:
+        if (set.data['amount'] == null) {
+          set.data['amount'] = '3';
+        }
+        if (set.data['rep_range'] == null) {
+          set.data['rep_range'] = '8-12';
+        }
         return "${set.data['amount']} Integrated Lengthened Partial Sets of ${set.data['rep_range']} Reps";
     }
   }

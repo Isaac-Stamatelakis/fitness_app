@@ -228,7 +228,6 @@ class TrainingBlockListState extends ATrainingBlockListState {
       if (block.exercise != null) {
         returnString += "${block.exercise!.exerciseName}\n";
       }
-   
     }
 
     

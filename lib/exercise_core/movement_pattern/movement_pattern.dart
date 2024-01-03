@@ -132,6 +132,14 @@ class MovementPatternFactory {
     }
     return movementPattern.toString().split(".")[1];
   }
+  static MovementPattern? stringToPattern(String string) {
+    for (MovementPattern movementPattern in MovementPattern.values) {
+      if (string == patternToString(movementPattern)) {
+        return movementPattern;
+      }
+    }
+    return null;
+  }
   static List<MovementPattern> getNoneNullPatterns() {
     List<MovementPattern> patterns = MovementPattern.values
       .where((pattern) => pattern != MovementPattern.UndefinedMovement)
