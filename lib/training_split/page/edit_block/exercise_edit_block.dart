@@ -51,7 +51,9 @@ class _ExerciseAndVariationContainerLoader extends WidgetLoader {
   const _ExerciseAndVariationContainerLoader({required this.block});
   @override
   Widget generateContent(AsyncSnapshot snapshot) {
-    return _ExerciseAndVariationContainer(block: block, exercises: snapshot.data);
+    List<IExercise?> exercises = [null];
+    exercises.addAll(snapshot.data);
+    return _ExerciseAndVariationContainer(block: block, exercises: exercises);
   }
 
   @override
@@ -63,7 +65,7 @@ class _ExerciseAndVariationContainerLoader extends WidgetLoader {
 
 class _ExerciseAndVariationContainer extends StatefulWidget {
   final IBlock? block;
-  final List<IExercise> exercises;
+  final List<IExercise?> exercises;
   const _ExerciseAndVariationContainer({required this.block, required this.exercises});
 
   @override
@@ -76,7 +78,13 @@ class _ExerciseAndVariationContainerState extends State<_ExerciseAndVariationCon
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _ExerciseDropButton(list: widget.exercises, width: 300, label: "Search Exercises", onSelect: _onExerciseSelected, initialValue: widget.block!.exercise),
+        _ExerciseDropButton(
+          list: widget.exercises, 
+          width: 300, 
+          label: "Search Exercises", 
+          onSelect: _onExerciseSelected, 
+          initialValue: widget.block!.exercise
+        ),
         const SizedBox(height: 20),
         _ExerciseVariationDropButtonLoader(
           block: widget.block!,
@@ -112,6 +120,17 @@ class _DropButtonState extends ASearchDropDownButtonState<MovementPattern> {
   String elementToString(MovementPattern? movementPattern) {
     return MovementPatternFactory.patternToString(movementPattern);
   }
+  
+  @override
+  int getInitalIndex() {
+    if (widget.list!.contains(widget.initialValue)) {
+      return widget.list!.indexOf(widget.initialValue);
+    }
+    if (widget.list!.isNotEmpty) {
+      return 0;
+    }
+    return -1;
+  }
 }
 
 class _ExerciseDropButton extends ASearchDropDownButton<IExercise> {
@@ -123,7 +142,22 @@ class _ExerciseDropButton extends ASearchDropDownButton<IExercise> {
 class _ExerciseDropButtonState extends ASearchDropDownButtonState<IExercise> {
   @override
   String elementToString(IExercise? element) {
-    return element!.exerciseName;
+    if (element == null) {
+      return "None";
+    }
+    return element.exerciseName;
+  }
+  
+  @override
+  int getInitalIndex() {
+    int index = 0;
+    for (IExercise? exercise in widget.list!) {
+      if (exercise != null && widget.initialValue != null && exercise.exerciseName == widget.initialValue!.exerciseName) {
+        return index;
+      }
+      index += 1;
+    }
+    return 0;
   }
 }
 
@@ -163,5 +197,19 @@ class _ExerciseVariationDropButtonState extends ASearchDropDownButtonState<Exerc
       return element.variationName;
     } 
     return "None";
+  }
+  @override
+  int getInitalIndex() {
+    if (widget.initialValue == null) {
+      return 0;
+    }
+    int index = 0;
+    for (ExerciseVariation? variation in widget.list!) {
+      if (variation!.variationName == widget.initialValue!.variationName) {
+        return index;
+      }
+      index += 1;
+    }
+    return 0;
   }
 }

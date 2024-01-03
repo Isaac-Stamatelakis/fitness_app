@@ -200,13 +200,16 @@ abstract class ASearchDropDownButtonState<T> extends State<ASearchDropDownButton
   @override
   void initState() {
     super.initState();
-    selectedIndex = getInitalIndex();
     buildLists("");
+    selectedIndex = getInitalIndex();
+    /*
     Future.delayed(Duration.zero, () {
       if (widget.initialValue == null && selectedIndex >= 0) {
         widget.onSelect(valueList[selectedIndex]);
       }
     });
+    */
+    
   }
 
   @override
@@ -240,7 +243,6 @@ abstract class ASearchDropDownButtonState<T> extends State<ASearchDropDownButton
             child: DropdownButton<String>(
               isExpanded: true,
               value: getValueAtIndex(),
-              
               onChanged: (String? newValue) {
                 setState(() {
                   selectedIndex = stringList.indexOf(newValue!);
@@ -288,16 +290,7 @@ abstract class ASearchDropDownButtonState<T> extends State<ASearchDropDownButton
     return stringList[selectedIndex];
   }
 
-  int getInitalIndex() {
-    if (widget.list!.contains(widget.initialValue)) {
-      return widget.list!.indexOf(widget.initialValue);
-    }
-    if (widget.list!.isNotEmpty) {
-      return 0;
-    }
-    return -1;
-    
-  }
+  int getInitalIndex();
 }
 
 abstract class AbstractDropDownSelector<T> extends StatefulWidget {
