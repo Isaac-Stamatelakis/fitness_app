@@ -263,7 +263,12 @@ class TrainingBlockListState extends ATrainingBlockListState {
 
   void _onBlockTypeChanged(IBlock? oldBlock, IBlock? newBlock) {
     int oldIndex = widget.blocks!.indexOf(oldBlock!);
-    widget.blocks?[oldIndex] = newBlock!;
+    /*
+    if (oldIndex >= 0) {
+
+      widget.blocks?[oldIndex] = newBlock!;
+    }
+    */
     Navigator.pop(context);
     _startEditDialog(newBlock);
   }

@@ -27,6 +27,9 @@ abstract class MultiDatabaseRetriever<T> {
     try {
       QuerySnapshot querySnapshot = await getQuerySnapshot();
       List<T> items = [];
+      if (querySnapshot.docs.isEmpty) {
+        return items;
+      }
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
         items.add(fromDocument(documentSnapshot));
       }
@@ -46,6 +49,9 @@ abstract class DatabaseQuery {
     try {
       List<dynamic> queryResults = [];
       QuerySnapshot querySnapshot = await getQuery().get();
+      if (querySnapshot.docs.isEmpty) {
+        return queryResults;
+      }
       for (QueryDocumentSnapshot snapshot in querySnapshot.docs) {
         queryResults.add(fromDocument(snapshot));
       }

@@ -4,6 +4,7 @@ import 'package:fitness_app/exercise_core/exercise/exercise.dart';
 import 'package:fitness_app/exercise_core/muscle/muscle_list.dart';
 import 'package:fitness_app/exercise_core/muscle/muscles.dart';
 import 'package:fitness_app/misc/display_list.dart';
+import 'package:fitness_app/training_split/set/dialog_edit_set.dart';
 import 'package:fitness_app/training_split/training_split.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -38,58 +39,70 @@ class IntegratedLengthenedPartialSet extends Set {
 }
 
 */
-enum SetType {
+enum LiftingSetType {
   Standard,
   DropSet,
   LengthenedPartialSet,
   IntegratedLengthenedPartialSet,
-  Undefined
 }
 
 abstract class ISet {
 
 }
 
-/// Similar to how its encoded on database. Let data be data
-class Set extends ISet {
-  final SetType? type;
-  final Map<String, dynamic> data;
-  Set({required this.data,required this.type});
-}
-
 class CardioSet extends ISet {
-  final int duration;
+  late int duration;
   CardioSet({required this.duration});
 }
 /// Represents how subsequent sets are stored for a training plan
 /// ie sets 3 of bicep curls, data={'rep_range':'8-12'}
-class SetCollection extends ISet {
-  final int? amount;
-  final SetType? type;
-  final Map<String, dynamic> data;
-  SetCollection({required this.amount, required this.type, required this.data});
+class LiftingSet extends ISet {
+  late LiftingSetType? type;
+  late Map<String, dynamic> data;
+  LiftingSet({required this.type, required this.data});
 }
 
 
+class LiftingSetFactory {
+  Map<String, dynamic> formatEmptyJson(LiftingSet set) {
+    if (
+      set.type == LiftingSetType.IntegratedLengthenedPartialSet ||
+      set.type == LiftingSetType.LengthenedPartialSet ||
+      set.type == LiftingSetType.Standard 
+    ) {
+      return {
+        "amount" : 0,
+        "rep_range": "8-12",
+      };
+    } else if (
+      set.type == LiftingSetType.DropSet 
+    ) {
+      return {
+        "weight_drop" : 15,
+        "rep" : 0
+      };
+    }
+    return {};
+  }
+}
+
 class SetFactory {
-  static SetType? fromString(String string) {
-    for (SetType setType in SetType.values) {
-      if (setToString(setType) == string) {
+  static LiftingSetType? liftingSetTypeFromString(String string) {
+    for (LiftingSetType setType in LiftingSetType.values) {
+      if (liftingSetTypeToString(setType) == string) {
         return setType;
       }
     }
-    return SetType.Undefined;
+    return null;
   }
 
-  static String setToString(SetType? setType) {
+  static String liftingSetTypeToString(LiftingSetType? setType) {
     return setType.toString().split(".")[1];
   }
 
   static ISet? fromJson<T extends ISet>(Map<String, dynamic> json) {
-    if (T is Set) {
-      return Set(type: SetFactory.fromString(json['type']), data: json['data']);
-    } else if (T is SetCollection) {
-      return SetCollection(amount: json['amount'], type: SetFactory.fromString(json['type']), data: json['data']);
+   if (T is LiftingSet) {
+      return LiftingSet(type: SetFactory.liftingSetTypeFromString(json['type']), data: json['data']);
     } else {
       return null;
     }
@@ -107,15 +120,20 @@ class SetFactory {
   }
 
   static Widget buildTextFromSet(ISet? set) {
-    if (set is SetCollection) {
+    if (set is LiftingSet) {
       return Text(
-        setToString(set.type),
+        liftingSetTypeToString(set.type),
         style: const TextStyle(
           color: Colors.white70
         ),
       );
     } else if (set is CardioSet) {
-
+      return Text(
+        "Duration: ${set.duration} Minutes",
+        style: const TextStyle(
+          color: Colors.white70
+        ),
+      );
     }
     return Container();
   }
@@ -142,8 +160,16 @@ class _SetListState extends NonFlexAbstractListState<ISet> {
   }
 
   @override
-  void onPress(ISet? set) {
-    // TODO: implement onPress
+  void onPress(ISet? set) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return LiftingEditSetDialogue(set: set as LiftingSet);
+      }
+    );
+    setState(() {
+      
+    });
   }
 
 }
@@ -166,8 +192,16 @@ class _CardioSetListState extends NonFlexAbstractListState<ISet> {
   }
 
   @override
-  void onPress(ISet? set) {
-    // TODO: implement onPress
+  void onPress(ISet? set) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CardioEditSetDialogue(set: set as CardioSet);
+      }
+    );
+    setState(() {
+      
+    });
   }
 
 }

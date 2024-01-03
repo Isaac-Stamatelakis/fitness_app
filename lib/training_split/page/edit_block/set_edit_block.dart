@@ -28,7 +28,7 @@ class _EditSetWidgetState extends State<LiftingEditBlockSet> {
     setState(() {
       if (block is ExerciseBlock) {
         block.sets!.add(
-          SetCollection(data: {}, type: SetType.Standard, amount: 1)
+          LiftingSet(data: {}, type: LiftingSetType.Standard)
         );
       }
     });

@@ -42,9 +42,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -54,9 +53,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.VerticlePress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -66,9 +64,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -78,9 +75,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ShoulderAbduction, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -90,9 +86,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ElbowExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -108,9 +103,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.VerticalPull, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -120,9 +114,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -132,9 +125,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.HorizontalPull, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -144,9 +136,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -156,9 +147,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.Pullover, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -168,9 +158,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.WristFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -186,9 +175,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.Squat, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -198,9 +186,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.LegFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -210,9 +197,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.AnkleExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -222,9 +208,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.LegExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -234,9 +219,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.HipAdbuction, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -246,9 +230,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.SpinalExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -264,9 +247,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -276,9 +258,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.VerticlePress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -288,9 +269,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -300,9 +280,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ShoulderAbduction, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -312,9 +291,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ElbowExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -330,9 +308,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.VerticalPull, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -342,9 +319,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -354,9 +330,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.HorizontalPull, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -366,9 +341,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -378,9 +352,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.Pullover, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -390,9 +363,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.WristFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -408,9 +380,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.Squat, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -420,9 +391,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.LegFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -432,9 +402,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.AnkleExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -444,9 +413,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.LegExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -456,9 +424,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.HipAdbuction, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -468,9 +435,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.SpinalExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -494,9 +460,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -506,9 +471,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -518,9 +482,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ChestFly, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -530,9 +493,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -542,9 +504,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.UpperChestFly, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -560,9 +521,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.VerticalPull, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -572,9 +532,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.HorizontalPull, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -584,9 +543,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.Pullover, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -596,9 +554,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.VerticalPull, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -608,9 +565,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.HorizontalPull, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -626,9 +582,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.Squat, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -638,9 +593,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.LegFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -650,9 +604,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.AnkleExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -662,9 +615,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.LegExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -674,9 +626,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.HipAdbuction, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -686,9 +637,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.SpinalExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -704,9 +654,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -716,9 +665,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ShoulderAbduction, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -728,9 +676,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ShoulderFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -740,9 +687,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -752,9 +698,9 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ShoulderHorizontalAbduction, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -770,9 +716,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -782,9 +727,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ElbowExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -794,9 +738,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ElbowExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -806,9 +749,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -818,9 +760,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.WristFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -845,9 +786,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -857,9 +797,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -869,9 +808,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ElbowExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -881,9 +819,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -893,9 +830,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.ShoulderAbduction, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -911,9 +847,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.Squat, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -923,9 +858,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.LegFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -935,9 +869,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.LegExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -947,9 +880,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.AnkleExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -959,9 +891,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.HipAdbuction, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -971,9 +902,8 @@ class TrainingSplitPresetFactory {
                   movementPattern: MovementPattern.SpinalExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]

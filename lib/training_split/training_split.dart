@@ -66,7 +66,7 @@ class TrainingSessionFactory {
   static Future<TrainingSession> fromDocument(DocumentSnapshot snapshot) async {
     var data = snapshot.data() as Map<String, dynamic>;
     return TrainingSession(
-      dbID: snapshot.id, name: data['name'], exerciseBlocks: await decode<SetCollection>(data['exercise_blocks'])
+      dbID: snapshot.id, name: data['name'], exerciseBlocks: await decode<LiftingSet>(data['exercise_blocks'])
     );
   }
 
