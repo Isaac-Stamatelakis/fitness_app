@@ -140,7 +140,7 @@ abstract class ATrainingBlockList extends StatefulWidget {
   State<StatefulWidget> createState();
 }
 
-abstract class ATrainingBlockListState extends State<ATrainingBlockList> implements IButtonListState<IBlock?>{
+abstract class ATrainingBlockListState extends State<ATrainingBlockList> implements IButtonListState<int>{
   @override
   Widget build(BuildContext context) {
     return Flexible(
@@ -149,25 +149,24 @@ abstract class ATrainingBlockListState extends State<ATrainingBlockList> impleme
         child: ListView.builder(
           itemCount: widget.blocks?.length,
           itemBuilder: (context, index) {
-            return _buildTile(context,widget.blocks?[index]);
+            return _buildTile(context,index);
           },
         ),
       ) 
     );
-    
   }
 
-  Widget? _buildTile(BuildContext context, IBlock? block) {
+  Widget? _buildTile(BuildContext context, int index) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(width: 1),
         ElevatedButton(
           onPressed: () {
-            onPress(block);
+            onPress(index);
           },
           onLongPress: () {
-            onLongPress(block);
+            onLongPress(index);
           },
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
@@ -185,7 +184,7 @@ abstract class ATrainingBlockListState extends State<ATrainingBlockList> impleme
               width: 200,
               height: 100,
               alignment: Alignment.center,
-              child: getContainerWidget(block)
+              child: getContainerWidget(index)
             ),
           ),
         ),
@@ -203,7 +202,8 @@ class TrainingBlockList extends ATrainingBlockList {
 
 class TrainingBlockListState extends ATrainingBlockListState {
   @override
-  Widget? getContainerWidget(IBlock? block) {
+  Widget? getContainerWidget(int? index) {
+    IBlock block = widget.blocks![index!];
     if (block is ExerciseBlock) {
       return generateText(block);
     }
@@ -211,15 +211,15 @@ class TrainingBlockListState extends ATrainingBlockListState {
   }
 
   @override
-  void onLongPress(IBlock? block) {
+  void onLongPress(int? index) {
     setState(() {
-      widget.blocks?.remove(block);
+      widget.blocks?.removeAt(index!);
     });
   }
 
   @override
-  void onPress(IBlock? block) async {
-    _startEditDialog(block);
+  void onPress(int? index) async {
+    _startEditDialog(index);
   }
   
   Widget generateText(IBlock? block) {
@@ -239,45 +239,43 @@ class TrainingBlockListState extends ATrainingBlockListState {
         textAlign: TextAlign.center,
       );
   }
-  void _moveUp(IBlock? block) {
+  void _moveUp(int? index) {
     setState(() {
-      int index = widget.blocks!.indexOf(block!);
       int newIndex;
-      index > 0 ? newIndex = index-1 : newIndex=widget.blocks!.length-1;
+      index! > 0 ? newIndex = index-1 : newIndex=widget.blocks!.length-1;
       dynamic temp = widget.blocks![index];
       widget.blocks![index] = widget.blocks![newIndex];
       widget.blocks![newIndex] = temp; 
     });
   }
 
-  void _moveDown(IBlock? block) {
+  void _moveDown(int? index) {
     setState(() {
-      int index = widget.blocks!.indexOf(block!);
       int newIndex;
-      index < widget.blocks!.length-1 ? newIndex = index+1 : newIndex=0;
+      index! < widget.blocks!.length-1 ? newIndex = index+1 : newIndex=0;
       dynamic temp = widget.blocks![index];
       widget.blocks![index] = widget.blocks![newIndex];
       widget.blocks![newIndex] = temp; 
     });
   }
 
-  void _onBlockTypeChanged(IBlock? oldBlock, IBlock? newBlock) {
-    int oldIndex = widget.blocks!.indexOf(oldBlock!);
-    /*
-    if (oldIndex >= 0) {
-
-      widget.blocks?[oldIndex] = newBlock!;
-    }
-    */
+  void _onBlockTypeChanged(int? index, IBlock? newBlock) {
+    widget.blocks?[index!] = newBlock!;
     Navigator.pop(context);
-    _startEditDialog(newBlock);
+    _startEditDialog(index);
   }
 
-  void _startEditDialog(IBlock? block) async {
+  void _startEditDialog(int? index) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return EditBlockDialogFactory(block: block, moveUp: _moveUp, moveDown: _moveDown, onBlockTypeChanged: _onBlockTypeChanged);
+        return EditBlockDialogFactory(
+          block:  widget.blocks?[index!],
+          moveUp: _moveUp, 
+          moveDown: _moveDown, 
+          onBlockTypeChanged: _onBlockTypeChanged, 
+          index: index
+        );
       }
     );
     setState(() {

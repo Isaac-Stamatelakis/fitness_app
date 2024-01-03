@@ -127,6 +127,9 @@ class MovementPatternFactory {
   }
 
   static String patternToString(MovementPattern? movementPattern) {
+    if (movementPattern == null) {
+      return "";
+    }
     return movementPattern.toString().split(".")[1];
   }
   static List<MovementPattern> getNoneNullPatterns() {

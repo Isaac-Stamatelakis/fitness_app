@@ -14,18 +14,19 @@ import 'package:fitness_app/training_split/training_split.dart';
 import 'package:flutter/material.dart';
 
 class EditBlockDialogFactory extends StatelessWidget {
+  final int? index;
   final IBlock? block;
-  final Function(IBlock?) moveUp;
-  final Function(IBlock?) moveDown;
-  final Function(IBlock?, IBlock?) onBlockTypeChanged;
+  final Function(int?) moveUp;
+  final Function(int?) moveDown;
+  final Function(int?, IBlock?) onBlockTypeChanged;
 
-  const EditBlockDialogFactory({super.key, this.block, required this.moveUp, required this.moveDown, required this.onBlockTypeChanged});
+  const EditBlockDialogFactory({super.key, this.block, required this.moveUp, required this.moveDown, required this.onBlockTypeChanged, required this.index});
   @override
   Widget build(BuildContext context) {
     if (block is ExerciseBlock) {
-      return _LiftingEditDialog(block: block, moveUp: moveUp, moveDown: moveDown, onBlockTypeChanged: onBlockTypeChanged);
+      return _LiftingEditDialog(block: block, moveUp: moveUp, moveDown: moveDown, onBlockTypeChanged: onBlockTypeChanged, index: index);
     } else if (block is CardioBlock) {
-      return _CardioEditDialog(block: block, moveUp: moveUp, moveDown: moveDown, onBlockTypeChanged: onBlockTypeChanged);
+      return _CardioEditDialog(block: block, moveUp: moveUp, moveDown: moveDown, onBlockTypeChanged: onBlockTypeChanged, index: index);
     }
     return Container();
   }
@@ -33,11 +34,12 @@ class EditBlockDialogFactory extends StatelessWidget {
 }
 
 abstract class _EditBlockDialog extends StatefulWidget {
+  final int? index;
   final IBlock? block;
-  final Function(IBlock?) moveUp;
-  final Function(IBlock?) moveDown;
-  final Function(IBlock?, IBlock?) onBlockTypeChanged;
-  const _EditBlockDialog({super.key, required this.block, required this.moveUp, required this.moveDown, required this.onBlockTypeChanged});
+  final Function(int?) moveUp;
+  final Function(int?) moveDown;
+  final Function(int?, IBlock?) onBlockTypeChanged;
+  const _EditBlockDialog({super.key, required this.block, required this.moveUp, required this.moveDown, required this.onBlockTypeChanged, required this.index});
 }
 
 abstract class _EditBlockDialogState extends State<_EditBlockDialog> {
@@ -98,7 +100,7 @@ abstract class _EditBlockDialogState extends State<_EditBlockDialog> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       IconButton(
-                        onPressed: (){widget.moveUp(widget.block);}, 
+                        onPressed: (){widget.moveUp(widget.index);}, 
                         icon: const Icon(
                           Icons.arrow_circle_up,
                           color: Colors.white,
@@ -107,7 +109,7 @@ abstract class _EditBlockDialogState extends State<_EditBlockDialog> {
                       ),
                       const SizedBox(width: 10),
                       IconButton(
-                        onPressed: (){widget.moveDown(widget.block);}, 
+                        onPressed: (){widget.moveDown(widget.index);}, 
                         icon: const Icon(
                           Icons.arrow_circle_down,
                           color: Colors.white,
@@ -162,7 +164,7 @@ abstract class _EditBlockDialogState extends State<_EditBlockDialog> {
       case _BlockTypeOption.Cardio:
         newBlock = CardioBlock(null, movementPattern: MovementPattern.Cardio, exercise: null, set: CardioSet(duration: 0));
     }
-    widget.onBlockTypeChanged(widget.block, newBlock);
+    widget.onBlockTypeChanged(widget.index, newBlock);
   }
 
   _BlockTypeOption _getOption() {
@@ -175,7 +177,7 @@ abstract class _EditBlockDialogState extends State<_EditBlockDialog> {
 }
 
 class _LiftingEditDialog extends _EditBlockDialog {
-  const _LiftingEditDialog({required super.block, required super.moveUp, required super.moveDown, required super.onBlockTypeChanged});
+  const _LiftingEditDialog({required super.block, required super.moveUp, required super.moveDown, required super.onBlockTypeChanged, required super.index});
   @override
   State<StatefulWidget> createState() => _LiftingEditDialogState();
 
@@ -194,7 +196,7 @@ class _LiftingEditDialogState extends _EditBlockDialogState {
 }
 
 class _CardioEditDialog extends _EditBlockDialog {
-  const _CardioEditDialog({required super.block, required super.moveUp, required super.moveDown, required super.onBlockTypeChanged});
+  const _CardioEditDialog({required super.block, required super.moveUp, required super.moveDown, required super.onBlockTypeChanged, required super.index});
   @override
   State<StatefulWidget> createState() => _CardioEditDialogState();
 
