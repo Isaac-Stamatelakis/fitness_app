@@ -64,7 +64,7 @@ class LiftingSet extends ISet {
 
 
 class LiftingSetFactory {
-  Map<String, dynamic> formatEmptyJson(LiftingSet set) {
+  static Map<String, dynamic> formatStaticEmptyJson(LiftingSet set) {
     if (
       set.type == LiftingSetType.IntegratedLengthenedPartialSet ||
       set.type == LiftingSetType.LengthenedPartialSet ||
@@ -79,10 +79,51 @@ class LiftingSetFactory {
     ) {
       return {
         "weight_drop" : 15,
-        "rep" : 0
+        "rep_range" : 0
       };
     }
     return {};
+  }
+  static Map<String, dynamic> cleanUpStaticSetData(LiftingSet set) {
+    Iterable<String> keys = set.data.keys;
+    if (
+      set.type == LiftingSetType.IntegratedLengthenedPartialSet ||
+      set.type == LiftingSetType.LengthenedPartialSet ||
+      set.type == LiftingSetType.Standard 
+    ) {
+      
+      for (String key in keys) {
+        if (key != 'amount' || key != 'rep_range') {
+          set.data.remove(key);
+        }
+      }
+    } else if (
+      set.type == LiftingSetType.DropSet 
+    ) {
+      for (String key in keys) {
+        if (key != 'weight_drop' || key != 'rep_range') {
+          set.data.remove(key);
+        }
+      }
+    }
+    return {};
+  }
+  static String formatString(LiftingSet set) {
+    if (set.data.isEmpty) {
+      return "";
+    }
+    switch (set.type) {
+      case null:
+        return "";
+      case LiftingSetType.Standard:
+        return "${set.data['amount']} Sets of ${set.data['rep_range']} Reps";
+      case LiftingSetType.DropSet:
+        return "Drop Set ${set.data['reps']} weight drop ${set.data['weight_drop']}";
+      case LiftingSetType.LengthenedPartialSet:
+        return "${set.data['amount']} Lengthened Partial Sets of ${set.data['rep_range']} Reps";
+      case LiftingSetType.IntegratedLengthenedPartialSet:
+        return "${set.data['amount']} Integrated Lengthened Partial Sets of ${set.data['rep_range']} Reps";
+    }
   }
 }
 

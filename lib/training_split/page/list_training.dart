@@ -4,6 +4,7 @@ import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart
 import 'package:fitness_app/misc/display_list.dart';
 import 'package:fitness_app/training_split/page/edit_block/edit_block_dialog.dart';
 import 'package:fitness_app/training_split/page/edit_session_dialog.dart';
+import 'package:fitness_app/training_split/set/set.dart';
 import 'package:fitness_app/training_split/training_split.dart';
 import 'package:flutter/material.dart';
 
@@ -204,10 +205,7 @@ class TrainingBlockListState extends ATrainingBlockListState {
   @override
   Widget? getContainerWidget(int? index) {
     IBlock block = widget.blocks![index!];
-    if (block is ExerciseBlock) {
-      return generateText(block);
-    }
-    return null;
+    return generateText(block);
   }
 
   @override
@@ -224,13 +222,27 @@ class TrainingBlockListState extends ATrainingBlockListState {
   
   Widget generateText(IBlock? block) {
     String returnString = "${MovementPatternFactory.patternToString(block!.movementPattern)}\n"; 
-    String exerciseName;
     if (block.variation != null) {
-      exerciseName = block.variation!.variationName;
+      returnString += "${block.variation!.variationName}\n";
     } else {
-      block.exercise == null ? exerciseName = "None" : exerciseName = block.exercise!.exerciseName;
+      if (block.exercise != null) {
+        returnString += "${block.exercise!.exerciseName}\n";
+      }
+   
     }
-    returnString += exerciseName;
+
+    
+    if (block is ExerciseBlock) {
+      if (block.sets!.isNotEmpty) {
+        LiftingSet set = block.sets![0] as LiftingSet;
+        returnString += LiftingSetFactory.formatString(set);
+      } 
+      if (block.sets!.length > 1) {
+        returnString += "\n...";
+      }
+    } else if (block is CardioBlock) {
+      returnString += "\n${block.set!.duration.toString()} Minutes";
+    }
     return Text(
         returnString,
         style: const TextStyle(

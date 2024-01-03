@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 
 class NewTrainingSplitDialog extends StatelessWidget {
   final User user;
-
   const NewTrainingSplitDialog({super.key, required this.user});
   
   @override
@@ -47,7 +46,8 @@ class NewTrainingSplitDialog extends StatelessWidget {
               centerTitle: true,
             ),
             TrainingSplitPresetList(
-              colors: [Colors.white,Colors.indigo.shade300]
+              colors: [Colors.white,Colors.indigo.shade300], 
+              user: user,
             ),
           ],
         ),
@@ -57,12 +57,61 @@ class NewTrainingSplitDialog extends StatelessWidget {
 }
 
 class TrainingSplitPresetList extends AbstractList<TrainingSplitPreset> {
-  const TrainingSplitPresetList({super.key, required super.colors}) : super(dataList: TrainingSplitPreset.values);
+  final User user;
+  const TrainingSplitPresetList({super.key, required super.colors, required this.user}) : super(dataList: TrainingSplitPreset.values);
   @override
   State<StatefulWidget> createState() => _TrainingPresetListState();
 }
 
-class _TrainingPresetListState extends AbstractListState<TrainingSplitPreset> {
+class _TrainingPresetListState extends State<TrainingSplitPresetList> implements IButtonListState<TrainingSplitPreset>{
+  @override
+  Widget build(BuildContext context) {
+    return Flexible(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width/2,
+        child: ListView.builder(
+          itemCount: widget.dataList?.length,
+          itemBuilder: (context, index) {
+            return _buildTile(context,widget.dataList?[index]);
+          },
+        ),
+      ) 
+    );
+  }
+
+  Widget? _buildTile(BuildContext context, TrainingSplitPreset? data) {
+    return Column(
+      children: [
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: () {
+            onPress(data);
+          },
+          onLongPress: () {
+            onLongPress(data);
+          },
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+            padding: const EdgeInsets.all(0.0),
+          ),
+          child: Ink(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                colors: widget.colors,
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            child: Container(
+              height: 100,
+              alignment: Alignment.center,
+              child: getContainerWidget(data)
+            ),
+          ),
+        ),
+      ],
+    );
+  }
   @override
   Widget? getContainerWidget(TrainingSplitPreset? preset) {
     return Text(
@@ -84,8 +133,12 @@ class _TrainingPresetListState extends AbstractListState<TrainingSplitPreset> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => TrainingSplitPage(
-        trainingSplit: TrainingSplitPresetFactory.buildSplit(preset))
+        trainingSplit: TrainingSplitPresetFactory.buildSplit(preset), 
+        user: widget.user,
+        )
       )
     );
   }
+  
+  
 }

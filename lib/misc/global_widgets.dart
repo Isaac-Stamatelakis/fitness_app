@@ -136,6 +136,8 @@ class ConfirmationDialog extends StatelessWidget {
     return AlertDialog(
       contentPadding: const EdgeInsets.all(0.0),
       content: Container(
+        height: 200,
+        width: 300,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Colors.red, Colors.orange],
@@ -171,8 +173,9 @@ class ConfirmationDialog extends StatelessWidget {
     );
   }
   void _onConfirm(BuildContext context) {
-    onConfirmCallback(context);
     _popBack(context);
+    onConfirmCallback(context);
+    
   }
   void _popBack(BuildContext context) {
     Navigator.pop(context);

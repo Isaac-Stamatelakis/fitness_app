@@ -80,46 +80,33 @@ abstract class _EditBlockDialogState extends State<_EditBlockDialog> {
                 centerTitle: true,
               ),
               const SizedBox(height: 20),
-              _BlockTypeSelector(onSelect: _onBlockTypeChanged, initalSelect: _getOption()),
-              const SizedBox(height: 20),
-              _EditSelector(onSelect: _onOptionChanged, initalSelect: _EditBlockMenuOption.Exercises),
-              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SquareGradientButtonSizeable(
-                    onPress: _onSavePress, 
-                    text: "Update", 
-                    colors: [Colors.blue,Colors.blue.shade300], 
-                    size: const Size(100,50)
+                  IconButton(
+                    onPressed: (){widget.moveUp(widget.index);}, 
+                    icon: const Icon(
+                      Icons.arrow_circle_up,
+                      color: Colors.white,
+                      size: 50,
+                    )
                   ),
-                  const SizedBox(width: 20),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: (){widget.moveUp(widget.index);}, 
-                        icon: const Icon(
-                          Icons.arrow_circle_up,
-                          color: Colors.white,
-                          size: 50,
-                        )
-                      ),
-                      const SizedBox(width: 10),
-                      IconButton(
-                        onPressed: (){widget.moveDown(widget.index);}, 
-                        icon: const Icon(
-                          Icons.arrow_circle_down,
-                          color: Colors.white,
-                          size: 50,
-                        )
-                      ),
-                    ],
+                  const SizedBox(width: 10),
+                  IconButton(
+                    onPressed: (){widget.moveDown(widget.index);}, 
+                    icon: const Icon(
+                      Icons.arrow_circle_down,
+                      color: Colors.white,
+                      size: 50,
+                    )
                   ),
                 ],
               ),
+              const SizedBox(height: 20),
+              _BlockTypeSelector(onSelect: _onBlockTypeChanged, initalSelect: _getOption()),
+              const SizedBox(height: 20),
+              _EditSelector(onSelect: _onOptionChanged, initalSelect: _EditBlockMenuOption.Exercises),
               const SizedBox(height: 20),
               _getOptionContent(),
               
@@ -138,11 +125,6 @@ abstract class _EditBlockDialogState extends State<_EditBlockDialog> {
       widget.block!.variation = null;
     });
   } 
-
-  void _onSavePress(BuildContext context) {
-    print(widget.block!.movementPattern.toString());
-    print(widget.block!.exercise!.exerciseName);
-  }
 
   void _onOptionChanged(_EditBlockMenuOption? option) {
     if (option == null) {
