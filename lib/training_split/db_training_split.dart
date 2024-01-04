@@ -33,10 +33,29 @@ class TrainingSplitRetriever extends DatabaseHelper<TrainingSplit> {
   }
 }
 
+/// Retrives training splits with owner_id = user_id, doesn't retrieve sessions
+class EmptyTrainingSplitUserQuery extends MultiDatabaseRetriever<TrainingSplit> {
+  final String userID;
+  EmptyTrainingSplitUserQuery({required this.userID});
+  @override
+  TrainingSplit fromDocument(DocumentSnapshot<Object?> snapshot) {
+    return TrainingSplit(
+      name: snapshot['name'], trainingSessions: [], dbID: snapshot.id
+    );
+  }
+
+  @override
+  Future<QuerySnapshot<Object?>> getQuerySnapshot() {
+    return FirebaseFirestore.instance.collection("TrainingSplits")
+    .where('owner_id', isEqualTo: userID)
+    .orderBy('last_accessed',descending: true)
+    .get();
+  }
+
+}
 
 class TrainingSplitSessionQuery {
   final String dbID;
-
   TrainingSplitSessionQuery({required this.dbID});
   Future<List<TrainingSession>> retrieve() async {
     try {

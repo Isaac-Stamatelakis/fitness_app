@@ -36,7 +36,7 @@ class TrainingSplitPage extends StatelessWidget {
 
   Widget getContent() {
     if (user.trainingSplitID!.isEmpty) {
-      return _NewTrainingPageContent(trainingSplit: trainingSplit, user: user);
+      return NewTrainingPageContent(trainingSplit: trainingSplit, user: user);
     } else {
       return _ModifyTrainingPageContent(trainingSplit: trainingSplit, user: user);
     }
@@ -230,8 +230,9 @@ class _EditNameDialogState extends State<_EditNameDialog> {
 
 }
 
-class _NewTrainingPageContent extends _AbstractTrainingPageContent {
-  const _NewTrainingPageContent({required super.trainingSplit, required super.user});
+class NewTrainingPageContent extends _AbstractTrainingPageContent {
+  // ignore: use_key_in_widget_constructors
+  const NewTrainingPageContent({required super.trainingSplit, required super.user});
 
   @override
   State<StatefulWidget> createState() => _NewTrainingPageContentState();
@@ -242,7 +243,8 @@ class _NewTrainingPageContentState extends _AbstractTrainingPageState {
     Map<String, dynamic> splitUpload = {
       'name': widget.trainingSplit!.name,
       'owner_id' : widget.user.dbID,
-      'date_created' : DateTime.now()
+      'date_created' : DateTime.now(),
+      'last_accessed': DateTime.now()
     };
     DocumentReference splitRef = await FirebaseFirestore.instance.collection("TrainingSplits").add(splitUpload);
     Logger().i("Split Uploaded: ${splitRef.id}");

@@ -1,3 +1,4 @@
+import 'package:fitness_app/main_scaffold.dart';
 import 'package:fitness_app/misc/display_list.dart';
 import 'package:fitness_app/misc/global_widgets.dart';
 import 'package:fitness_app/training_split/page/page_training_split.dart';
@@ -132,13 +133,14 @@ class _TrainingPresetListState extends State<TrainingSplitPresetList> implements
     Navigator.pop(context);
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => TrainingSplitPage(
-        trainingSplit: TrainingSplitPresetFactory.buildSplit(preset), 
-        user: widget.user,
+      MaterialPageRoute(builder: (context) => MainScaffold(
+        title: "Test",
+        content: NewTrainingPageContent(
+          trainingSplit: TrainingSplitPresetFactory.buildSplit(preset), 
+          user: widget.user,
+          ), 
         )
       )
     );
   }
-  
-  
 }
