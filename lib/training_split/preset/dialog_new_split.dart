@@ -133,14 +133,12 @@ class _TrainingPresetListState extends State<TrainingSplitPresetList> implements
     Navigator.pop(context);
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MainScaffold(
-        title: "Test",
-        content: NewTrainingPageContent(
+      MaterialPageRoute(builder: (context) => 
+        TrainingSplitPage(
           trainingSplit: TrainingSplitPresetFactory.buildSplit(preset), 
           user: widget.user,
           ), 
         )
-      )
     );
   }
 }

@@ -29,29 +29,29 @@ class TrainingSplitPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Required so that background scaffold rng is not constantly reloaded when state updated
     return MainScaffold(
-      content: getContent(),
+      content: _TrainingPageContent(trainingSplit: trainingSplit, user: user),
       title: "Training Split"
     );
   }
-
-  Widget getContent() {
-    if (user.trainingSplitID!.isEmpty) {
-      return NewTrainingPageContent(trainingSplit: trainingSplit, user: user);
-    } else {
-      return _ModifyTrainingPageContent(trainingSplit: trainingSplit, user: user);
-    }
-  }
-
 }
 
-abstract class _AbstractTrainingPageContent extends StatefulWidget {
+class _TrainingPageContent extends StatefulWidget {
   final User user;
   final TrainingSplit? trainingSplit;
-  const _AbstractTrainingPageContent({required this.trainingSplit,required this.user});
+  const _TrainingPageContent({required this.trainingSplit,required this.user});
+  @override
+  State<StatefulWidget> createState() => _TrainingPageState();
 
 }
 
-abstract class _AbstractTrainingPageState extends State<_AbstractTrainingPageContent> {
+class _TrainingPageState extends State<_TrainingPageContent> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.trainingSplit!.dbID == null) {
+     _upload();
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -66,7 +66,7 @@ abstract class _AbstractTrainingPageState extends State<_AbstractTrainingPageCon
               ), 
             )
           ],
-        ),
+        ),  
         Positioned(
           bottom: 80,
           left: 10,
@@ -93,48 +93,10 @@ abstract class _AbstractTrainingPageState extends State<_AbstractTrainingPageCon
             )
           )
         ),        
-        getExtraContent()
       ],
     );
   }
-
-  void _onAddPress();
-
-  /*
-  void _onDeletePress() async {
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return ConfirmationDialog(displayText: "Are you sure you want to delete this split?", onConfirmCallback: _onRestartConfirmation,
-        );
-      }
-    );
-  }
-
-  void _onRestartConfirmation(BuildContext context) {
-    Navigator.pop(context);
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return NewTrainingSplitDialog(user: widget.user);
-      }
-    );
-  }
-  Positioned(
-          bottom: 10,
-          left: 10,
-          child: FloatingActionButton(
-            heroTag: 'deleteButton',
-            backgroundColor: Colors.red,
-            onPressed: _onDeletePress,
-            child:  const Icon(
-              Icons.restart_alt,
-              color: Colors.white
-            )
-          ),
-        ),
-  */
-
+  
   void _onNameEditPress() async {
     await showDialog(
       context: context,
@@ -153,7 +115,32 @@ abstract class _AbstractTrainingPageState extends State<_AbstractTrainingPageCon
       
     });
   }
-  Widget getExtraContent();
+
+  Future<void> _upload() async {
+    Map<String, dynamic> splitUpload = {
+      'name': widget.trainingSplit!.name,
+      'owner_id' : widget.user.dbID,
+      'date_created' : DateTime.now(),
+      'last_accessed':  DateTime(1, 1, 1)
+    };
+    DocumentReference splitRef = await FirebaseFirestore.instance.collection("TrainingSplits").add(splitUpload);
+    Logger().i("Split Uploaded: ${splitRef.id}");
+    String splitID = splitRef.id;
+    int index = 0;
+    for (ISession session in widget.trainingSplit!.trainingSessions) {
+      SessionUploader.uploadSession(session, splitID, index);
+      index += 1;
+    }
+  }
+
+  void _onAddPress() async {
+    TrainingSession newSession = TrainingSession(dbID: null, name: "New Session", exerciseBlocks: []);
+    await SessionUploader.uploadSession(newSession, widget.trainingSplit!.dbID, widget.trainingSplit!.trainingSessions.length);
+    setState(() {
+      widget.trainingSplit?.trainingSessions.add(newSession);
+    });
+    
+  }
 }
 
 class _EditNameDialog extends StatefulWidget {
@@ -227,74 +214,17 @@ class _EditNameDialogState extends State<_EditNameDialog> {
       )
     );
   }
-
-}
-
-class NewTrainingPageContent extends _AbstractTrainingPageContent {
-  // ignore: use_key_in_widget_constructors
-  const NewTrainingPageContent({required super.trainingSplit, required super.user});
-
-  @override
-  State<StatefulWidget> createState() => _NewTrainingPageContentState();
-}
-
-class _NewTrainingPageContentState extends _AbstractTrainingPageState {
-  void _onCompletePress() async {
-    Map<String, dynamic> splitUpload = {
-      'name': widget.trainingSplit!.name,
-      'owner_id' : widget.user.dbID,
-      'date_created' : DateTime.now(),
-      'last_accessed': DateTime.now()
-    };
-    DocumentReference splitRef = await FirebaseFirestore.instance.collection("TrainingSplits").add(splitUpload);
-    Logger().i("Split Uploaded: ${splitRef.id}");
-    
-    String splitID = splitRef.id;
-    widget.user.trainingSplitID = splitID;
-    await FirebaseFirestore.instance.collection('Users').doc(widget.user.dbID).update({
-      'training_split_id' : splitID
-    });
-    Logger().i("User Current Split Set: ${splitRef.id}");
-    int index = 0;
-    for (ISession session in widget.trainingSplit!.trainingSessions) {
-      SessionUploader.uploadSession(session, splitID, index);
-      index += 1;
-    }
-  }
-  
-  @override
-  void _onAddPress() {
-    setState(() {
-      widget.trainingSplit?.trainingSessions.add(TrainingSession(dbID: null, name: "New Session", exerciseBlocks: []));
-    });
-  }
-  
-  @override
-  Widget getExtraContent() {
-    return Positioned(
-      bottom: 150,
-      left: 10,
-      child: FloatingActionButton(
-        heroTag: 'saveButton',
-        backgroundColor: Colors.green,
-        onPressed: _onCompletePress,
-        child:  const Icon(
-          Icons.save,
-          color: Colors.white
-        )
-      ),
-    );
-  }
 }
 
 class ModifyTrainingSplitPageLoader extends PageLoader {
   final User user;
-  const ModifyTrainingSplitPageLoader({super.key, required this.user});
+  final String? splitID;
+  const ModifyTrainingSplitPageLoader({super.key, required this.splitID, required this.user});
   @override
   Widget generateContent(AsyncSnapshot snapshot) {
     return MainScaffold(
       title: "Training Split", 
-      content:_ModifyTrainingPageContent(
+      content:_TrainingPageContent(
         trainingSplit: snapshot.data, 
         user: user), 
       );
@@ -302,7 +232,7 @@ class ModifyTrainingSplitPageLoader extends PageLoader {
 
   @override
   Future getFuture() {
-    return TrainingSplitRetriever(dbID: user.trainingSplitID!).fromDatabase();
+    return TrainingSplitRetriever(dbID: splitID!).fromDatabase();
   }
 
   @override
@@ -312,30 +242,4 @@ class ModifyTrainingSplitPageLoader extends PageLoader {
 
 }
 
-class _ModifyTrainingPageContent extends _AbstractTrainingPageContent {
-  const _ModifyTrainingPageContent({required super.trainingSplit, required super.user});
-
-  @override
-  State<StatefulWidget> createState() => _ModifyTrainingPageContentState();
-}
-
-class _ModifyTrainingPageContentState extends _AbstractTrainingPageState {
-  
-  @override
-  void _onAddPress() async {
-    TrainingSession newSession = TrainingSession(dbID: null, name: "New Session", exerciseBlocks: []);
-    await SessionUploader.uploadSession(newSession, widget.trainingSplit!.dbID, widget.trainingSplit!.trainingSessions.length);
-    setState(() {
-      widget.trainingSplit?.trainingSessions.add(newSession);
-    });
-    
-  }
-  
-  @override
-  Widget getExtraContent() {
-    return Container();
-  }
-  
-  
-}
 

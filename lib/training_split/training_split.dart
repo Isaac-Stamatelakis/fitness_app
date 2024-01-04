@@ -134,6 +134,11 @@ class TrainingSessionFactory {
       }
       List<ISet?> sets = [];
       _BlockTypeOption? blockTypeOption;
+      List<dynamic> list = json['sets'];
+      if (list.isEmpty) {
+        blocks.add(ExerciseBlock(variation, sets: sets, movementPattern: movementPattern, exercise: exercise));
+        continue;
+      }
       for (dynamic setVal in json['sets']) {
         Map<String,dynamic> setJson = setVal as Map<String,dynamic>;
         if (setJson['type'] == "Cardio") {
@@ -148,7 +153,6 @@ class TrainingSessionFactory {
           }
         }
       }
-
       switch (blockTypeOption) {
         case null:
           // Do nothing

@@ -60,12 +60,6 @@ class _TrainingSplitSelectorDialogState extends State<TrainingSplitSelectorDialo
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SquareGradientButtonSizeable(
-                  onPress: _navigateToEdit, 
-                  text: "Edit Current Split", 
-                  colors: [Colors.blue,Colors.blue.shade300], 
-                  size: const Size(200,100)
-                ),
                 const SizedBox(width: 20),
                 SquareGradientButtonSizeable(
                   onPress: _navigateToNewSplit, 
@@ -77,28 +71,6 @@ class _TrainingSplitSelectorDialogState extends State<TrainingSplitSelectorDialo
             ),
             _TrainingSplitListLoader(user: widget.user)
           ],
-        )
-      )
-    );
-  }
-
-  void _navigateToEdit(BuildContext context) {
-    if (widget.user.trainingSplitID == "") {
-      ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        backgroundColor: Colors.red,
-        content: Text("Cannot Modify. Select/Create a Training Split"),
-        duration: Duration(seconds: 1), // Adjust the duration as needed
-
-      ));
-      return;
-    }
-    Navigator.pop(context);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => 
-      ModifyTrainingSplitPageLoader(
-          user: widget.user
         )
       )
     );
@@ -121,7 +93,7 @@ class _TrainingSplitListLoader extends WidgetLoader {
   const _TrainingSplitListLoader({required this.user});
   @override
   Widget generateContent(AsyncSnapshot snapshot) {
-    return _TrainingSplitList(dataList: snapshot.data, colors: [Colors.indigo.shade200,Colors.white70]);
+    return _TrainingSplitList(splits: snapshot.data, user: user);
   }
 
   @override
@@ -131,24 +103,106 @@ class _TrainingSplitListLoader extends WidgetLoader {
 
 }
 
-class _TrainingSplitList extends AbstractList<TrainingSplit> {
-  const _TrainingSplitList({required super.dataList, required super.colors});
+class _TrainingSplitList extends StatefulWidget {
+  final List<TrainingSplit?>? splits;
+  final User user;
+
+  const _TrainingSplitList({required this.splits, required this.user});
+  
   @override
   State<StatefulWidget> createState() => _TrainingSplitListState();
-
 }
 
-class _TrainingSplitListState extends AbstractListState<TrainingSplit> {
+class _TrainingSplitListState extends State<_TrainingSplitList> implements IButtonListState<TrainingSplit>{
   @override
-  Widget? getContainerWidget(TrainingSplit? split) {
-    if (split!.name == null) {
-      return Container();
-    }
-    return Text(
-      split.name!,
-      style: const TextStyle(
-        color: Colors.white
+  Widget build(BuildContext context) {
+    return Flexible(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width/2,
+        child: ListView.builder(
+          itemCount: widget.splits?.length,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return _buildFirstTile(context,widget.splits?[index]);
+            } else {
+              return _buildTile(context,widget.splits?[index]);
+            }
+          },
+        ),
+      ) 
+    );
+  }
+
+  Widget? _buildFirstTile(BuildContext context, TrainingSplit? split) {
+    return Column(
+      children: [
+        const SizedBox(height: 20),
+        Container(
+          height: 80,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue.shade300, Colors.blue], // Set your desired gradient colors
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          alignment: Alignment.center,
+          child: getListTile(split),
+        ),
+        const SizedBox(height: 40),
+      ],
+    );
+  }
+
+  Widget? _buildTile(BuildContext context, TrainingSplit? split) {
+    return Column(
+      children: [
+        const SizedBox(height: 20),
+        Container(
+        height: 80,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.green.shade300, Colors.green], // Set your desired gradient colors
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        alignment: Alignment.center,
+        child: getListTile(split)
+        ),
+      ],
+    );
+  }
+
+  Widget? getListTile(TrainingSplit? split) {
+    return ListTile(
+      title: Text(split!.name!),
+      textColor: Colors.white,
+      trailing: IconButton(
+        icon: const Icon(Icons.touch_app),
+        color: Colors.white, 
+        onPressed: () {
+          onPress(split);
+        },
       ),
+      onLongPress: () {
+        onLongPress(split);
+      },
+      onTap: () {
+        _navigateToEdit(context, split);
+      },
+    );
+  }
+
+  void _navigateToEdit(BuildContext context, TrainingSplit? split) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => 
+      ModifyTrainingSplitPageLoader(
+          user: widget.user,
+          splitID: split!.dbID,
+        )
+      )
     );
   }
 
@@ -160,19 +214,42 @@ class _TrainingSplitListState extends AbstractListState<TrainingSplit> {
         return _DeleteSplitConfirmationDialog(displayText: "Do you want to delete ${split!.name}?", split: split, callback: _onDeleteConfirmation);
       }
     );
-
   }
   @override
-  void onPress(TrainingSplit? split) {
-    // TODO: implement onPress
-  }
-
-  void _onDeleteConfirmation(TrainingSplit? split) {
+  void onPress(TrainingSplit? split) async {
+    User user = widget.user;
+    if (user.trainingSplitID == split!.dbID) {
+      return;
+    }
+    await FirebaseFirestore.instance.collection("TrainingSplits").doc(split.dbID).update(
+      {
+        "last_accessed" : DateTime.now()
+      }
+    );
+    await FirebaseFirestore.instance.collection("Users").doc(user.dbID).update(
+      {
+        "training_split_id" : split.dbID
+      }
+    );
     setState(() {
-      widget.dataList!.remove(split);
+      widget.splits!.remove(split);
+      widget.splits!.insert(0,split);
     });
   }
- 
+
+  void _onDeleteConfirmation(TrainingSplit? split) async {
+    await FirebaseFirestore.instance.collection("TrainingSplits").doc(split!.dbID!).delete();
+    Logger().i("Deleted Training Split: ${split.dbID}");
+    setState(() {
+      widget.splits!.remove(split);
+    });
+  }
+  
+  @override
+  Widget? getContainerWidget(TrainingSplit? data) {
+    // TODO: implement getContainerWidget
+    throw UnimplementedError();
+  }
 }
 
 class _DeleteSplitConfirmationDialog extends StatelessWidget {
@@ -217,14 +294,11 @@ class _DeleteSplitConfirmationDialog extends StatelessWidget {
             ) 
           ],
         ),
-        
       )
     );
   }
-  void _onConfirm(BuildContext context) async {
+  void _onConfirm(BuildContext context) {
     _popBack(context);
-    await FirebaseFirestore.instance.collection("TrainingSplits").doc(split!.dbID!).delete();
-    Logger().i("Deleted Training Split: ${split!.dbID}");
     callback(split);
     
   }
