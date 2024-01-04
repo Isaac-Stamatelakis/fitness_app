@@ -73,6 +73,6 @@ class ExerciseVariationListLoader extends WidgetLoader {
 
   @override
   Future getFuture() {
-    return ExerciseVariationRetriever(exerciseID: exerciseID).retrieve();
+    return ExerciseVariationQuery(exerciseID: exerciseID).retrieve();
   }
 }

@@ -3,7 +3,7 @@ import 'package:fitness_app/misc/display_list.dart';
 import 'package:flutter/material.dart';
 
 class MuscleList extends AbstractList<Muscle> {
-  const MuscleList({super.dataList, super.key, required super.colors});
+  const MuscleList({required super.dataList, super.key, required super.colors});
   
   @override
   State<StatefulWidget> createState() => _MuscleListState();

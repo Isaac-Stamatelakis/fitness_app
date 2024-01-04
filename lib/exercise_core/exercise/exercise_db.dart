@@ -2,15 +2,16 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness_app/exercise_core/exercise/exercise.dart';
+import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
 import 'package:fitness_app/misc/database.dart';
 
 /// Retrieves exercises from preset collection which are preincluded and immutable by user
 class PresetExerciseRetriever {
-  Future<List<Exercise>> retrieve() async {
+  Future<List<IExercise>> retrieve() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("PresetExercises").get();
-    List<Exercise> exercises = [];
+    List<IExercise> exercises = [];
     for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-      exercises.add(ExerciseFactory.fromDocument(documentSnapshot));
+      exercises.add(ExerciseFactory.fromDocument<PresetExercise>(documentSnapshot));
     }
     return exercises;
   }
@@ -20,11 +21,11 @@ class PresetExerciseRetriever {
 class CustomExerciseRetriever {
   final String ownerID;
   CustomExerciseRetriever({required this.ownerID});
-  Future<List<Exercise>> retrieve() async {
+  Future<List<IExercise>> retrieve() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("CustomExercises").where('owner_id', isEqualTo: ownerID).get();
-    List<Exercise> exercises = [];
+    List<IExercise> exercises = [];
     for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-      exercises.add(ExerciseFactory.fromDocument(documentSnapshot));
+      exercises.add(ExerciseFactory.fromDocument<UserExercise>(documentSnapshot));
     }
     return exercises;
   }
@@ -34,8 +35,8 @@ class CustomExerciseRetriever {
 class EntireExerciseRetriever {
   final String ownerID;
   EntireExerciseRetriever({required this.ownerID});
-  Future<List<Exercise>> retrieve() async {
-    List<Exercise> exercises = [];
+  Future<List<IExercise>> retrieve() async {
+    List<IExercise> exercises = [];
     exercises.addAll(await CustomExerciseRetriever(ownerID: ownerID).retrieve());
     exercises.addAll(await PresetExerciseRetriever().retrieve());
     return exercises;
@@ -44,10 +45,9 @@ class EntireExerciseRetriever {
 
 class SingleExerciseRetriever {
   final String dbID;
-
   SingleExerciseRetriever({required this.dbID});
-  Future<Exercise?> retrieve() async { 
-    Exercise? exercise = await SingleCustomExerciseRetriever(dbID: dbID).fromDatabase();
+  Future<IExercise?> retrieve() async { 
+    IExercise? exercise = await SinglePresetExerciseRetriever(dbID: dbID).fromDatabase();
     if (exercise != null) {
       return exercise;
     }
@@ -61,12 +61,12 @@ class SinglePresetExerciseRetriever extends DatabaseHelper{
   SinglePresetExerciseRetriever({required this.dbID});
   @override
   fromDocument(DocumentSnapshot<Object?> snapshot) {
-    return ExerciseFactory.fromDocument(snapshot);
+    return ExerciseFactory.fromDocument<PresetExercise>(snapshot);
   }
 
   @override
   getDatabaseReference() {
-    return FirebaseFirestore.instance.collection("PresetExercises").doc(dbID).get();
+    return FirebaseFirestore.instance.collection("PresetExercises").doc(dbID);
   }
 } 
 
@@ -75,13 +75,58 @@ class SingleCustomExerciseRetriever extends DatabaseHelper{
   SingleCustomExerciseRetriever({required this.dbID});
   @override
   fromDocument(DocumentSnapshot<Object?> snapshot) {
-    return ExerciseFactory.fromDocument(snapshot);
+    return ExerciseFactory.fromDocument<UserExercise>(snapshot);
   }
   @override
   getDatabaseReference() {
-    return FirebaseFirestore.instance.collection("CustomExercises").doc(dbID).get();
+    return FirebaseFirestore.instance.collection("CustomExercises").doc(dbID);
   }
 } 
+
+class EntirePatternExerciseQuery {
+  final MovementPattern? pattern;
+  EntirePatternExerciseQuery({required this.pattern});
+  Future<List<IExercise?>> retrieve() async { 
+    List<IExercise> exercises = [];
+    exercises.addAll(await PresetPatternExerciseQuery(pattern: pattern).retrieve());
+    exercises.addAll(await CustomPatternExerciseQuery(pattern: pattern).retrieve());
+    return exercises;
+  }
+}
+
+class PresetPatternExerciseQuery extends MultiDatabaseRetriever<IExercise> {
+  final MovementPattern? pattern;
+
+  PresetPatternExerciseQuery({required this.pattern});
+  @override
+  fromDocument(DocumentSnapshot<Object?> snapshot) {
+    return ExerciseFactory.fromDocument<PresetExercise>(snapshot);
+  }
+
+  @override
+  Future<QuerySnapshot<Object?>> getQuerySnapshot() {
+    return FirebaseFirestore.instance.collection("PresetExercises")
+      .where('movementPattern', isEqualTo: MovementPatternFactory.patternToString(pattern))
+      .get();
+  }
+}
+
+class CustomPatternExerciseQuery extends MultiDatabaseRetriever<IExercise> {
+  final MovementPattern? pattern;
+
+  CustomPatternExerciseQuery({required this.pattern});
+  @override
+  fromDocument(DocumentSnapshot<Object?> snapshot) {
+    return ExerciseFactory.fromDocument<PresetExercise>(snapshot);
+  }
+
+  @override
+  Future<QuerySnapshot<Object?>> getQuerySnapshot() {
+    return FirebaseFirestore.instance.collection("CustomExercises")
+      .where('movementPattern', isEqualTo: MovementPatternFactory.patternToString(pattern))
+      .get();
+  }
+}
 /// Deprecated, now on database, still here cause this took too much time to make
 /*
 class PreSetExercises {

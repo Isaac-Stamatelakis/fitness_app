@@ -1,11 +1,14 @@
 import 'package:fitness_app/misc/global_widgets.dart';
 import 'package:fitness_app/misc/page_loader.dart';
+import 'package:fitness_app/training_split/page/page_training_split.dart';
+import 'package:fitness_app/training_split/preset/dialog_new_split.dart';
+import 'package:fitness_app/training_split/selector/selector_dialog_training_split.dart';
 import 'package:fitness_app/user/user.dart';
 import 'package:flutter/material.dart';
 
-class HomePageLoader extends PageLoader {
+class HomePageLoader extends SizedWidgetLoader {
   final String userID;
-  const HomePageLoader({required this.userID, super.key});
+  const HomePageLoader({required this.userID, super.key, required super.size});
 
   @override
   Widget generateContent(AsyncSnapshot snapshot) {
@@ -16,13 +19,6 @@ class HomePageLoader extends PageLoader {
   Future getFuture() {
     return UserRetriever(userID: userID).fromDatabase();
   }
-
-  @override
-  String getTitle() {
-    return "Overload Training";
-  }
-
-  
 }
 
 
@@ -57,7 +53,7 @@ class _State extends State<HomePage> {
             children: [
                _SquareGradientButton(
                 _toTrainingSplit, 
-                text: widget.user.trainingSplitID == "" ? "Create Training Split" : "Edit Training Split", 
+                text: "Manage Training Splits",
                 colors: [Colors.blue,Colors.blue.shade200], 
                 size: const Size(200,100)
               ),
@@ -95,16 +91,37 @@ class _State extends State<HomePage> {
       if (widget.user.currentSessionID == "") {
 
       } else {
-        
+
       }
     }
     
   }
 
   void _toTrainingSplit() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return TrainingSplitSelectorDialog(user: widget.user);
+        }
+      );
+    /*
     if (widget.user.trainingSplitID == "") {
-
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return NewTrainingSplitDialog(user: widget.user);
+        }
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ModifyTrainingSplitPageLoader(
+            user: widget.user
+          )
+        )
+      );
     }
+    */
   }
 
   void _toProgress() {
@@ -112,7 +129,6 @@ class _State extends State<HomePage> {
   }
 
 }
-
 
 
 class _SessionList extends StatelessWidget {

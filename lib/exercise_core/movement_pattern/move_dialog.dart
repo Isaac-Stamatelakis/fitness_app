@@ -24,7 +24,7 @@ class MovementDialog extends StatelessWidget {
             AppBar(
               backgroundColor: Colors.black,
               title: Text(
-                MovementPatternMuscleFactory.movementPatternToString(movementPattern),
+                MovementPatternFactory.patternToString(movementPattern),
                 style: const TextStyle(
                   color: Colors.white
                 ),
@@ -41,7 +41,7 @@ class MovementDialog extends StatelessWidget {
               centerTitle: true,
             ),
             const Text("Muscles Trained:"),
-            MuscleList(dataList: MovementPatternMuscleFactory.getMusclesWorked(movementPattern), colors: [Colors.white,Colors.indigo.shade100],)
+            MuscleList(dataList: MovementPatternFactory.getMusclesWorked(movementPattern), colors: [Colors.white,Colors.indigo.shade100],)
           ],
         )
       )

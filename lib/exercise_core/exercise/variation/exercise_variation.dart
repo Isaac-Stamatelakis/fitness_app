@@ -15,9 +15,9 @@ class ExerciseVariationFactory {
   } 
 }
 
-class ExerciseVariationRetriever extends MultiDatabaseRetriever<ExerciseVariation> {
+class ExerciseVariationQuery extends MultiDatabaseRetriever<ExerciseVariation> {
   final String exerciseID;
-  ExerciseVariationRetriever({required this.exerciseID});
+  ExerciseVariationQuery({required this.exerciseID});
   @override
   fromDocument(DocumentSnapshot<Object?> snapshot) {
     return ExerciseVariationFactory.fromDocument(snapshot);
@@ -25,6 +25,20 @@ class ExerciseVariationRetriever extends MultiDatabaseRetriever<ExerciseVariatio
   @override
   Future<QuerySnapshot<Object?>> getQuerySnapshot() {
     return FirebaseFirestore.instance.collection("ExerciseVariations").where('exercise_id', isEqualTo: exerciseID).get();
+  }
+}
+
+class ExerciseVariationRetriever extends DatabaseHelper<ExerciseVariation> {
+  final String dbID;
+  ExerciseVariationRetriever({required this.dbID});
+  @override
+  fromDocument(DocumentSnapshot<Object?> snapshot) {
+    return ExerciseVariationFactory.fromDocument(snapshot);
+  }
+
+  @override
+  getDatabaseReference() {
+    return FirebaseFirestore.instance.collection("ExerciseVariations").doc(dbID);
   }
 
 }

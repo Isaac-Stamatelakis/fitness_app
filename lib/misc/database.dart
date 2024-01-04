@@ -26,8 +26,10 @@ abstract class MultiDatabaseRetriever<T> {
   Future<List<T>> retrieve() async {
     try {
       QuerySnapshot querySnapshot = await getQuerySnapshot();
-    
       List<T> items = [];
+      if (querySnapshot.docs.isEmpty) {
+        return items;
+      }
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
         items.add(fromDocument(documentSnapshot));
       }
@@ -47,6 +49,9 @@ abstract class DatabaseQuery {
     try {
       List<dynamic> queryResults = [];
       QuerySnapshot querySnapshot = await getQuery().get();
+      if (querySnapshot.docs.isEmpty) {
+        return queryResults;
+      }
       for (QueryDocumentSnapshot snapshot in querySnapshot.docs) {
         queryResults.add(fromDocument(snapshot));
       }
@@ -61,3 +66,25 @@ abstract class DatabaseQuery {
   dynamic getQuery();
 }
 
+
+abstract class FutureMultiDatabaseRetriever<T> {
+  Future<List<T>> retrieve() async {
+    try {
+      QuerySnapshot querySnapshot = await getQuerySnapshot();
+      List<T> items = [];
+      if (querySnapshot.docs.isEmpty) {
+        return items;
+      }
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        items.add(await fromDocument(documentSnapshot));
+      }
+      return items;
+    } catch (e) {
+      Logger().e('Error retrieving from database: $e');
+      return [];
+    }
+  }
+  Future<T> fromDocument(DocumentSnapshot snapshot);
+
+  Future<QuerySnapshot> getQuerySnapshot();
+}

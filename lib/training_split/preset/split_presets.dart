@@ -1,18 +1,19 @@
 // ignore_for_file: constant_identifier_names
-
 import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
-import 'package:fitness_app/training_split/set.dart';
+import 'package:fitness_app/misc/display_list.dart';
+import 'package:fitness_app/training_split/set/set.dart';
 import 'package:fitness_app/training_split/training_split.dart';
+import 'package:flutter/material.dart';
 
 enum TrainingSplitPreset {
- PushPullLeg,
- BroSplit,
- UpperLower,
- Custom 
+  Custom,
+  PushPullLeg,
+  BroSplit,
+  UpperLower,
 }
 
 class TrainingSplitPresetFactory {
-  String presetToString(TrainingSplitPreset preset) {
+  static String presetToString(TrainingSplitPreset? preset) {
     switch (preset) {
       case TrainingSplitPreset.PushPullLeg:
         return "Push/Pull/Legs";
@@ -25,7 +26,7 @@ class TrainingSplitPresetFactory {
     }
   }
 
-  TrainingSplit? buildSplit(TrainingSplitPreset preset) {
+  static TrainingSplit? buildSplit(TrainingSplitPreset? preset) {
     switch (preset) {
       case TrainingSplitPreset.PushPullLeg:
         return TrainingSplit(
@@ -35,58 +36,58 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Push", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.VerticlePress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ShoulderAbduction, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -96,69 +97,69 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Pull", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.VerticalPull, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HorizontalPull, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.Pullover, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.WristFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -167,70 +168,70 @@ class TrainingSplitPresetFactory {
             ),
             TrainingSession(
               dbID: null, 
-              name: "Leg", 
-              exercises: [
+              name: "Legs", 
+              exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.Squat, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.LegFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.AnkleExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.LegExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HipAdbuction, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.SpinalExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -240,58 +241,58 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Push", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.VerticlePress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ShoulderAbduction, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -301,69 +302,69 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Pull", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.VerticalPull, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HorizontalPull, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.Pullover, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.WristFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -372,77 +373,77 @@ class TrainingSplitPresetFactory {
             ),
             TrainingSession(
               dbID: null, 
-              name: "Leg", 
-              exercises: [
+              name: "Legs", 
+              exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.Squat, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.LegFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.AnkleExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.LegExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HipAdbuction, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.SpinalExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
               ]
             ),
-            RestSession()
+            TrainingSession(dbID: null, name: "Rest", exerciseBlocks: [])
           ],
         );
       case TrainingSplitPreset.BroSplit:
@@ -453,58 +454,58 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Chest", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ChestFly, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.UpperChestFly, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -514,58 +515,58 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Back", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.VerticalPull, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HorizontalPull, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.Pullover, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.VerticalPull, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HorizontalPull, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -574,70 +575,70 @@ class TrainingSplitPresetFactory {
             ),
             TrainingSession(
               dbID: null, 
-              name: "Leg", 
-              exercises: [
+              name: "Legs", 
+              exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.Squat, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.LegFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.AnkleExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.LegExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HipAdbuction, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.SpinalExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -647,58 +648,59 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Shoulders", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ShoulderAbduction, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ShoulderFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ShoulderHorizontalAbduction, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -708,66 +710,66 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Arms", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.WristFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
               ],
             ),
-            RestSession(),
-            RestSession()
+            TrainingSession(dbID: null, name: "Rest", exerciseBlocks: []),
+            TrainingSession(dbID: null, name: "Rest", exerciseBlocks: [])
           ],
         );
       case TrainingSplitPreset.UpperLower:
@@ -778,58 +780,58 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Upper1", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HorizontalPress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ElbowExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.InclinePress, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.ShoulderAbduction, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
@@ -839,76 +841,76 @@ class TrainingSplitPresetFactory {
             TrainingSession(
               dbID: null, 
               name: "Lower1", 
-              exercises: [
+              exerciseBlocks: [
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.Squat, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.LegFlexion, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.LegExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.AnkleExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.HipAdbuction, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
                 ExerciseBlock(
+                  null,
                   movementPattern: MovementPattern.SpinalExtension, 
                   exercise: null, 
                   sets: [
-                    SetCollection(
-                      amount: 3, 
-                      type: SetType.Standard, 
+                    LiftingSet(
+                      type: LiftingSetType.Standard, 
                       data: {},
                     )
                   ]
                 ),
               ],
             ),
-            RestSession()
+            TrainingSession(dbID: null, name: "Rest", exerciseBlocks: [])
           ],
         );
       case TrainingSplitPreset.Custom:
@@ -918,9 +920,9 @@ class TrainingSplitPresetFactory {
           trainingSessions: [
 
           ],
-          
         );
+      case null:
+        return null;
     }
-
   }
 }

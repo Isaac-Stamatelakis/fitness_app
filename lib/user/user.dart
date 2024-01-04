@@ -3,10 +3,10 @@ import 'package:fitness_app/misc/database.dart';
 import 'package:fitness_app/misc/global.dart';
 
 class User {
-  final String? name;
-  final String? currentSessionID;
-  final String? trainingSplitID;
-  final String? dbID;
+  late String? name;
+  late String? currentSessionID;
+  late String? trainingSplitID;
+  late String? dbID;
   User({required this.name, required this.currentSessionID, required this.trainingSplitID, required this.dbID});
 }
 

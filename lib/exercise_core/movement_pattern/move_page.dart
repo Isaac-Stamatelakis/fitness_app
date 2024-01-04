@@ -12,15 +12,7 @@ class MovementPatternPage extends DisplayListFragment<MovementPattern> {
 }
 
 class _State extends DisplayListFragmentState<MovementPattern> {
-  @override
-  Widget? buildText(data) {
-    return Text(
-      MovementPatternMuscleFactory.movementPatternToString(data),
-      style: const TextStyle(
-        color: Colors.white
-      ),
-    );
-  }
+  
 
   @override
   void onPress(MovementPattern movementPattern) {
@@ -47,9 +39,9 @@ class _State extends DisplayListFragmentState<MovementPattern> {
   void onLongPress(MovementPattern data) {
     // Do nothing
   }
-  
+
   @override
-  void updateDisplayedFields(String searchText) {
-    // Do nothing
+  String getString(MovementPattern pattern) {
+    return MovementPatternFactory.patternToString(pattern);
   }
 }

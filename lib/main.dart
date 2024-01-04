@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
             )
           )
       ),
-      home: const MainScaffold(title: "Overload Training", content: HomePageLoader(userID: "C86Yk50EFU6Gj1U69rEj"))
+      home: MainScaffold(title: "Overload Training", content: HomePageLoader(userID: "C86Yk50EFU6Gj1U69rEj", size: MediaQuery.of(context).size/2))
     );
   }
 }

@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 
 class ExerciseDialog extends StatefulWidget {
   const ExerciseDialog({super.key, required this.exercise});
-  final Exercise exercise;
+  final IExercise exercise;
   @override
   State<StatefulWidget> createState() => _State();
 }
@@ -58,7 +58,7 @@ class _State extends State<ExerciseDialog> {
                 SquareGradientButton(
                   height: 100,
                   onPress: _showMovementDialog, 
-                  text: MovementPatternMuscleFactory.movementPatternToString(widget.exercise.movementPattern), 
+                  text: MovementPatternFactory.patternToString(widget.exercise.movementPattern), 
                   colors: [Colors.blue,Colors.blue.shade300]
                 ),
                 const SizedBox(

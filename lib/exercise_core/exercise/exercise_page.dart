@@ -30,23 +30,16 @@ class ExercisePageLoader extends PageLoader {
 
 
 
-class ExercisePage extends DisplayListFragment<Exercise> {
+class ExercisePage extends DisplayListFragment<IExercise> {
   const ExercisePage({super.key, required super.dataList, required super.colors});
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends DisplayListFragmentState<Exercise> {
+class _State extends DisplayListFragmentState<IExercise> {
   @override
-  Widget? buildText(Exercise exercise) {
-    return Text(
-      exercise.exerciseName
-    );
-  }
-
-  @override
-  void onPress(Exercise exercise) {
+  void onPress(IExercise exercise) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -77,12 +70,12 @@ class _State extends DisplayListFragmentState<Exercise> {
   }
   
   @override
-  void onLongPress(Exercise data) {
+  void onLongPress(IExercise data) {
     print("Hello");
   }
   
   @override
-  void updateDisplayedFields(String searchText) {
-    // TODO: implement updateDisplayedFields
+  String getString(IExercise exercise) {
+    return exercise.exerciseName;
   }
 }
