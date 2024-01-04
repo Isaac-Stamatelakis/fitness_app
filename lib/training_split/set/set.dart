@@ -85,26 +85,24 @@ class LiftingSetFactory {
     return {};
   }
   static Map<String, dynamic> cleanUpStaticSetData(LiftingSet set) {
-    Iterable<String> keys = set.data.keys;
     if (
       set.type == LiftingSetType.IntegratedLengthenedPartialSet ||
       set.type == LiftingSetType.LengthenedPartialSet ||
       set.type == LiftingSetType.Standard 
     ) {
-      
-      for (String key in keys) {
-        if (key != 'amount' && key != 'rep_range') {
-          set.data.remove(key);
-        }
-      }
+      Map<String,dynamic> keep = {
+        'amount': set.data['amount'],
+        'rep_range': set.data['rep_range'],
+      };
+      set.data = keep;
     } else if (
       set.type == LiftingSetType.DropSet 
     ) {
-      for (String key in keys) {
-        if (key != 'weight_drop' && key != 'rep_range') {
-          set.data.remove(key);
-        }
-      }
+      Map<String,dynamic> keep = {
+        'weight_drop': set.data['weight_drop'],
+        'rep_range': set.data['rep_range'],
+      };
+      set.data = keep;
     }
     return {};
   }

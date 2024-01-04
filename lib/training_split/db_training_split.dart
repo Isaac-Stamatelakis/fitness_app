@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
 import 'package:fitness_app/misc/database.dart';
@@ -66,53 +68,20 @@ class TrainingSplitSessionQuery {
 }
 
 class SessionUploader {
-  static void uploadSession(ISession session, String splitID, int index) async {
-    if (session is TrainingSession) {
-      List<Map<String,dynamic>> exercise_blocks = [];
-      for (IBlock block in session.exerciseBlocks) {
-        String exercise_id = "";
-        String variation_id = "";
-        if (block.exercise != null) {
-          exercise_id = block.exercise!.dbID;
-          if (block.variation != null) {
-            variation_id = block.variation!.dbID;
-          }
-        }
-        Map<String,dynamic> blockJson = {
-          'exercise_id' : exercise_id,
-          'variation_id' : variation_id,
-          'movement_pattern': MovementPatternFactory.patternToString(block.movementPattern)
-        };
-
-        if (block is CardioBlock) {
-          blockJson['sets'] = [
-            {
-              'type':'Cardio',
-              'duration': block.set!.duration
-            }
-          ];
-          exercise_blocks.add(blockJson);
-        } else if (block is ExerciseBlock) {
-          List<Map<String, dynamic>> sets = [];
-          for (ISet? set in block.sets!) {
-            if (set is LiftingSet) {
-              LiftingSetFactory.cleanUpStaticSetData(set);
-              set.data['type'] = SetFactory.liftingSetTypeToString(set.type);
-              sets.add(set.data);
-            }
-          }
-          blockJson['sets'] = sets;
-          exercise_blocks.add(blockJson);
-        }
-      }
-      Map<String,dynamic> sessionUpload = {
-        'exercise_blocks': exercise_blocks,
-        'name' : session.name,
-        'order' : index,
-        'training_split_id' : splitID
-      };
-    DocumentReference sessionRef = await FirebaseFirestore.instance.collection("StaticSessions").add(sessionUpload);
+  static Future<void> uploadSession(ISession session, String? splitID, int index) async {
+    Map<String, dynamic>? sessionUpload = TrainingSessionFactory.sessionToJson(session, index, splitID);
+    DocumentReference sessionRef = await FirebaseFirestore.instance.collection("StaticSessions").add(sessionUpload!);
+    session.dbID = sessionRef.id;
     Logger().i("Session Uploaded: ${sessionRef.id}");
-    }
+  }
+
+  static Future<void> updateSession(ISession? session, param1, param2) async {
+    Map<String, dynamic>? sessionUpload = TrainingSessionFactory.sessionToJson(session, null, null);
+    await FirebaseFirestore.instance.collection("StaticSessions").doc(session!.dbID).update(sessionUpload!);
+  }
+
+  static Future<void> deleteSession(ISession? session) async {
+    await FirebaseFirestore.instance.collection("StaticSessions").doc(session!.dbID).delete();
+    Logger().i("Deleted Static Session : ${session.dbID}");
   }
 }

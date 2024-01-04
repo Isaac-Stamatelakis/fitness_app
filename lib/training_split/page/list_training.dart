@@ -1,7 +1,9 @@
 import 'dart:isolate';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
 import 'package:fitness_app/misc/display_list.dart';
+import 'package:fitness_app/training_split/db_training_split.dart';
 import 'package:fitness_app/training_split/page/edit_block/edit_block_dialog.dart';
 import 'package:fitness_app/training_split/page/edit_session_dialog.dart';
 import 'package:fitness_app/training_split/set/set.dart';
@@ -9,27 +11,28 @@ import 'package:fitness_app/training_split/training_split.dart';
 import 'package:flutter/material.dart';
 
 abstract class ASessionList extends StatefulWidget {
+  final String? traingSplitID;
   final List<ISession>? sessions;
 
-  const ASessionList({super.key, required this.sessions});
+  const ASessionList({super.key, required this.sessions, required this.traingSplitID});
   @override
   State<StatefulWidget> createState();
 
 }
 
-abstract class ASessionListState<T extends ISession> extends State<ASessionList> implements IButtonListState<ISession?>{
+abstract class ASessionListState<T extends ISession> extends State<ASessionList> implements IButtonListState<int>{
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
       itemCount: widget.sessions?.length,
       itemBuilder: (context, index) {
-        return _buildTile(context,widget.sessions?[index]);
+        return _buildTile(context,index);
       },
     ); 
   }
 
-  Widget? _buildTile(BuildContext context, ISession? session) {
+  Widget? _buildTile(BuildContext context, int index) {
     return Column(
       children: [
         Row(
@@ -38,10 +41,10 @@ abstract class ASessionListState<T extends ISession> extends State<ASessionList>
             const SizedBox(width: 1),
             ElevatedButton(
               onPressed: () {
-                onPress(session);
+                onPress(index);
               },
               onLongPress: () {
-                onLongPress(session);
+                onLongPress(index);
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
@@ -59,13 +62,13 @@ abstract class ASessionListState<T extends ISession> extends State<ASessionList>
                   width: 200,
                   height: 50,
                   alignment: Alignment.center,
-                  child: getContainerWidget(session)
+                  child: getContainerWidget(index)
                 ),
               ),
             ),
           ],
         ),
-        TrainingSessionFactory.generateBlockList(session)
+        TrainingSessionFactory.generateBlockList(widget.sessions![index])
       ],
     ); 
   }
@@ -73,61 +76,94 @@ abstract class ASessionListState<T extends ISession> extends State<ASessionList>
 
 
 class TrainingSessionList extends ASessionList {
-  const TrainingSessionList({super.key, required super.sessions});
+  const TrainingSessionList({super.key, required super.sessions, required super.traingSplitID});
   @override
   State<StatefulWidget> createState() => _TrainingSessionListState();
 }
 
 class _TrainingSessionListState extends ASessionListState {
   @override
-  Widget? getContainerWidget(ISession? session) {
-    return TrainingSessionFactory.toText(session);
+  Widget? getContainerWidget(int? index) {
+    return TrainingSessionFactory.toText(widget.sessions![index!]);
   }
 
   @override
-  void onLongPress(ISession? session) {
+  void onLongPress(int? index) async {
+    ISession? session = widget.sessions?.removeAt(index!);
     setState(() {
-      widget.sessions?.remove(session);
+      
     });
+    if (session!.dbID != null && session.dbID!.isNotEmpty) {
+      SessionUploader.deleteSession(session);
+    }
+    // Shifts all session indexs down by own whose index is now at the deleted index
+    for (int i = 0; i < widget.sessions!.length; i ++) {
+      await _updateOrder(i);
+    }
   }
 
   @override
-  void onPress(ISession? session) async {
+  void onPress(int? index) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return EditSessionDialog(addBlock: _addBlock, session: session, moveLeft: _moveLeft, moveRight: _moveRight);
+        return EditSessionDialog(addBlock: _addBlock, session: widget.sessions![index!], moveLeft: _moveLeft, moveRight: _moveRight);
       }
     );
+    if (widget.sessions![index!].dbID != null) {
+      SessionUploader.updateSession(widget.sessions![index], widget.traingSplitID, index);
+    }
     setState((){});
   }
-  void _moveLeft(ISession? session) {
+  void _moveLeft(ISession? session) async {
+    int index = widget.sessions!.indexOf(session!);
+    int newIndex;
+    index > 0 ? newIndex = index-1 : newIndex=widget.sessions!.length-1;
     setState(() {
-      int index = widget.sessions!.indexOf(session!);
-      int newIndex;
-      index > 0 ? newIndex = index-1 : newIndex=widget.sessions!.length-1;
       dynamic temp = widget.sessions![index];
       widget.sessions![index] = widget.sessions![newIndex];
       widget.sessions![newIndex] = temp; 
     });
+    await _updateOrder(index);
+    await _updateOrder(newIndex);
   }
 
-  void _moveRight(ISession? session) {
+  void _moveRight(ISession? session) async {
+    int index = widget.sessions!.indexOf(session!);
+    int newIndex;
+    index < widget.sessions!.length-1 ? newIndex = index+1 : newIndex=0;
     setState(() {
-      int index = widget.sessions!.indexOf(session!);
-      int newIndex;
-      index < widget.sessions!.length-1 ? newIndex = index+1 : newIndex=0;
       dynamic temp = widget.sessions![index];
       widget.sessions![index] = widget.sessions![newIndex];
       widget.sessions![newIndex] = temp; 
     });
+    await _updateOrder(index);
+    await _updateOrder(newIndex);
   }
+
+  Future<void> _updateOrder(int index) async {
+    if (widget.sessions![index].dbID != null) {
+      await FirebaseFirestore.instance.collection("StaticSessions").doc(widget.sessions![index].dbID).update(
+        {
+          'order': index
+        }
+      );
+    }
+  }
+
   void _addBlock(ISession? session) {
     setState(() {
       if (session is TrainingSession) {
         session.exerciseBlocks.add(ExerciseBlock(null, movementPattern: MovementPattern.UndefinedMovement, exercise: null, sets: []));
       }
     });
+    _updateSession(session);
+  }
+
+  void _updateSession(ISession? session) {
+    if (session!.dbID != null && session.dbID!.isNotEmpty) {
+      SessionUploader.updateSession(session, null, null);
+    }
   }
 }
 
@@ -135,8 +171,8 @@ class _TrainingSessionListState extends ASessionListState {
 
 abstract class ATrainingBlockList extends StatefulWidget {
   final List<IBlock>? blocks;
-
-  const ATrainingBlockList({super.key, required this.blocks});
+  final ISession? session;
+  const ATrainingBlockList({super.key, required this.blocks, required this.session});
   @override
   State<StatefulWidget> createState();
 }
@@ -195,7 +231,7 @@ abstract class ATrainingBlockListState extends State<ATrainingBlockList> impleme
 }
 
 class TrainingBlockList extends ATrainingBlockList {
-  const TrainingBlockList({super.key, required super.blocks});
+  const TrainingBlockList({super.key, required super.blocks, required super.session});
   @override
   State<StatefulWidget> createState() => TrainingBlockListState();
 
@@ -213,6 +249,7 @@ class TrainingBlockListState extends ATrainingBlockListState {
     setState(() {
       widget.blocks?.removeAt(index!);
     });
+    _updateSession();
   }
 
   @override
@@ -229,8 +266,6 @@ class TrainingBlockListState extends ATrainingBlockListState {
         returnString += "${block.exercise!.exerciseName}\n";
       }
     }
-
-    
     if (block is ExerciseBlock) {
       if (block.sets!.isNotEmpty) {
         LiftingSet set = block.sets![0] as LiftingSet;
@@ -240,7 +275,7 @@ class TrainingBlockListState extends ATrainingBlockListState {
         returnString += "\n...";
       }
     } else if (block is CardioBlock) {
-      returnString += "\n${block.set!.duration.toString()} Minutes";
+      returnString += "${block.set!.duration.toString()} Minutes";
     }
     return Text(
         returnString,
@@ -258,6 +293,10 @@ class TrainingBlockListState extends ATrainingBlockListState {
       widget.blocks![index] = widget.blocks![newIndex];
       widget.blocks![newIndex] = temp; 
     });
+    if (widget.session!.dbID != null && widget.session!.dbID!.isNotEmpty) {
+      SessionUploader.updateSession(widget.session, null, null);
+    }
+    _updateSession();
   }
 
   void _moveDown(int? index) {
@@ -268,6 +307,7 @@ class TrainingBlockListState extends ATrainingBlockListState {
       widget.blocks![index] = widget.blocks![newIndex];
       widget.blocks![newIndex] = temp; 
     });
+    _updateSession();
   }
 
   void _onBlockTypeChanged(int? index, IBlock? newBlock) {
@@ -289,9 +329,13 @@ class TrainingBlockListState extends ATrainingBlockListState {
         );
       }
     );
-    setState(() {
-      
-    });
+    setState(() {});
+    _updateSession();
   }
 
+  void _updateSession() {
+    if (widget.session!.dbID != null && widget.session!.dbID!.isNotEmpty) {
+      SessionUploader.updateSession(widget.session, null, null);
+    }
+  }
 }

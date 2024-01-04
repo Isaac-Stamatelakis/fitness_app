@@ -115,11 +115,6 @@ class _State extends State<HomePage> {
     }
   }
 
-  void _reload() {
-    setState(() {
-      
-    });
-  }
   void _toProgress() {
     
   }

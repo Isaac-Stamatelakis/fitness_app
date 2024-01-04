@@ -61,13 +61,27 @@ abstract class _AbstractTrainingPageState extends State<_AbstractTrainingPageCon
             const SizedBox(width: 50),
             Flexible(
               child: TrainingSessionList(
-                sessions: widget.trainingSplit?.trainingSessions
+                sessions: widget.trainingSplit?.trainingSessions, 
+                traingSplitID: widget.trainingSplit!.dbID,
               ), 
             )
           ],
         ),
         Positioned(
-          bottom: 150,
+          bottom: 80,
+          left: 10,
+          child: FloatingActionButton(
+            heroTag: 'nameButton',
+            backgroundColor: Colors.blue,
+            onPressed: _onNameEditPress,
+            child:  const Icon(
+              Icons.edit,
+              color: Colors.white
+            )
+          )
+        ),
+        Positioned(
+          bottom: 10,
           left: 10,
           child: FloatingActionButton(
             heroTag: 'addButton',
@@ -78,45 +92,15 @@ abstract class _AbstractTrainingPageState extends State<_AbstractTrainingPageCon
               color: Colors.white
             )
           )
-        ),
-        Positioned(
-          bottom: 80,
-          left: 10,
-          child: FloatingActionButton(
-            heroTag: 'saveButton',
-            backgroundColor: Colors.green,
-            onPressed: _onCompletePress,
-            child:  const Icon(
-              Icons.save,
-              color: Colors.white
-            )
-          ),
-        ),
-        Positioned(
-          bottom: 10,
-          left: 10,
-          child: FloatingActionButton(
-            heroTag: 'deleteButton',
-            backgroundColor: Colors.red,
-            onPressed: _onDeletePress,
-            child:  const Icon(
-              Icons.restart_alt,
-              color: Colors.white
-            )
-          ),
-        )
+        ),        
+        getExtraContent()
       ],
     );
   }
 
-  void _onAddPress() {
-    setState(() {
-      widget.trainingSplit?.trainingSessions.add(TrainingSession(dbID: null, name: "New Session", exerciseBlocks: []));
-    });
-  }
+  void _onAddPress();
 
-  void _onCompletePress();
-
+  /*
   void _onDeletePress() async {
     await showDialog(
       context: context,
@@ -136,17 +120,124 @@ abstract class _AbstractTrainingPageState extends State<_AbstractTrainingPageCon
       }
     );
   }
+  Positioned(
+          bottom: 10,
+          left: 10,
+          child: FloatingActionButton(
+            heroTag: 'deleteButton',
+            backgroundColor: Colors.red,
+            onPressed: _onDeletePress,
+            child:  const Icon(
+              Icons.restart_alt,
+              color: Colors.white
+            )
+          ),
+        ),
+  */
+
+  void _onNameEditPress() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return _EditNameDialog(trainingSplit: widget.trainingSplit);
+      }
+    );
+    if (widget.trainingSplit!.dbID != null && widget.trainingSplit!.dbID!.isNotEmpty) {
+      FirebaseFirestore.instance.collection("TrainingSplits").doc(widget.trainingSplit!.dbID!).update(
+        {
+          'name': widget.trainingSplit!.name
+        }
+      );
+    }
+    setState(() {
+      
+    });
+  }
+  Widget getExtraContent();
+}
+
+class _EditNameDialog extends StatefulWidget {
+  final TrainingSplit? trainingSplit;
+
+  const _EditNameDialog({required this.trainingSplit});
+  @override
+  State<StatefulWidget> createState() => _EditNameDialogState();
+
+}
+
+class _EditNameDialogState extends State<_EditNameDialog> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.text = widget.trainingSplit!.name!;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      contentPadding: const EdgeInsets.all(0.0),
+      content: Container(
+        width: 300,
+        height: 200,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.black, Colors.black87],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: [
+            AppBar(
+              backgroundColor: Colors.black,
+              title: const Text(
+                "Edit Training Split Title",
+                style: TextStyle(
+                  color: Colors.white
+                ),
+              ),
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back, 
+                  color: Colors.white
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              centerTitle: true,
+            ),
+            TextField(
+              controller: _controller,
+              decoration: const InputDecoration(
+                labelText: 'Title',
+                labelStyle: TextStyle(
+                  color: Colors.grey
+                ),
+              ),
+              onChanged: (value) {
+                widget.trainingSplit!.name = value;
+              },
+            ),
+          ],
+        )
+      )
+    );
+  }
+
 }
 
 class _NewTrainingPageContent extends _AbstractTrainingPageContent {
-  _NewTrainingPageContent({required super.trainingSplit, required super.user});
+  const _NewTrainingPageContent({required super.trainingSplit, required super.user});
 
   @override
   State<StatefulWidget> createState() => _NewTrainingPageContentState();
 }
 
 class _NewTrainingPageContentState extends _AbstractTrainingPageState {
-  @override
   void _onCompletePress() async {
     Map<String, dynamic> splitUpload = {
       'name': widget.trainingSplit!.name,
@@ -167,6 +258,30 @@ class _NewTrainingPageContentState extends _AbstractTrainingPageState {
       SessionUploader.uploadSession(session, splitID, index);
       index += 1;
     }
+  }
+  
+  @override
+  void _onAddPress() {
+    setState(() {
+      widget.trainingSplit?.trainingSessions.add(TrainingSession(dbID: null, name: "New Session", exerciseBlocks: []));
+    });
+  }
+  
+  @override
+  Widget getExtraContent() {
+    return Positioned(
+      bottom: 150,
+      left: 10,
+      child: FloatingActionButton(
+        heroTag: 'saveButton',
+        backgroundColor: Colors.green,
+        onPressed: _onCompletePress,
+        child:  const Icon(
+          Icons.save,
+          color: Colors.white
+        )
+      ),
+    );
   }
 }
 
@@ -196,16 +311,29 @@ class ModifyTrainingSplitPageLoader extends PageLoader {
 }
 
 class _ModifyTrainingPageContent extends _AbstractTrainingPageContent {
-  _ModifyTrainingPageContent({required super.trainingSplit, required super.user});
+  const _ModifyTrainingPageContent({required super.trainingSplit, required super.user});
 
   @override
   State<StatefulWidget> createState() => _ModifyTrainingPageContentState();
 }
 
 class _ModifyTrainingPageContentState extends _AbstractTrainingPageState {
+  
   @override
-  void _onCompletePress() {
-    // TODO: implement _onCompletePress
+  void _onAddPress() async {
+    TrainingSession newSession = TrainingSession(dbID: null, name: "New Session", exerciseBlocks: []);
+    await SessionUploader.uploadSession(newSession, widget.trainingSplit!.dbID, widget.trainingSplit!.trainingSessions.length);
+    setState(() {
+      widget.trainingSplit?.trainingSessions.add(newSession);
+    });
+    
   }
+  
+  @override
+  Widget getExtraContent() {
+    return Container();
+  }
+  
+  
 }
 

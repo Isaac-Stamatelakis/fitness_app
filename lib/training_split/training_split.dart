@@ -12,7 +12,7 @@ import 'package:fitness_app/training_split/set/set.dart';
 import 'package:flutter/material.dart';
 
 class TrainingSplit {
-  final String? name;
+  late String? name;
   final List<ISession> trainingSessions;
   final String? dbID;
 
@@ -20,7 +20,7 @@ class TrainingSplit {
 }
 
 abstract class ISession {
-  final String? dbID;
+  late String? dbID;
   late String name;
   ISession({required this.dbID, required this.name});
 }
@@ -50,6 +50,63 @@ class CardioBlock extends IBlock {
 
 
 class TrainingSessionFactory {
+
+  static Map<String, dynamic>? sessionToJson(ISession? session, int? index, String? splitID) {
+    if (session is TrainingSession) {
+      List<Map<String,dynamic>> exercise_blocks = [];
+      for (IBlock block in session.exerciseBlocks) {
+        String exercise_id = "";
+        String variation_id = "";
+        
+        if (block.exercise != null) {
+          exercise_id = block.exercise!.dbID;
+          if (block.variation != null) {
+            variation_id = block.variation!.dbID;
+          }
+        }
+        Map<String,dynamic> blockJson = {
+          'exercise_id' : exercise_id,
+          'variation_id' : variation_id,
+          'movement_pattern': MovementPatternFactory.patternToString(block.movementPattern)
+        };
+        if (block is CardioBlock) {
+          blockJson['sets'] = [
+            {
+              'type':'Cardio',
+              'duration': block.set!.duration
+            }
+          ];
+          exercise_blocks.add(blockJson);
+        } else if (block is ExerciseBlock) {
+          List<Map<String, dynamic>> sets = [];
+          for (ISet? set in block.sets!) {
+            if (set is LiftingSet) {
+              LiftingSetFactory.cleanUpStaticSetData(set);
+              set.data['type'] = SetFactory.liftingSetTypeToString(set.type);
+              sets.add(set.data);
+            }
+          }
+          blockJson['sets'] = sets;
+          exercise_blocks.add(blockJson);
+        }
+      }
+      Map<String,dynamic> sessionUpload = {
+        'exercise_blocks': exercise_blocks,
+        'name' : session.name,
+      };
+      if (index != null) {
+        sessionUpload['order'] = index;
+      }
+      if (splitID != null) {
+        sessionUpload['training_split_id'] = splitID;
+      }
+     
+      return sessionUpload;
+    }
+   
+    return null;
+  }
+
   static Future<TrainingSession> fromDocument(DocumentSnapshot snapshot) async {
     var data = snapshot.data() as Map<String, dynamic>;
     return TrainingSession(
@@ -120,7 +177,7 @@ class TrainingSessionFactory {
 
   static Widget generateBlockList(ISession? session) {
     if (session is TrainingSession) {
-      return TrainingBlockList(blocks: session.exerciseBlocks);
+      return TrainingBlockList(blocks: session.exerciseBlocks, session: session);
     }
     return Container();
   }
