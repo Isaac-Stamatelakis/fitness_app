@@ -17,7 +17,6 @@ class User {
       Timestamp timestamp =splitTimer!['date'];
       splitTimer!['date'] = timestamp.toDate();
     }
-     
     Duration difference = DateTime.now().difference(splitTimer!['date']);
     int dayDifference = difference.inDays;
     int session = splitTimer!['session'];

@@ -77,6 +77,7 @@ class TrackedBlockFactory {
       return null;
     }
     TrackedBlock returnBlock = TrackedBlock(block!.variation, movementPattern: block.movementPattern, exercise: block.exercise, sets: []);
+    
     List<TrackedSet> sets = [];
     if (block is ExerciseBlock) {
       for (ISet? set in block.sets!) {
@@ -84,7 +85,11 @@ class TrackedBlockFactory {
           if (set.type == LiftingSetType.Standard || set.type == LiftingSetType.IntegratedLengthenedPartialSet || set.type == LiftingSetType.LengthenedPartialSet) {
             int? amount = int.parse(set.data['amount']);
             for (int i = 0; i < amount; i ++) {
-              Map<String,dynamic> goalMap = set.data;
+              Map<String,dynamic> newSet = {};
+              for (String key in set.data.keys) {
+                newSet[key] = newSet[key];
+              }
+              Map<String,dynamic> goalMap = newSet;
               goalMap['reps']= null;  goalMap['weight']= null;
               sets.add(TrackedSet(
                 type: liftingSetToTracked(set.type)!,
@@ -92,7 +97,11 @@ class TrackedBlockFactory {
               ));
             }
               } else if (set.type == LiftingSetType.DropSet) {
-                Map<String,dynamic> goalMap = set.data;
+                Map<String,dynamic> newSet = {};
+                for (String key in set.data.keys) {
+                  newSet[key] = newSet[key];
+                }
+                Map<String,dynamic> goalMap = newSet;
                 goalMap['reps'] = null; goalMap['start_weight'] = null; goalMap['end_weight'] = null;
                 sets.add(TrackedSet(
                 type: liftingSetToTracked(set.type)!,
@@ -169,17 +178,16 @@ class RecordedTrainingSessionDBCom {
         'sets':sets
       });
     }
-    String user_id = "";
-    if (user != null) {
-      user_id = user.dbID!;
-    }
-    return {
+    Map<String,dynamic> returnJson = {
       'name': session.name,
       'static_session_id' : session.staticSessionID,
       'exercise_blocks': blockListMap,
       'created' : session.date,
-      'owner_id' : user_id
     };
+    if (user != null) {
+      returnJson['owner_id']= user.dbID;
+    }
+    return returnJson;
   }
   static Future<String?> upload(RecordedTrainingSession? session, User user) async {
     if (session == null) {

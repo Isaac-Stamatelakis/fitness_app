@@ -232,6 +232,9 @@ class _TrainingSplitListState extends AbstractOrderedTileListState<TrainingSplit
   void _onDeleteConfirmation(TrainingSplit? split) async {
     await FirebaseFirestore.instance.collection("TrainingSplits").doc(split!.dbID!).delete();
     Logger().i("Deleted Training Split: ${split.dbID}");
+    FirebaseFirestore.instance.collection("Users").doc(widget.user.dbID).update({
+      'training_split_id' : ""
+    });
     setState(() {
       widget.list!.remove(split);
     });

@@ -87,15 +87,6 @@ class _AddExerciseVariationDialogState extends State<AddExerciseVariationDialog>
       );
       Navigator.pop(context);
       widget.callback(ExerciseVariation(docRef.id, variationName: input));
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return SingleButtonDialog(
-            displayText: "Exercise Variation $input Successfully Added!", 
-            buttonText: 'Continue', 
-            buttonColors: [Colors.green,Colors.green.shade100], dialogColors: [Colors.blue.shade300,Colors.white],);
-        }
-      );
     })
     .catchError((error) {
       Logger().e("Error adding document: $error");

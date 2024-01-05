@@ -88,7 +88,6 @@ class _State extends State<HomePage> {
     );
   }
 
-
   void _toSession() async {
     if (widget.user.trainingSplitID == "") {
       showDialog(
@@ -148,6 +147,9 @@ class _State extends State<HomePage> {
   }
 
   void _toSessionManager() {
+    if (widget.user.trainingSplitID == null || widget.user.trainingSplitID!.isEmpty) {
+      return;
+    }
     showDialog(
       context: context,
       builder: (BuildContext context) {
