@@ -182,12 +182,15 @@ class _TrackingBlockListState extends State<_TrackingBlockList> implements IButt
   Widget? getContainerWidget(int? index) {
     IBlock? block = widget.blocks![index!];
     String string = MovementPatternFactory.patternToFormattedString(block!.movementPattern);
+    
+    
+
+    if (block.variation != null) {
+      string += "\n${block.variation!.variationName}";
+    } else {
     if (block.exercise != null) {
-      if (block.variation != null) {
-        string += "\n${block.variation!.variationName}";
-      } else {
-        string += "\n${block.exercise!.exerciseName}";
-      }
+          string += "\n${block.exercise!.exerciseName}";
+        }
     }
     return Text(
        string,

@@ -205,7 +205,7 @@ class _ExerciseVariationDropButtonState extends ASearchDropDownButtonState<Exerc
     }
     int index = 0;
     for (ExerciseVariation? variation in widget.list!) {
-      if (variation!.variationName == widget.initialValue!.variationName) {
+      if (variation != null && variation.variationName == widget.initialValue!.variationName) {
         return index;
       }
       index += 1;
