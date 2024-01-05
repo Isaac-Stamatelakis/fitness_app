@@ -9,6 +9,7 @@ import 'package:fitness_app/training_split/page/edit_session_dialog.dart';
 import 'package:fitness_app/training_split/set/set.dart';
 import 'package:fitness_app/training_split/training_split.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 abstract class ASessionList extends StatefulWidget {
   final String? traingSplitID;
@@ -172,7 +173,8 @@ class _TrainingSessionListState extends ASessionListState {
 abstract class ATrainingBlockList extends StatefulWidget {
   final List<IBlock>? blocks;
   final ISession? session;
-  const ATrainingBlockList({super.key, required this.blocks, required this.session});
+  final Axis scrollDirection;
+  const ATrainingBlockList({super.key, required this.blocks, required this.session, required this.scrollDirection});
   @override
   State<StatefulWidget> createState();
 }
@@ -184,6 +186,7 @@ abstract class ATrainingBlockListState extends State<ATrainingBlockList> impleme
       child: SizedBox(
         width: 200,
         child: ListView.builder(
+          scrollDirection: widget.scrollDirection,
           itemCount: widget.blocks?.length,
           itemBuilder: (context, index) {
             return _buildTile(context,index);
@@ -231,7 +234,7 @@ abstract class ATrainingBlockListState extends State<ATrainingBlockList> impleme
 }
 
 class TrainingBlockList extends ATrainingBlockList {
-  const TrainingBlockList({super.key, required super.blocks, required super.session});
+  const TrainingBlockList({super.key, required super.blocks, required super.session, required super.scrollDirection});
   @override
   State<StatefulWidget> createState() => TrainingBlockListState();
 

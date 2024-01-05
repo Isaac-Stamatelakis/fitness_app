@@ -21,7 +21,24 @@ abstract class DatabaseHelper<T> {
   dynamic getDatabaseReference();
 }
 
+abstract class AsyncDatabaseHelper<T> {
+  Future<T?> fromDatabase() async {
+    try {
+      DocumentSnapshot documentSnapshot = await getDatabaseReference().get();
+      if (documentSnapshot.exists && documentSnapshot.data() != null) {
+        return await fromDocument(documentSnapshot);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      Logger().e('Error retrieving from database: $e');
+      return null;
+    }
+  }
+  Future<T?> fromDocument(DocumentSnapshot snapshot);
 
+  dynamic getDatabaseReference();
+}
 abstract class MultiDatabaseRetriever<T> {
   Future<List<T>> retrieve() async {
     try {

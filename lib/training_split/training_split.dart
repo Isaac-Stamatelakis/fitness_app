@@ -181,7 +181,7 @@ class TrainingSessionFactory {
 
   static Widget generateBlockList(ISession? session) {
     if (session is TrainingSession) {
-      return TrainingBlockList(blocks: session.exerciseBlocks, session: session);
+      return TrainingBlockList(blocks: session.exerciseBlocks, session: session, scrollDirection: Axis.vertical);
     }
     return Container();
   }

@@ -86,6 +86,23 @@ class TrainingSplitSessionQuery {
   }
 }
 
+class TrainingSessionRetriever extends AsyncDatabaseHelper<TrainingSession?> {
+  final String dbID;
+  TrainingSessionRetriever({required this.dbID});
+  @override
+  Future<TrainingSession?> fromDocument(DocumentSnapshot<Object?> snapshot) async{
+    return await TrainingSessionFactory.fromDocument(snapshot);
+  }
+
+  @override
+  getDatabaseReference() {
+    return FirebaseFirestore.instance.collection("StaticSessions").doc(dbID);
+  }
+  
+
+}
+
+
 class SessionUploader {
   static Future<void> uploadSession(ISession session, String? splitID, int index) async {
     Map<String, dynamic>? sessionUpload = TrainingSessionFactory.sessionToJson(session, index, splitID);
