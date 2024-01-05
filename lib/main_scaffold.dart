@@ -91,14 +91,14 @@ class MainScaffold extends StatelessWidget {
                 height: 50,
                 onPress: _navigateMovementPatterns, 
                 text: "Movement Patterns", 
-                colors: [Colors.white70,Colors.indigo.shade400]
+                colors: [Colors.blue,Colors.blue.shade300]
               ),
               const SizedBox(height: 20),
               SquareGradientButton(
                 height: 50,
                 onPress: _navigateExercises, 
                 text: "Exercises", 
-                colors: [Colors.white70,Colors.indigo.shade400]
+                colors: [Colors.blue,Colors.blue.shade300]
               ),
             ],
           )
@@ -111,9 +111,13 @@ class MainScaffold extends StatelessWidget {
     Scaffold.of(context).closeDrawer();
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MovementPatternPage(
+      MaterialPageRoute(builder: (context) => 
+      MainScaffold(
+        title: "Movement Patterns",
+        content: MovementPatternPage(
           dataList: MovementPatternFactory.getNoneNullPatterns(), colors: const [Colors.black,Colors.black87]
-        )
+          )
+        ), 
       )
     );
   }

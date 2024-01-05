@@ -1,10 +1,13 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness_app/exercise_core/movement_pattern/movement_pattern.dart';
 import 'package:fitness_app/exercise_core/muscle/muscles.dart';
 
 /// Represents an exercise. Has name and movement pattern that the exercise belongs to
 class IExercise {
-  IExercise(this.exerciseName, this.dbID, {required this.movementPattern});
+  final ExerciseType exerciseType;
+  IExercise({required this.movementPattern, required this.exerciseName, required this.dbID, required this.exerciseType});
   final MovementPattern? movementPattern;
   final String exerciseName;
   List<Muscle> getMusclesWorked() {
@@ -13,18 +16,12 @@ class IExercise {
   final String dbID;
 }
 
-/// Represents an exercise from presets. Is immutable to user
-class PresetExercise extends IExercise {
-  PresetExercise(super.exerciseName, super.dbID, {required super.movementPattern});
-
-}
-
-/// Represents an exercise that the user created.
-class UserExercise extends IExercise {
-  UserExercise(super.exerciseName, super.dbID, {required super.movementPattern});
+enum ExerciseType {
+  Custom,
+  Preset
 }
 class ExerciseFactory {
-  static IExercise fromDocument<T extends IExercise>(DocumentSnapshot snapshot) {
+  static IExercise fromDocument(DocumentSnapshot snapshot, ExerciseType type) {
     var data = snapshot.data() as Map<String, dynamic>;
     MovementPattern? exercisePattern;
     for (MovementPattern movementPattern in MovementPattern.values) {
@@ -32,11 +29,7 @@ class ExerciseFactory {
         exercisePattern = movementPattern;
       }
     }
-    if (T is PresetExercise) {
-      return PresetExercise(data['name'], movementPattern: exercisePattern, snapshot.id);
-    } else if (T is UserExercise) {
-      return UserExercise(data['name'], movementPattern: exercisePattern, snapshot.id);
-    }
-    return IExercise(data['name'], movementPattern: exercisePattern, snapshot.id);
+    return IExercise(
+      movementPattern: exercisePattern, exerciseName: data['name'], dbID: snapshot.id, exerciseType: type);
   }
 }

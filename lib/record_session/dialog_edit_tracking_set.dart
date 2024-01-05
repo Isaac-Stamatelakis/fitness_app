@@ -119,8 +119,6 @@ class _EditTrackingSetDialogState extends State<EditTrackingSetDialog> {
       widget.set!.type = type;
     });
   }
-
-  
 }
 
 enum _EditOption {
@@ -145,10 +143,8 @@ class _OptionSelectorDropDownState extends AbstractDropDownSelectorState<_EditOp
 
 class _SetTypeDropDown extends AbstractDropDownSelector<TrackedSetType> {
   const _SetTypeDropDown({required super.onSelect, required super.initalSelect}) : super(options: TrackedSetType.values);
-
   @override
   State<StatefulWidget> createState() => _SetTypeDropDownState();
-
 }
 
 class _SetTypeDropDownState extends AbstractDropDownSelectorState<TrackedSetType> {

@@ -5,13 +5,19 @@ import 'package:fitness_app/misc/global_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
-// ignore: must_be_immutable
-class AddExerciseVariationDialog extends StatelessWidget {
+
+class AddExerciseVariationDialog extends StatefulWidget {
   final IExercise exercise;
   final Function(ExerciseVariation) callback;
-  AddExerciseVariationDialog({super.key, required this.exercise, required this.callback});
+  const AddExerciseVariationDialog({super.key, required this.exercise, required this.callback});
 
+  @override
+  State<AddExerciseVariationDialog> createState() => _AddExerciseVariationDialogState();
+}
+
+class _AddExerciseVariationDialogState extends State<AddExerciseVariationDialog> {
   late String input;
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -67,28 +73,34 @@ class AddExerciseVariationDialog extends StatelessWidget {
   void _addVariation(BuildContext context) async {
     Map<String, dynamic> jsonDoc = {
       "name" : input,
-      "exercise_id": exercise.dbID
+      "exercise_id": widget.exercise.dbID
     };
-
-     FirebaseFirestore.instance.collection("ExerciseVariations").add(jsonDoc)
-      .then((DocumentReference docRef) {
-        Logger().i("Document added with ID: ${docRef.id}");
-        Navigator.pop(context);
-        callback(ExerciseVariation(docRef.id, variationName: input));
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return SingleButtonDialog(
-              displayText: "Exercise Variation $input Successfully Added!", 
-              buttonText: 'Continue', 
-              buttonColors: [Colors.green,Colors.green.shade100], dialogColors: [Colors.blue.shade300,Colors.white],);
-          }
-        );
-      })
-      .catchError((error) {
-        Logger().e("Error adding document: $error");
-        Navigator.pop(context);
-      }
-    );
+    FirebaseFirestore.instance.collection("ExerciseVariations").add(jsonDoc)
+    .then((DocumentReference docRef) {
+      Logger().i("Document added with ID: ${docRef.id}");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text("Exercise Variation $input Successfully Added!"),
+          duration: const Duration(seconds: 2), 
+        )
+      );
+      Navigator.pop(context);
+      widget.callback(ExerciseVariation(docRef.id, variationName: input));
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SingleButtonDialog(
+            displayText: "Exercise Variation $input Successfully Added!", 
+            buttonText: 'Continue', 
+            buttonColors: [Colors.green,Colors.green.shade100], dialogColors: [Colors.blue.shade300,Colors.white],);
+        }
+      );
+    })
+    .catchError((error) {
+      Logger().e("Error adding document: $error");
+      Navigator.pop(context);
+    }
+  );
   }
 }
