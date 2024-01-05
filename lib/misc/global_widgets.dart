@@ -202,14 +202,6 @@ abstract class ASearchDropDownButtonState<T> extends State<ASearchDropDownButton
     super.initState();
     buildLists("");
     selectedIndex = getInitalIndex();
-    /*
-    Future.delayed(Duration.zero, () {
-      if (widget.initialValue == null && selectedIndex >= 0) {
-        widget.onSelect(valueList[selectedIndex]);
-      }
-    });
-    */
-    
   }
 
   @override

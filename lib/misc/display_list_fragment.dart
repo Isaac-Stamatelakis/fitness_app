@@ -20,49 +20,46 @@ abstract class DisplayListFragmentState<T> extends State<DisplayListFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return MainScaffold(
-      title: getTitle(),
-      content: Stack(
-        children: [
-          buildExtraContent(),
-          Center(
-            child: Column(
-              children: [
-                SizedBox(
+    return Stack(
+      children: [
+        buildExtraContent(),
+        Center(
+          child: Column(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width/2,
+                child: TextField(
+                  onChanged: (search) {
+                    setState(() {
+                      buildLists(search);
+                    });
+                  },
+                  style: const TextStyle(
+                    color: Colors.white
+                  ),
+                  decoration: const InputDecoration(
+                    labelText: 'Search',
+                    labelStyle: TextStyle(
+                      color: Colors.grey
+                    )
+                  ),
+                )
+              ),
+              Flexible(
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width/2,
-                  child: TextField(
-                    onChanged: (search) {
-                      setState(() {
-                        buildLists(search);
-                      });
+                  child: ListView.builder(
+                    itemCount: valueList.length,
+                    itemBuilder: (context, index) {
+                      return _buildTile(context,valueList[index],onPress);
                     },
-                    style: const TextStyle(
-                      color: Colors.white
-                    ),
-                    decoration: const InputDecoration(
-                      labelText: 'Search',
-                      labelStyle: TextStyle(
-                        color: Colors.grey
-                      )
-                    ),
-                  )
-                ),
-                Flexible(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width/2,
-                    child: ListView.builder(
-                      itemCount: valueList.length,
-                      itemBuilder: (context, index) {
-                        return _buildTile(context,valueList[index],onPress);
-                      },
-                    ),
-                  ) 
+                  ),
                 ) 
-              ],
-            ),
-          ) 
-        ],
-      )
+              ) 
+            ],
+          ),
+        ) 
+      ],
     );
   }
 

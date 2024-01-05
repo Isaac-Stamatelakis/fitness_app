@@ -11,7 +11,7 @@ class PresetExerciseRetriever {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("PresetExercises").get();
     List<IExercise> exercises = [];
     for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-      exercises.add(ExerciseFactory.fromDocument<PresetExercise>(documentSnapshot));
+      exercises.add(ExerciseFactory.fromDocument(documentSnapshot,ExerciseType.Preset));
     }
     return exercises;
   }
@@ -25,7 +25,7 @@ class CustomExerciseRetriever {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("CustomExercises").where('owner_id', isEqualTo: ownerID).get();
     List<IExercise> exercises = [];
     for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-      exercises.add(ExerciseFactory.fromDocument<UserExercise>(documentSnapshot));
+      exercises.add(ExerciseFactory.fromDocument(documentSnapshot, ExerciseType.Custom));
     }
     return exercises;
   }
@@ -61,7 +61,7 @@ class SinglePresetExerciseRetriever extends DatabaseHelper{
   SinglePresetExerciseRetriever({required this.dbID});
   @override
   fromDocument(DocumentSnapshot<Object?> snapshot) {
-    return ExerciseFactory.fromDocument<PresetExercise>(snapshot);
+    return ExerciseFactory.fromDocument(snapshot,ExerciseType.Preset);
   }
 
   @override
@@ -75,7 +75,7 @@ class SingleCustomExerciseRetriever extends DatabaseHelper{
   SingleCustomExerciseRetriever({required this.dbID});
   @override
   fromDocument(DocumentSnapshot<Object?> snapshot) {
-    return ExerciseFactory.fromDocument<UserExercise>(snapshot);
+    return ExerciseFactory.fromDocument(snapshot,ExerciseType.Custom);
   }
   @override
   getDatabaseReference() {
@@ -100,7 +100,7 @@ class PresetPatternExerciseQuery extends MultiDatabaseRetriever<IExercise> {
   PresetPatternExerciseQuery({required this.pattern});
   @override
   fromDocument(DocumentSnapshot<Object?> snapshot) {
-    return ExerciseFactory.fromDocument<PresetExercise>(snapshot);
+    return ExerciseFactory.fromDocument(snapshot,ExerciseType.Preset);
   }
 
   @override
@@ -117,7 +117,7 @@ class CustomPatternExerciseQuery extends MultiDatabaseRetriever<IExercise> {
   CustomPatternExerciseQuery({required this.pattern});
   @override
   fromDocument(DocumentSnapshot<Object?> snapshot) {
-    return ExerciseFactory.fromDocument<PresetExercise>(snapshot);
+    return ExerciseFactory.fromDocument(snapshot,ExerciseType.Custom);
   }
 
   @override

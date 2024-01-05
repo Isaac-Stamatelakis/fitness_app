@@ -8,6 +8,7 @@ import 'package:fitness_app/misc/global.dart';
 import 'package:fitness_app/record_session/tracking_set.dart';
 import 'package:fitness_app/training_split/set/set.dart';
 import 'package:fitness_app/training_split/training_split.dart';
+import 'package:fitness_app/user/user.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
@@ -15,9 +16,10 @@ class RecordedTrainingSession {
   late String? dbID;
   late String? staticSessionID;
   late String? name;
+  late DateTime? date;
   late List<TrackedBlock?>? blocks;
 
-  RecordedTrainingSession({required this.staticSessionID, required this.name, required this.blocks, required this.dbID});
+  RecordedTrainingSession({required this.staticSessionID, required this.name, required this.blocks, required this.dbID, required this.date});
   
 }
 class TrackedBlock extends IBlock {
@@ -36,6 +38,7 @@ class TrackedBlockFactory {
       name: session.name, 
       blocks: trackedBlocks,
       dbID: null,
+      date: DateTime.now()
     );
   }
 
@@ -60,11 +63,13 @@ class TrackedBlockFactory {
         TrackedBlock(variation, movementPattern: pattern, exercise: exercise, sets: sets)
       );
     }
+    Timestamp dateTime = json['created'];
     return RecordedTrainingSession(
       staticSessionID: json['static_session_id'], 
       name: json['name'], 
       blocks: blocks, dbID: 
-      snapshot.id
+      snapshot.id, 
+      date: dateTime.toDate()
     );
   }
   static TrackedBlock? blockToTrackedBlock(IBlock? block) {
@@ -137,7 +142,7 @@ class TrackedBlockFactory {
 
 
 class RecordedTrainingSessionDBCom {
-  static Map<String,dynamic> toJson(RecordedTrainingSession? session) {
+  static Map<String,dynamic> toJson(RecordedTrainingSession? session, User? user) {
     List<Map<String, dynamic>> blockListMap = [];
     for (TrackedBlock? block in session!.blocks!) {
       List<Map<String,dynamic>> sets = [];
@@ -164,31 +169,45 @@ class RecordedTrainingSessionDBCom {
         'sets':sets
       });
     }
+    String user_id = "";
+    if (user != null) {
+      user_id = user.dbID!;
+    }
     return {
       'name': session.name,
       'static_session_id' : session.staticSessionID,
-      'exercise_blocks': blockListMap
+      'exercise_blocks': blockListMap,
+      'created' : session.date,
+      'owner_id' : user_id
     };
   }
-  static Future<void> upload(RecordedTrainingSession? session) async {
+  static Future<String?> upload(RecordedTrainingSession? session, User user) async {
     if (session == null) {
-      return;
+      return null;
     }
     if (session.dbID != null && session.dbID!.isNotEmpty) {
-      return;
+      return null;
     }
-    dynamic json = toJson(session);
+    dynamic json = toJson(session,user);
+    
     DocumentReference reference = await FirebaseFirestore.instance.collection("RecordedSessions").add(json);
+    session.dbID = reference.id;
+    user.currentSessionID = session.dbID;
     Logger().i("Uploaded Recorded Session: ${reference.id}");
+    FirebaseFirestore.instance.collection("Users").doc(user.dbID).update({
+      'current_session_id' : session.dbID
+    });
+    return reference.id;
   }
-  static Future<void> update(RecordedTrainingSession? session) async {
+  static Future<void> update(RecordedTrainingSession? session, User? user) async {
     if (session == null) {
       return;
     }
     if (session.dbID == null || session.dbID!.isEmpty) {
       return;
     }
-    dynamic json = toJson(session);
+
+    dynamic json = toJson(session, user);
     await FirebaseFirestore.instance.collection("RecordedSessions").doc(session.dbID).update(json);
   }
 }

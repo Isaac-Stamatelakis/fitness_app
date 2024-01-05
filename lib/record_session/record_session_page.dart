@@ -80,12 +80,7 @@ class _RecordSessionState extends State<_RecordSessionPage> {
     void initState() {
       super.initState();
       if (widget.session!.dbID == null) {
-        RecordedTrainingSessionDBCom.upload(widget.session);
-        if (widget.user.currentSessionID!.isEmpty) {
-          FirebaseFirestore.instance.collection("Users").doc(widget.user.dbID).update({
-            'current_session_id' : widget.session!.dbID
-          });
-        }
+        RecordedTrainingSessionDBCom.upload(widget.session, widget.user);
       }
       
     }
@@ -97,7 +92,7 @@ class _RecordSessionState extends State<_RecordSessionPage> {
         Row(
           children: [
             const SizedBox(width: 50),
-            Flexible(child: _TrackingBlockList(blocks: widget.session!.blocks, session: widget.session))   
+            Flexible(child: _TrackingBlockList(blocks: widget.session!.blocks, session: widget.session, user: widget.user))   
           ],
         ),
         Positioned(
@@ -121,13 +116,14 @@ class _RecordSessionState extends State<_RecordSessionPage> {
     setState(() {
       widget.session!.blocks!.add(TrackedBlock(null, movementPattern: MovementPattern.UndefinedMovement, exercise: null, sets: []));
     });
-    await RecordedTrainingSessionDBCom.update(widget.session);
+    await RecordedTrainingSessionDBCom.update(widget.session, widget.user);
   }
 }
 class _TrackingBlockList extends StatefulWidget {
+  final User user;
   final List<TrackedBlock?>? blocks;
   final RecordedTrainingSession? session;
-  const _TrackingBlockList({required this.blocks, required this.session});
+  const _TrackingBlockList({required this.blocks, required this.session, required this.user});
   
   @override
   State<StatefulWidget> createState() => _TrackingBlockListState();
@@ -195,6 +191,7 @@ class _TrackingBlockListState extends State<_TrackingBlockList> implements IButt
     }
     return Text(
        string,
+       textAlign: TextAlign.center,
        style: const TextStyle(
         color: Colors.white
        ),
@@ -206,7 +203,7 @@ class _TrackingBlockListState extends State<_TrackingBlockList> implements IButt
     setState(() {
       widget.blocks!.removeAt(index!);
     });
-    await RecordedTrainingSessionDBCom.update(widget.session);
+    await RecordedTrainingSessionDBCom.update(widget.session, widget.user);
   }
   
   @override
@@ -222,7 +219,7 @@ class _TrackingBlockListState extends State<_TrackingBlockList> implements IButt
       }
     );
     setState(() {});
-    await RecordedTrainingSessionDBCom.update(widget.session);
+    await RecordedTrainingSessionDBCom.update(widget.session, widget.user);
   }
 
   void _moveLeft(TrackedBlock? block) async {
@@ -234,7 +231,7 @@ class _TrackingBlockListState extends State<_TrackingBlockList> implements IButt
       widget.blocks![index] = widget.blocks![newIndex];
       widget.blocks![newIndex] = temp; 
     });
-    await RecordedTrainingSessionDBCom.update(widget.session);
+    await RecordedTrainingSessionDBCom.update(widget.session, widget.user);
   }
 
   void _moveRight(TrackedBlock? block) async {
@@ -246,7 +243,7 @@ class _TrackingBlockListState extends State<_TrackingBlockList> implements IButt
       widget.blocks![index] = widget.blocks![newIndex];
       widget.blocks![newIndex] = temp; 
     });
-    await RecordedTrainingSessionDBCom.update(widget.session);
+    await RecordedTrainingSessionDBCom.update(widget.session, widget.user);
   } 
 }
 
@@ -430,7 +427,7 @@ class _TrackingSetListState extends State<_TrackingSetList> implements IButtonLi
     setState(() {
       widget.block!.sets.removeAt(index!);
     });
-    await RecordedTrainingSessionDBCom.update(widget.session);
+    await RecordedTrainingSessionDBCom.update(widget.session, null);
   }
   
   @override
@@ -446,7 +443,7 @@ class _TrackingSetListState extends State<_TrackingSetList> implements IButtonLi
       }
     );
     setState(() {});
-    await RecordedTrainingSessionDBCom.update(widget.session);
+    await RecordedTrainingSessionDBCom.update(widget.session, null);
   }
 
   void _moveUp(int? index) async {
@@ -457,7 +454,7 @@ class _TrackingSetListState extends State<_TrackingSetList> implements IButtonLi
       widget.block!.sets[index] = widget.block!.sets[newIndex];
       widget.block!.sets[newIndex] = temp; 
     });
-    await RecordedTrainingSessionDBCom.update(widget.session);
+    await RecordedTrainingSessionDBCom.update(widget.session, null);
   }
 
   void _moveDown(int? index) async {
@@ -468,7 +465,7 @@ class _TrackingSetListState extends State<_TrackingSetList> implements IButtonLi
       widget.block!.sets[index] = widget.block!.sets[newIndex];
       widget.block!.sets[newIndex] = temp; 
     });
-    await RecordedTrainingSessionDBCom.update(widget.session);
+    await RecordedTrainingSessionDBCom.update(widget.session, null);
   }
 }
 

@@ -1,11 +1,19 @@
+import 'dart:isolate';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness_app/misc/global_widgets.dart';
 import 'package:fitness_app/misc/page_loader.dart';
+import 'package:fitness_app/record_session/dialogue_select_record_session.dart';
+import 'package:fitness_app/record_session/list_previous_session.dart';
 import 'package:fitness_app/record_session/record_session_page.dart';
+import 'package:fitness_app/training_split/db_training_split.dart';
 import 'package:fitness_app/training_split/page/page_training_split.dart';
 import 'package:fitness_app/training_split/preset/dialog_new_split.dart';
 import 'package:fitness_app/training_split/selector/selector_dialog_training_split.dart';
+import 'package:fitness_app/training_split/training_split.dart';
 import 'package:fitness_app/user/user.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 class HomePageLoader extends SizedWidgetLoader {
   final String userID;
@@ -35,16 +43,16 @@ class _State extends State<HomePage> {
   late DateTime firstDayOfMonth = DateTime(selectedDay.year, selectedDay.month, 1);
   late DateTime lastDayOfMonth = DateTime(selectedDay.year, selectedDay.month+1, 0);
 
-
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,      
         children: [
+          const SizedBox(height: 40),
           _SquareGradientButton(
             _toSession, 
-            text: widget.user.currentSessionID == "" ? "Start Session" : "Continue Session", 
+            text: "Record Session",
             colors: [Colors.red,Colors.red.shade200], 
             size: const Size(300,100)
           ),
@@ -59,23 +67,29 @@ class _State extends State<HomePage> {
                 size: const Size(200,100)
               ),
                const SizedBox(width: 20),
-               _SquareGradientButton(_toProgress, text: "View Progress", colors: [Colors.blue,Colors.blue.shade200], size: const Size(200,100))
+                _SquareGradientButton(
+                  _toSessionManager, 
+                  text: "Manage Sessions", 
+                  colors: [Colors.blue,Colors.blue.shade200], 
+                  size: const Size(200,100
+                )
+              )
             ],
           ),
           const SizedBox(height: 20),
-          Flexible(
-            child: SizedBox(
-              width: 500,
-              child: _SessionList()
-            ),
-          ),
+          _SquareGradientButton(
+            _toSessionView, 
+            text: "View Sessions", 
+            colors: [Colors.green,Colors.green.shade200], 
+            size: const Size(300,100)
+          )
         ],
       )
     );
   }
 
 
-  void _toSession() {
+  void _toSession() async {
     if (widget.user.trainingSplitID == "") {
       showDialog(
         context: context,
@@ -89,29 +103,39 @@ class _State extends State<HomePage> {
         }
       );
     } else {
-      if (widget.user.currentSessionID == "") {
-        /*
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => NewSessionTrackerLoader(
-            staticSessionID: widget.user.currentSessionID!, 
-            user: widget.user
-            )
-          )
-        );
-        */
+      if (!widget.user.createdSessionToday() || widget.user.currentSessionID == null) {
+        TrainingSplit? split = await TrainingSplitRetriever(dbID: widget.user.trainingSplitID!).fromDatabase();
+        int sessionNum = widget.user.getCurrentSession();
+        int sessionAmount = split!.trainingSessions.length;
+        ISession? session = split.trainingSessions[sessionNum % sessionAmount];
+        widget.user.lastSession = DateTime.now();
+        await FirebaseFirestore.instance.collection("Users").doc(widget.user.dbID).update({
+          'last_session': widget.user.lastSession,
+        });
+        Logger().i("User session set to ${session.name} from split ${split.name}. Last session updated to ${widget.user.lastSession}");
+        _createNewRecordSession(session);
       } else {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => RecordedSessionLoader(
-            dbID: widget.user.currentSessionID!, 
-            user: widget.user
+              user: widget.user,
+              dbID: widget.user.currentSessionID!,
             )
           )
         );
       }
     }
-    
+  }
+
+  void _createNewRecordSession(ISession? session) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => NewSessionTrackerLoader(
+          user: widget.user,
+          staticSessionID: session!.dbID!,
+        )
+      )
+    );
   }
 
   void _toTrainingSplit() {
@@ -121,28 +145,30 @@ class _State extends State<HomePage> {
           return TrainingSplitSelectorDialog(user: widget.user);
         }
       );
-    /*
-    if (widget.user.trainingSplitID == "") {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return NewTrainingSplitDialog(user: widget.user);
-        }
-      );
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ModifyTrainingSplitPageLoader(
-            user: widget.user
-          )
-        )
-      );
-    }
-    */
   }
 
+  void _toSessionManager() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return RecordSessionSelectorDialog(
+          user: widget.user,
+        );
+      }
+    );
+  }
   void _toProgress() {
     
+  }
+
+  void _toSessionView() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => PreviousSessionListLoader(
+          user: widget.user
+        )
+      )
+    );
   }
 
 }
@@ -185,7 +211,6 @@ class _SessionList extends StatelessWidget {
       }
     );
   }
-
 }
 
 class _SquareGradientButton extends StatelessWidget {

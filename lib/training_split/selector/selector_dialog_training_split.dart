@@ -3,6 +3,7 @@ import 'package:fitness_app/misc/display_list.dart';
 import 'package:fitness_app/misc/global.dart';
 import 'package:fitness_app/misc/global_widgets.dart';
 import 'package:fitness_app/misc/page_loader.dart';
+import 'package:fitness_app/misc/tile_list_first.dart';
 import 'package:fitness_app/training_split/db_training_split.dart';
 import 'package:fitness_app/training_split/page/page_training_split.dart';
 import 'package:fitness_app/training_split/preset/dialog_new_split.dart';
@@ -93,7 +94,7 @@ class _TrainingSplitListLoader extends WidgetLoader {
   const _TrainingSplitListLoader({required this.user});
   @override
   Widget generateContent(AsyncSnapshot snapshot) {
-    return _TrainingSplitList(splits: snapshot.data, user: user);
+    return _TrainingSplitList(list: snapshot.data, user: user);
   }
 
   @override
@@ -103,37 +104,16 @@ class _TrainingSplitListLoader extends WidgetLoader {
 
 }
 
-class _TrainingSplitList extends StatefulWidget {
-  final List<TrainingSplit?>? splits;
-  final User user;
-
-  const _TrainingSplitList({required this.splits, required this.user});
+class _TrainingSplitList extends AbstractOrderedTileList<TrainingSplit> {
+  const _TrainingSplitList({required super.user,required super.list});
   
   @override
   State<StatefulWidget> createState() => _TrainingSplitListState();
 }
 
-class _TrainingSplitListState extends State<_TrainingSplitList> implements IButtonListState<TrainingSplit>{
+class _TrainingSplitListState extends AbstractOrderedTileListState<TrainingSplit> {
   @override
-  Widget build(BuildContext context) {
-    return Flexible(
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width/2,
-        child: ListView.builder(
-          itemCount: widget.splits?.length,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return _buildFirstTile(context,widget.splits?[index]);
-            } else {
-              return _buildTile(context,widget.splits?[index]);
-            }
-          },
-        ),
-      ) 
-    );
-  }
-
-  Widget? _buildFirstTile(BuildContext context, TrainingSplit? split) {
+  Widget? buildFirstTile(BuildContext context, TrainingSplit? split) {
     return Column(
       children: [
         const SizedBox(height: 20),
@@ -147,52 +127,55 @@ class _TrainingSplitListState extends State<_TrainingSplitList> implements IButt
             ),
           ),
           alignment: Alignment.center,
-          child: getListTile(split),
+          child: buildTile(split),
         ),
         const SizedBox(height: 40),
       ],
     );
   }
 
-  Widget? _buildTile(BuildContext context, TrainingSplit? split) {
-    return Column(
-      children: [
-        const SizedBox(height: 20),
-        Container(
-        height: 80,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.green.shade300, Colors.green], // Set your desired gradient colors
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+    @override
+    Widget? buildLaterTile(BuildContext context, TrainingSplit? element) {
+      return Column(
+        children: [
+          const SizedBox(height: 20),
+          Container(
+          height: 80,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green.shade300, Colors.green], // Set your desired gradient colors
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
-        ),
-        alignment: Alignment.center,
-        child: getListTile(split)
-        ),
-      ],
-    );
-  }
-
-  Widget? getListTile(TrainingSplit? split) {
+          alignment: Alignment.center,
+          child: buildTile(element)
+          ),
+        ],
+      );
+    }
+    
+  @override
+  Widget? buildTile(TrainingSplit? element) {
     return ListTile(
-      title: Text(split!.name!),
+      title: Text(element!.name!),
       textColor: Colors.white,
       trailing: IconButton(
         icon: const Icon(Icons.touch_app),
         color: Colors.white, 
         onPressed: () {
-          onPress(split);
+          onPress(element);
         },
       ),
       onLongPress: () {
-        onLongPress(split);
+        onLongPress(element);
       },
       onTap: () {
-        _navigateToEdit(context, split);
+        _navigateToEdit(context, element);
       },
     );
   }
+
 
   void _navigateToEdit(BuildContext context, TrainingSplit? split) {
     Navigator.push(
@@ -226,14 +209,23 @@ class _TrainingSplitListState extends State<_TrainingSplitList> implements IButt
         "last_accessed" : DateTime.now()
       }
     );
+    widget.user.lastSession = DateTime(1,1,1);
+    widget.user.trainingSplitID = split.dbID;
+    widget.user.splitTimer = {
+      'session':0,
+      'date':DateTime.now()
+    };
     await FirebaseFirestore.instance.collection("Users").doc(user.dbID).update(
       {
-        "training_split_id" : split.dbID
+        "training_split_id" : split.dbID,
+        'split_timer': widget.user.splitTimer,
+        'last_session': widget.user.lastSession
       }
     );
+    Logger().i("User Training Split Changed to ${split.dbID}");
     setState(() {
-      widget.splits!.remove(split);
-      widget.splits!.insert(0,split);
+      widget.list!.remove(split);
+      widget.list!.insert(0,split);
     });
   }
 
@@ -241,14 +233,8 @@ class _TrainingSplitListState extends State<_TrainingSplitList> implements IButt
     await FirebaseFirestore.instance.collection("TrainingSplits").doc(split!.dbID!).delete();
     Logger().i("Deleted Training Split: ${split.dbID}");
     setState(() {
-      widget.splits!.remove(split);
+      widget.list!.remove(split);
     });
-  }
-  
-  @override
-  Widget? getContainerWidget(TrainingSplit? data) {
-    // TODO: implement getContainerWidget
-    throw UnimplementedError();
   }
 }
 
