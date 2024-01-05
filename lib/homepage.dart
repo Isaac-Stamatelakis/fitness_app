@@ -1,5 +1,6 @@
 import 'package:fitness_app/misc/global_widgets.dart';
 import 'package:fitness_app/misc/page_loader.dart';
+import 'package:fitness_app/record_session/record_session_page.dart';
 import 'package:fitness_app/training_split/page/page_training_split.dart';
 import 'package:fitness_app/training_split/preset/dialog_new_split.dart';
 import 'package:fitness_app/training_split/selector/selector_dialog_training_split.dart';
@@ -89,9 +90,25 @@ class _State extends State<HomePage> {
       );
     } else {
       if (widget.user.currentSessionID == "") {
-
+        /*
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => NewSessionTrackerLoader(
+            staticSessionID: widget.user.currentSessionID!, 
+            user: widget.user
+            )
+          )
+        );
+        */
       } else {
-
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => RecordedSessionLoader(
+            dbID: widget.user.currentSessionID!, 
+            user: widget.user
+            )
+          )
+        );
       }
     }
     

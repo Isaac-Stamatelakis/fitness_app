@@ -51,7 +51,7 @@ class SingleExerciseRetriever {
     if (exercise != null) {
       return exercise;
     }
-    exercise = await SingleCustomExerciseRetriever(dbID: dbID).fromDatabase();
+    exercise = await SinglePresetExerciseRetriever(dbID: dbID).fromDatabase();
     return exercise;
   }
 }
