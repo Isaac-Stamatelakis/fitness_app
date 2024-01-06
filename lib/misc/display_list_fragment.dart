@@ -31,7 +31,7 @@ abstract class DisplayListFragmentState<T> extends State<DisplayListFragment> {
                 child: TextField(
                   onChanged: (search) {
                     setState(() {
-                      buildLists(search);
+                      buildLists(search.toLowerCase());
                     });
                   },
                   style: const TextStyle(
